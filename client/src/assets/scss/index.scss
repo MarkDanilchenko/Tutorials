@@ -1,0 +1,22 @@
+/* import the Bootstrap */
+@import '../../../node_modules/bootstrap/scss/bootstrap.scss';
+/* import custom styles */
+@import 'fonts.scss';
+@import 'colors.scss';
+@import 'style_common.scss';
+@import 'style_footer.scss';
+@import 'style_dotCube.scss';
+@import 'style_colorMode.scss';
+@import 'style_mainLogo.scss';
+// some styles defined currently in .vue files !!!
+// some styles defined currently in .vue files !!!
+// some styles defined currently in .vue files !!!
+
+/* ------- customize Bootstrap styles via mixins -------- */
+.btn-custom-green {
+	@include button-variant($green_color_05, $green_color);
+}
+
+.btn-outline-custom-green {
+	@include button-outline-variant($green_color);
+}

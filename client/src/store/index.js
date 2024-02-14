@@ -1,5 +1,5 @@
 import { createStore } from 'vuex';
-import tutorials__store from '@/store/tutorials__store.js';
+import { tutorials__store } from '@/store/tutorials__store.js';
 
 export default createStore({
 	state: () => ({}),

@@ -1,0 +1,29 @@
+#mainLogo {
+	min-height: 20vh;
+	background: radial-gradient(50% 35%, $green_color_05 40%, transparent 100%);
+	.wrapper {
+		display: grid;
+		place-content: center;
+		background-color: transparent;
+		min-height: 100px;
+		font-size: clamp(1.5rem, 1rem + 18vw, 15rem);
+        font-family: 'Monoton', sans-serif;
+        text-shadow: 0 10px 10px rgba(0, 0, 0, 0.5);
+		text-transform: uppercase;
+		div {
+			grid-area: 1/1/-1/-1;
+		}
+	}
+    .top {
+        clip-path: polygon(0 0, 100% 0, 100% 48%, 0 58%);
+    }
+    .bottom {
+        clip-path: polygon(0 60%, 100% 50%, 100% 100%, 0 100%);
+        color: transparent;
+        background: linear-gradient(0deg, $green_color 30%, transparent 70%);
+        background-clip: text;
+        -webkit-background-clip: text;
+        transform: translateX(-0.03em);
+
+    }
+}

@@ -3,8 +3,8 @@ import * as VueRouter from 'vue-router';
 const routes = [
 	{
 		path: '/',
-		name: 'main',
-		component: () => import('@/pages/Main__page.vue'),
+		name: 'home',
+		component: () => import('@/pages/Home__page.vue'),
 	},
 	{
 		path: '/tutorials',
