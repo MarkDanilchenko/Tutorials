@@ -12,11 +12,6 @@ const routes = [
 		component: () => import('@/pages/Tutorials__page.vue'),
 	},
 	{
-		path: '/tutorials/:id',
-		name: 'tutorial',
-		component: () => import('@/pages/Tutorial__page.vue'),
-	},
-	{
 		path: '/tutorials/addNew',
 		name: 'addNew',
 		component: () => import('@/pages/AddNew__page.vue'),
