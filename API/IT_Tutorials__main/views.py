@@ -19,13 +19,26 @@ class TutorialViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         if request.query_params.get("q"):
-            result = models.Tutorial.objects.filter(
-                title__icontains=request.query_params.get("q")
+            result = (
+                models.Tutorial.objects.filter(
+                    title__icontains=request.query_params.get("q")
+                )
+                .order_by("title")
+                .first()
             )
+            if result:
+                result_serialized = self.serializer_class(result, many=False).data
+                return Response(
+                    {"tutorial": result_serialized}, status=status.HTTP_200_OK
+                )
+            else:
+                return Response(
+                    {"Error": "No results found"}, status=status.HTTP_404_NOT_FOUND
+                )
         else:
-            result = models.Tutorial.objects.all().order_by("publish_date")
-        result_serialized = self.serializer_class(result, many=True).data
-        return Response({"tutorials": result_serialized}, status=status.HTTP_200_OK)
+            result = models.Tutorial.objects.all().order_by("title")
+            result_serialized = self.serializer_class(result, many=True).data
+            return Response({"tutorials": result_serialized}, status=status.HTTP_200_OK)
 
     def create(self, request):
         if request.data.get("published") == False and request.data.get("publish_date"):
@@ -55,7 +68,7 @@ class TutorialPublishedViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]
 
     def list(self, request):
-        result = models.Tutorial.objects.filter(published=True).order_by("publish_date")
+        result = models.Tutorial.objects.filter(published=True).order_by("title")
         result_serialized = self.serializer_class(result, many=True).data
         return Response(
             {"tutorials_published": result_serialized}, status=status.HTTP_200_OK
