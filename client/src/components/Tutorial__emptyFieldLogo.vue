@@ -1,7 +1,7 @@
 <template>
     <section class="my-tutorials__emptyFieldLogo">
         <div class="d-flex justify-content-center align-items-center">
-            <img src="@/assets/IMG/Tutorial__emptyFieldLogo.svg" alt="Tutorial__emptyFieldLogo"
+            <img src="@/assets/IMG/Tutorial__emptyFieldLogo.svg" width="90%" height="90%" alt="Tutorial__emptyFieldLogo"
                 title="Tutorial__emptyFieldLogo">
         </div>
     </section>
@@ -13,4 +13,5 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+</style>

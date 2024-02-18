@@ -1,16 +1,27 @@
 <template>
     <section class="my-tutorials">
+        <!-- LOGO -->
+        <!-- LOGO -->
+        <!-- LOGO -->
         <div id="mainLogo" class="d-flex justify-content-center align-items-center">
             <section class="wrapper">
                 <div class="top">Tutorials</div>
                 <div class="bottom" aria-hidden="true">Tutorials</div>
             </section>
         </div>
+        <!-- Tutorials block -->
+        <!-- Tutorials block -->
+        <!-- Tutorials block -->
         <div v-if="tutorials.length > 0">
             <div class="row">
                 <div class="col-md-6 col-12 mb-md-0 mb-4">
                     <h5 class="my-3 text-muted">Tutorials' list</h5>
                     <Tutorials__list :tutorials="tutorials" />
+                    <div class="d-flex justify-content-center mt-3">
+                        <button class="btn btn-outline-custom-green me-3" type="button"></button>
+                        <button class="btn btn-danger" type="button" data-bs-toggle="modal"
+                            data-bs-target="#deleteAllTutorials">Delete all</button>
+                    </div>
                 </div>
                 <hr class="d-md-none">
                 <div class="col-md-6 col-12">
@@ -33,11 +44,35 @@
                                 type="button">Search</button>
                         </div>
                     </div>
-                    <!-- search result -->
-                    <!-- search result -->
-                    <!-- search result -->
+                    <!-- Tutorial: emptyField, search result -->
+                    <!-- Tutorial: emptyField, search result -->
+                    <!-- Tutorial: emptyField, search result -->
                     <div class="row">
-                        <component :is="activeComponent"></component>
+                        <transition name="fade" mode="out-in">
+                            <component :is="activeComponent"></component>
+                        </transition>
+                    </div>
+                </div>
+                <!-- Delete all Tutorials modal -->
+                <!-- Delete all Tutorials modal -->
+                <!-- Delete all Tutorials modal -->
+                <div class="modal fade" tabindex="-1" id="deleteAllTutorials" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Delete All Tutorials</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Are you sure you want to delete all tutorials? <b> <br> This action cannot be undone.</b>
+                                </p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-danger" @click="deleteAllTutorials"
+                                    data-bs-dismiss="modal">Delete all</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -70,25 +105,30 @@ export default {
             tutorials: state => state.tutorials.tutorials,
             tutorial__searchQuery: state => state.tutorials.tutorial__searchQuery
         }),
-        ...mapGetters({
-        }),
     },
     methods: {
         ...mapActions({
-            getAllTutorials: 'tutorials/getAllTutorials',
-            getSearchedTutorial: 'tutorials/getSearchedTutorial'
+            getTutorials: 'tutorials/getTutorials',
+            getSearchedTutorial: 'tutorials/getSearchedTutorial',
+            deleteTutorials: 'tutorials/deleteTutorials'
         }),
         ...mapMutations({
-            setSearchQueryTutorial: 'tutorials/setSearchQueryTutorial'
+            setSearchQueryTutorial: 'tutorials/setSearchQueryTutorial',
+            setSearchedTutorial: 'tutorials/setSearchedTutorial'
         }),
         searchTutorial() {
-            this.activeComponent = 'Tutorial__searched';
+            this.setSearchedTutorial(null);
             this.getSearchedTutorial();
             this.setSearchQueryTutorial('');
+            this.activeComponent = 'Tutorial__searched';
+        },
+        deleteAllTutorials() {
+            this.activeComponent = 'Tutorial__emptyFieldLogo';
+            this.deleteTutorials();
         }
     },
     mounted() {
-        this.getAllTutorials();
+        this.getTutorials();
     },
 }
 </script>
@@ -103,5 +143,15 @@ export default {
     font-weight: 700;
     font-size: 32px;
     text-shadow: 0px 0px 10px $green-color;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
 }
 </style>

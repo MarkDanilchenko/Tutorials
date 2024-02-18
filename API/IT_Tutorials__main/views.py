@@ -33,7 +33,10 @@ class TutorialViewSet(viewsets.ModelViewSet):
                 )
             else:
                 return Response(
-                    {"Error": "No results found"}, status=status.HTTP_404_NOT_FOUND
+                    {
+                        "tutorial": "No one tutorial found. Please, try again or check your request!"
+                    },
+                    status=status.HTTP_404_NOT_FOUND,
                 )
         else:
             result = models.Tutorial.objects.all().order_by("title")
