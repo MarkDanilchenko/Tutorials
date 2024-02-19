@@ -8,6 +8,10 @@
             <p v-if="tutorial__details.publish_date" class="text-end"><i>Publishe date:</i> {{
                 tutorial__details.publish_date }}</p>
             <p v-else class="text-end"><i>Publishe date:</i> -</p>
+            <div class="d-flex justify-content-end align-items-center tutorial__btnBlock">
+                <button type="button" class="btn btn-danger" @click="deleteTutorial(tutorial__details.id)">Delete</button>
+            </div>
+
         </div>
         <div v-else class="text-center">Tutorial <span class="text-green">not found!</span>
             <br>Please, try again or check your request!
@@ -25,9 +29,20 @@ export default {
         }),
     },
     methods: {
+        ...mapActions({
+            deleteSingleTutorial: 'tutorials/deleteSingleTutorial',
+        }),
+        deleteTutorial(id) {
+            this.deleteSingleTutorial(id);
+            this.$router.push({ path: '/tutorials' }).then(() => {
+                window.location.reload();
+            });
+        }
     },
 }
 
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+.tutorial__btnBlock {}
+</style>

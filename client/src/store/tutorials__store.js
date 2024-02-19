@@ -38,7 +38,7 @@ export const tutorials__store = {
 		// DRF: class TutorialViewSet - def list(): GET all tutorials list
 		async getTutorials({ commit, state }) {
 			await axios
-				.get(`http://${process.env.server_HostPort_1}/api/tutorials`, {
+				.get(`http://${process.env.server_HostPort_1}/api/tutorials/`, {
 					headers: {
 						'Content-Type': 'application/json',
 						Accept: 'application/json',
@@ -55,7 +55,7 @@ export const tutorials__store = {
 		// DRF: class TutorialViewSet - def list(): GET tutorial which contains searched query
 		async getSearchedTutorial({ commit, state }) {
 			await axios
-				.get(`http://${process.env.server_HostPort_1}/api/tutorials`, {
+				.get(`http://${process.env.server_HostPort_1}/api/tutorials/`, {
 					headers: {
 						'Content-Type': 'application/json',
 						Accept: 'application/json',
@@ -75,7 +75,7 @@ export const tutorials__store = {
 		// DRF: class TutorialViewSet - def destroy(): DELETE tutorials list
 		deleteTutorials({ commit }) {
 			axios
-				.delete(`http://${process.env.server_HostPort_1}/api/tutorials`, {
+				.delete(`http://${process.env.server_HostPort_1}/api/tutorials/`, {
 					headers: {
 						'Content-Type': 'application/json',
 						Accept: 'application/json',
@@ -106,7 +106,7 @@ export const tutorials__store = {
 		// DRF: class TutorialDetailedViewSet - def retrieve(): GET a single tutorial
 		async getSingleTutorial({ commit }, id) {
 			await axios
-				.get(`http://${process.env.server_HostPort_1}/api/tutorials/${id}`, {
+				.get(`http://${process.env.server_HostPort_1}/api/tutorials/${id}/`, {
 					headers: {
 						'Content-Type': 'application/json',
 						Accept: 'application/json',
@@ -115,6 +115,23 @@ export const tutorials__store = {
 				})
 				.then((response) => {
 					commit('setSingleAndSearchedTutorial', response.data.tutorial);
+				})
+				.catch((error) => {
+					console.log(error.message);
+				});
+		},
+		// DRF: class TutorialDetailedViewSet - def destroy(): DELETE a single tutorial
+		async deleteSingleTutorial({ commit }, id) {
+			await axios
+				.delete(`http://${process.env.server_HostPort_1}/api/tutorials/${id}/`, {
+					headers: {
+						'Content-Type': 'application/json',
+						Accept: 'application/json',
+						body: null,
+					},
+				})
+				.then((response) => {
+					commit('setSingleAndSearchedTutorial', null);
 				})
 				.catch((error) => {
 					console.log(error.message);
