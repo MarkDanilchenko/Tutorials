@@ -15,10 +15,38 @@
         <div v-if="tutorials.length > 0">
             <div class="row">
                 <div class="col-md-6 col-12 mb-md-0 mb-4">
-                    <h5 class="my-3 text-muted">Tutorials' list</h5>
-                    <Tutorials__list :tutorials="tutorials" />
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="my-3 text-muted">Tutorials' list</h5>
+                        <!-- radios: (published/all) -->
+                        <!-- radios: (published/all) -->
+                        <!-- radios: (published/all) -->
+                        <div class="d-flex justify-content-center">
+                            <div class="form-check me-3">
+                                <input class="form-check-input" type="radio" name="radioIsPublished" id="radioAll"
+                                    @click="setPublishedTutorial(false)" checked>
+                                <label class="form-check-label text-small" for="radioAll">
+                                    All
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="radioIsPublished" id="radioPublished"
+                                    @click="setPublishedTutorial(true)">
+                                <label class="form-check-label text-small" for="radioPublished">
+                                    Published only
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Tutorials__list -->
+                    <!-- Tutorials__list -->
+                    <!-- Tutorials__list -->
+                    <Tutorials__list :tutorials="displayTutorials" />
+                    <!-- Tutorials btns -->
+                    <!-- Tutorials btns -->
+                    <!-- Tutorials btns -->
                     <div class="d-flex justify-content-center mt-3">
-                        <button class="btn btn-outline-custom-green me-3" type="button"></button>
+                        <button class="btn btn-outline-custom-green me-3" @click="$router.push('/tutorials/addNew')"
+                            type="button">New Tutorial</button>
                         <button class="btn btn-danger" type="button" data-bs-toggle="modal"
                             data-bs-target="#deleteAllTutorials">Delete all</button>
                     </div>
@@ -77,8 +105,13 @@
                 </div>
             </div>
         </div>
-        <div v-else class="tutorials__empty d-flex justify-content-center align-items-center">
-            No any Tutorial...
+        <!-- Tutorials: emptyField -->
+        <!-- Tutorials: emptyField -->
+        <!-- Tutorials: emptyField -->
+        <div v-else class="tutorials__empty d-flex flex-column justify-content-center align-items-center">
+            <p>No any Tutorial...</p> <br>
+            <button class="btn btn-outline-custom-green me-3" @click="$router.push('/tutorials/addNew')" type="button">New
+                Tutorial</button>
         </div>
     </section>
 </template>
@@ -103,7 +136,11 @@ export default {
     computed: {
         ...mapState({
             tutorials: state => state.tutorials.tutorials,
-            tutorial__searchQuery: state => state.tutorials.tutorial__searchQuery
+            tutorial__searchQuery: state => state.tutorials.tutorial__searchQuery,
+            tutorial__published: state => state.tutorials.tutorial__published,
+        }),
+        ...mapGetters({
+            displayTutorials: 'tutorials/displayTutorials',
         }),
     },
     methods: {
@@ -114,7 +151,8 @@ export default {
         }),
         ...mapMutations({
             setSearchQueryTutorial: 'tutorials/setSearchQueryTutorial',
-            setSearchedTutorial: 'tutorials/setSearchedTutorial'
+            setSearchedTutorial: 'tutorials/setSearchedTutorial',
+            setPublishedTutorial: 'tutorials/setPublishedTutorial',
         }),
         searchTutorial() {
             this.setSearchedTutorial(null);
@@ -125,7 +163,7 @@ export default {
         deleteAllTutorials() {
             this.activeComponent = 'Tutorial__emptyFieldLogo';
             this.deleteTutorials();
-        }
+        },
     },
     mounted() {
         this.getTutorials();
@@ -142,7 +180,6 @@ export default {
     color: $green-color;
     font-weight: 700;
     font-size: 32px;
-    text-shadow: 0px 0px 10px $green-color;
 }
 
 .fade-enter-active,

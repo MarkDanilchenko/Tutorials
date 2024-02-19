@@ -5,8 +5,18 @@ export const tutorials__store = {
 		tutorials: [],
 		tutorial__searched: null,
 		tutorial__searchQuery: '',
+		tutorial__published: false,
+		tutorial__postError: null,
 	}),
-	getters: {},
+	getters: {
+		displayTutorials(state) {
+			if (state.tutorial__published) {
+				return state.tutorials.filter((i) => i.published == true);
+			} else if (state.tutorial__published === false) {
+				return state.tutorials;
+			}
+		},
+	},
 	mutations: {
 		setTutorials(state, tutorials) {
 			state.tutorials = tutorials;
@@ -16,6 +26,12 @@ export const tutorials__store = {
 		},
 		setSearchQueryTutorial(state, tutorial__searchQuery) {
 			state.tutorial__searchQuery = tutorial__searchQuery;
+		},
+		setPublishedTutorial(state, tutorial__published) {
+			state.tutorial__published = tutorial__published;
+		},
+		setTutorialPostError(state, tutorial__postError) {
+			state.tutorial__postError = tutorial__postError;
 		},
 	},
 	actions: {
@@ -72,6 +88,19 @@ export const tutorials__store = {
 				})
 				.catch((error) => {
 					console.log(error.message);
+				});
+		},
+		// DRF: class TutorialViewSet - def create(): CREATE new tutorial
+		async postTutorial({ commit }, tutorial) {
+			await axios
+				.post(`http://${process.env.server_HostPort_1}/api/tutorials/`, tutorial, {
+					headers: {
+						'Content-Type': 'application/json',
+						Accept: 'application/json',
+					},
+				})
+				.catch((error) => {
+					commit('setTutorialPostError', error.message);
 				});
 		},
 	},

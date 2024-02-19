@@ -14,7 +14,7 @@ const routes = [
 	{
 		path: '/tutorials/addNew',
 		name: 'addNew',
-		component: () => import('@/pages/AddNew__page.vue'),
+		component: () => import('@/pages/NewTutorial__page.vue'),
 	},
 ];
 
