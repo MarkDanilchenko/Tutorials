@@ -13,14 +13,20 @@
             </h2>
             <div v-if="index == 0" :id="`collapse${index}`" class="accordion-collapse collapse show">
                 <div class="accordion-body d-flex justify-content-between align-items-center">
-                    <p class="m-0"><span class="text-small text-muted">Tutorial title:</span> <b>"{{ tutorial.title }}"</b></p>
-                    <button class="btn btn-outline-custom-green">More</button>
+                    <p class="m-0"><span class="text-small text-muted">Tutorial title:</span> <b>"{{ tutorial.title }}"</b>
+                    </p>
+                    <!-- $emit data for the GET single Tutorial method directly to the Tutorials__page.vue to the getDetailsSingleTutorial(id){} -->
+                    <button class="btn btn-outline-custom-green"
+                        @click="this.$emit('getDetailsSingleTutorial', tutorial.id)">More</button>
                 </div>
             </div>
             <div v-else :id="`collapse${index}`" class="accordion-collapse collapse">
                 <div class="accordion-body d-flex justify-content-between align-items-center">
-                    <p class="m-0"><span class="text-small text-muted">Tutorial title:</span> <b>"{{ tutorial.title }}"</b></p>
-                    <button class="btn btn-outline-custom-green">More</button>
+                    <p class="m-0"><span class="text-small text-muted">Tutorial title:</span> <b>"{{ tutorial.title }}"</b>
+                    </p>
+                    <!-- $emit data for the GET single Tutorial method directly to the Tutorials__page.vue to the getDetailsSingleTutorial(id){} -->
+                    <button class="btn btn-outline-custom-green"
+                        @click="this.$emit('getDetailsSingleTutorial', tutorial.id)">More</button>
                 </div>
             </div>
         </div>
@@ -38,18 +44,6 @@ export default {
         index: {
             type: Number
         }
-    },
-    computed: {
-        ...mapState({
-        }),
-        ...mapGetters({
-        }),
-    },
-    methods: {
-        ...mapActions({
-        }),
-        ...mapMutations({
-        }),
     },
 }
 </script>

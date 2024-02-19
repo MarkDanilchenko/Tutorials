@@ -1,7 +1,8 @@
 <template>
     <section class="my-tutorials__list">
         <div class="accordion" id="TutorialsAccordionPanel">
-            <Tutorial__item v-for="tutorial, index in tutorials" :key="tutorial.id" :tutorial="tutorial" :index="index" />
+            <Tutorial__item v-for="tutorial, index in tutorials" :key="tutorial.id" :tutorial="tutorial" :index="index"
+                @getDetailsSingleTutorial="this.$emit('getDetailsSingleTutorial', tutorial.id)" />
         </div>
     </section>
 </template>

@@ -40,7 +40,7 @@
                     <!-- Tutorials__list -->
                     <!-- Tutorials__list -->
                     <!-- Tutorials__list -->
-                    <Tutorials__list :tutorials="displayTutorials" />
+                    <Tutorials__list :tutorials="displayTutorials" @getDetailsSingleTutorial="getDetailsSingleTutorial" />
                     <!-- Tutorials btns -->
                     <!-- Tutorials btns -->
                     <!-- Tutorials btns -->
@@ -118,14 +118,14 @@
 
 <script>
 import Tutorials__list from '@/components/Tutorials__list.vue';
-import Tutorial__searched from '@/components/Tutorial__searched.vue';
+import Tutorial__details from '@/components/Tutorial__details.vue';
 import Tutorial__emptyFieldLogo from '@/components/Tutorial__emptyFieldLogo.vue';
 import { mapState, mapActions, mapGetters, mapMutations } from 'vuex';
 export default {
     name: 'Tutorials__page',
     components: {
         Tutorials__list,
-        Tutorial__searched,
+        Tutorial__details,
         Tutorial__emptyFieldLogo
     },
     data() {
@@ -147,23 +147,28 @@ export default {
         ...mapActions({
             getTutorials: 'tutorials/getTutorials',
             getSearchedTutorial: 'tutorials/getSearchedTutorial',
-            deleteTutorials: 'tutorials/deleteTutorials'
+            deleteTutorials: 'tutorials/deleteTutorials',
+            getSingleTutorial: 'tutorials/getSingleTutorial',
         }),
         ...mapMutations({
             setSearchQueryTutorial: 'tutorials/setSearchQueryTutorial',
-            setSearchedTutorial: 'tutorials/setSearchedTutorial',
+            setSingleAndSearchedTutorial: 'tutorials/setSingleAndSearchedTutorial',
             setPublishedTutorial: 'tutorials/setPublishedTutorial',
         }),
         searchTutorial() {
-            this.setSearchedTutorial(null);
+            this.setSingleAndSearchedTutorial(null);
             this.getSearchedTutorial();
             this.setSearchQueryTutorial('');
-            this.activeComponent = 'Tutorial__searched';
+            this.activeComponent = 'Tutorial__details';
         },
         deleteAllTutorials() {
             this.activeComponent = 'Tutorial__emptyFieldLogo';
             this.deleteTutorials();
         },
+        getDetailsSingleTutorial(id) {
+            this.getSingleTutorial(id);
+            this.activeComponent = 'Tutorial__details';
+        }
     },
     mounted() {
         this.getTutorials();

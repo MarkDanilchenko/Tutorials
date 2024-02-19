@@ -3,7 +3,7 @@ export const tutorials__store = {
 	namespaced: true,
 	state: () => ({
 		tutorials: [],
-		tutorial__searched: null,
+		tutorial__details: null,
 		tutorial__searchQuery: '',
 		tutorial__published: false,
 		tutorial__postError: null,
@@ -21,8 +21,8 @@ export const tutorials__store = {
 		setTutorials(state, tutorials) {
 			state.tutorials = tutorials;
 		},
-		setSearchedTutorial(state, tutorial__searched) {
-			state.tutorial__searched = tutorial__searched;
+		setSingleAndSearchedTutorial(state, tutorial__details) {
+			state.tutorial__details = tutorial__details;
 		},
 		setSearchQueryTutorial(state, tutorial__searchQuery) {
 			state.tutorial__searchQuery = tutorial__searchQuery;
@@ -66,7 +66,7 @@ export const tutorials__store = {
 					},
 				})
 				.then((response) => {
-					commit('setSearchedTutorial', response.data.tutorial);
+					commit('setSingleAndSearchedTutorial', response.data.tutorial);
 				})
 				.catch((error) => {
 					console.log(error.response.data.tutorial);
@@ -84,13 +84,13 @@ export const tutorials__store = {
 				})
 				.then((response) => {
 					commit('setTutorials', []);
-					commit('setSearchedTutorial', null);
+					commit('setSingleAndSearchedTutorial', null);
 				})
 				.catch((error) => {
 					console.log(error.message);
 				});
 		},
-		// DRF: class TutorialViewSet - def create(): CREATE new tutorial
+		// DRF: class TutorialViewSet - def create(): POST new tutorial
 		async postTutorial({ commit }, tutorial) {
 			await axios
 				.post(`http://${process.env.server_HostPort_1}/api/tutorials/`, tutorial, {
@@ -101,6 +101,23 @@ export const tutorials__store = {
 				})
 				.catch((error) => {
 					commit('setTutorialPostError', error.message);
+				});
+		},
+		// DRF: class TutorialDetailedViewSet - def retrieve(): GET a single tutorial
+		async getSingleTutorial({ commit }, id) {
+			await axios
+				.get(`http://${process.env.server_HostPort_1}/api/tutorials/${id}`, {
+					headers: {
+						'Content-Type': 'application/json',
+						Accept: 'application/json',
+						body: null,
+					},
+				})
+				.then((response) => {
+					commit('setSingleAndSearchedTutorial', response.data.tutorial);
+				})
+				.catch((error) => {
+					console.log(error.message);
 				});
 		},
 	},
