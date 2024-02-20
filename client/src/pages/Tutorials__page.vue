@@ -41,9 +41,9 @@
                     <!-- Tutorials__list -->
                     <!-- Tutorials__list -->
                     <Tutorials__list :tutorials="displayTutorials" @getDetailsSingleTutorial="getDetailsSingleTutorial" />
-                    <!-- Tutorials btns -->
-                    <!-- Tutorials btns -->
-                    <!-- Tutorials btns -->
+                    <!-- Tutorials add/del btns -->
+                    <!-- Tutorials add/del btns -->
+                    <!-- Tutorials add/del btns -->
                     <div class="d-flex justify-content-center mt-3">
                         <button class="btn btn-outline-custom-green me-3" @click="$router.push('/tutorials/addNew')"
                             type="button">New Tutorial</button>
@@ -72,9 +72,9 @@
                                 type="button">Search</button>
                         </div>
                     </div>
-                    <!-- Tutorial: emptyField, search result -->
-                    <!-- Tutorial: emptyField, search result -->
-                    <!-- Tutorial: emptyField, search result -->
+                    <!-- Tutorial: emptyField, search/details components -->
+                    <!-- Tutorial: emptyField, search/details components -->
+                    <!-- Tutorial: emptyField, search/details components -->
                     <div class="row">
                         <transition name="fade" mode="out-in">
                             <component :is="activeComponent"></component>

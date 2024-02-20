@@ -1,7 +1,10 @@
 <template>
     <section class="my-notFound">
         <div class="d-flex flex-column justify-content-center align-items-center notFoundPage">
-            <p class="text-center"><span class="text-green">404</span><br>Page not found</p>
+            <p class="text-center">
+                <span class="text-green">404</span>
+                <br>Page not found
+            </p>
             <button @click="$router.go(-1)" class="btn btn-outline-custom-green">Back</button>
         </div>
     </section>

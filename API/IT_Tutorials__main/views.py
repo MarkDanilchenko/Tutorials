@@ -44,9 +44,15 @@ class TutorialViewSet(viewsets.ModelViewSet):
             return Response({"tutorials": result_serialized}, status=status.HTTP_200_OK)
 
     def create(self, request):
-        if request.data.get("published") == False and request.data.get("publish_date"):
-            del request.data["publish_date"]
-        elif request.data.get("published"):
+        if (
+            request.data.get("published") == False
+            or request.data.get("published") == "false"
+        ):
+            pass
+        elif (
+            request.data.get("published") == True
+            or request.data.get("published") == "true"
+        ):
             request.data["publish_date"] = datetime.date.today().strftime("%Y-%m-%d")
         result_serialized = self.serializer_class(data=request.data)
         if result_serialized.is_valid():
@@ -62,19 +68,6 @@ class TutorialViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-# class TutorialPublishedViewSet(viewsets.ModelViewSet):
-#     serializer_class = serializers.TutorialSerializer
-#     pagination_class = None
-#     permission_classes = [permissions.AllowAny]
-
-#     def list(self, request):
-#         result = models.Tutorial.objects.filter(published=True).order_by("title")
-#         result_serialized = self.serializer_class(result, many=True).data
-#         return Response(
-#             {"tutorials_published": result_serialized}, status=status.HTTP_200_OK
-#         )
-
-
 class TutorialDetailedViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.TutorialSerializer
     pagination_class = None
@@ -87,16 +80,24 @@ class TutorialDetailedViewSet(viewsets.ModelViewSet):
 
     def update(self, request, pk):
         result = get_object_or_404(models.Tutorial, pk=pk)
-        if request.data.get("published") == False and request.data.get("publish_date"):
-            del request.data["publish_date"]
-        elif request.data.get("published") and not request.data.get("publish_date"):
+        if (
+            # from JSON: "published": "false" (string), from Insomnia: "published": false (boolean)
+            request.data.get("published") == False
+            or request.data.get("published") == "false"
+        ):
+            pass
+        elif (
+            # from JSON: "published": "true" (string), from Insomnia: "published": true (boolean)
+            request.data.get("published") == "true"
+            or request.data.get("published") == True
+        ):
             request.data["publish_date"] = datetime.date.today().strftime("%Y-%m-%d")
         result_serialized = self.serializer_class(result, data=request.data)
         if result_serialized.is_valid():
             result_serialized.save()
             return Response(
                 {"updated": result_serialized.data},
-                status=status.HTTP_202_ACCEPTED,
+                status=status.HTTP_200_OK,
             )
         return Response(
             {"error": result_serialized.errors}, status=status.HTTP_400_BAD_REQUEST

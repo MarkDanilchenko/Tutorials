@@ -6,7 +6,6 @@
                     <img src="@/assets/IMG/Vue3_logo.png" width="30" height="30" class="d-inline-block align-text-top"
                         alt="Vue3 logo" title="Home page">
                 </router-link>
-
                 <router-link v-else to="/" class="navbar-brand me-3 p-0">
                     <img src="@/assets/IMG/Vue3_logo.png" width="30" height="30" class="d-inline-block align-text-top"
                         alt="Vue3 logo" title="Home page">

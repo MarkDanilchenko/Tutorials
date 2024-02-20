@@ -1,16 +1,16 @@
 <template>
-    <section class="my-newTutorial">
+    <section class="my-updateTutorial">
         <div class="row">
             <div class="d-flex flex-column justify-content-center align-items-center mt-5">
-                <!-- addNewTutorial__form -->
-                <!-- addNewTutorial__form -->
-                <!-- addNewTutorial__form -->
-                <form action="" class="col-lg-6 col-md-8 col-10" name="addNewTutorial__form" id="addNewTutorial__form">
+                <!-- updateTutorial__form -->
+                <!-- updateTutorial__form -->
+                <!-- updateTutorial__form -->
+                <form action="" class="col-lg-6 col-md-8 col-10" name="updateTutorial__form" id="updateTutorial__form">
                     <fieldset class="form-group mb-3">
-                        <legend class="border-bottom text-center mb-3">Add new Tutorial</legend>
+                        <legend class="border-bottom text-center mb-3">Tutorial Update</legend>
                         <div class="mb-3">
                             <label for="tutorialTitle" class="form-label"><b>Title: *</b></label>
-                            <input v-customFocus type="text" class="form-control" id="tutorialTitle" aria-describedby="tutorialTitleHelp"
+                            <input type="text" class="form-control" id="tutorialTitle" aria-describedby="tutorialTitleHelp"
                                 placeholder="Title of the tutorial..." v-model="form.title" @input="v$.form.title.$touch()">
                             <div v-if="v$.form.title.required.$invalid" class="text-secondary text-small">This field is
                                 required.</div>
@@ -18,7 +18,6 @@
                                 longer than
                                 {{
                                     v$.form.title.maxLength.$params.max }} symbols.</div>
-                            <!-- <div v-if="v$.form.title.onlyLetters.$invalid" class="text-danger text-small">!!!</div> -->
                         </div>
                         <div class="mb-3">
                             <label for="tutorialDescription" class="form-label"><b>Description: *</b></label>
@@ -40,7 +39,7 @@
                     </fieldset>
                     <div class="d-flex justify-content-center align-items-center">
                         <button class="btn btn-outline-custom-green" type="submit" :disabled="btnSubmitDisabled"
-                            @click.prevent="addNewTutorial">Add!</button>
+                            @click.prevent="updateTutorial(this.$route.params.id)">Update!</button>
                     </div>
                 </form>
                 <!-- form bottom -->
@@ -66,9 +65,9 @@
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex';
 import { useVuelidate } from '@vuelidate/core';
 import { maxLength, minLength, required, helpers } from '@vuelidate/validators';
-// const onlyLetters = (value) => !helpers.req(value) || helpers.regex(/^[a-zA-Z]*$/)(value);
+import axios from 'axios';
 export default {
-    name: 'NewTutorial__page',
+    name: 'UpdateTutorial__page',
     setup() {
         return {
             v$: useVuelidate()
@@ -80,7 +79,7 @@ export default {
                 title: '',
                 description: '',
                 isPublished: false
-            },
+            }
         }
     },
     validations() {
@@ -88,19 +87,19 @@ export default {
             form: {
                 title: {
                     required,
-                    maxLength: maxLength(100),
-                    // onlyLetters
+                    maxLength: maxLength(100)
                 },
                 description: {
                     required,
                     maxLength: maxLength(1000)
-                },
+                }
             }
         }
+
     },
     computed: {
         ...mapState({
-            error: state => state.tutorials.tutorial__postError
+            error: state => state.tutorials.tutorial__putError
         }),
         btnSubmitDisabled() {
             return this.v$.$invalid ? true : false
@@ -108,29 +107,46 @@ export default {
     },
     methods: {
         ...mapActions({
-            postTutorial: 'tutorials/postTutorial'
+            putSingleTutorial: 'tutorials/putSingleTutorial'
         }),
         ...mapMutations({
-            setTutorialPostError: 'tutorials/setTutorialPostError'
+            setTutorialPutError: 'tutorials/setTutorialPutError'
         }),
-        addNewTutorial() {
-            let newTutorial = new FormData();
-            newTutorial.append('title', this.form.title);
-            newTutorial.append('description', this.form.description);
-            newTutorial.append('published', this.form.isPublished);
-            this.postTutorial(newTutorial).then((response) => {
-                this.setTutorialPostError(null);
-                this.v$.$reset();
-                this.$router.push('/tutorials');
+        updateTutorial(id) {
+            let updateTutorial = new FormData();
+            updateTutorial.append('title', this.form.title);
+            updateTutorial.append('description', this.form.description);
+            updateTutorial.append('published', this.form.isPublished);
+            this.putSingleTutorial({ "id": id, "updateTutorial": updateTutorial })
+                .then((response) => {
+                    this.setTutorialPutError(null);
+                    this.v$.$reset();
+                    this.$router.push('/tutorials');
+                }).catch((error) => {
+                    this.setTutorialPutError(error.message);
+                });
+        },
+        async getTutorialForFormFill(id) {
+            await axios.get(`http://${process.env.server_HostPort_1}/api/tutorials/${id}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                }
+            }).then((response) => {
+                this.form.title = response.data.tutorial.title;
+                this.form.description = response.data.tutorial.description;
+                this.form.isPublished = response.data.tutorial.published;
             }).catch((error) => {
-                this.setTutorialPostError(error.message);
+                console.log(error.message);
             });
-        }
+        },
     },
     mounted() {
-        this.setTutorialPostError(null);
-    }
+        this.getTutorialForFormFill(this.$route.params.id);
+        this.setTutorialPutError(null);
+    },
 }
+
 </script>
 
 <style scoped lang="scss"></style>

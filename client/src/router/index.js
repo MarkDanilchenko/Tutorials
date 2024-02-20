@@ -17,6 +17,11 @@ const routes = [
 		component: () => import('@/pages/NewTutorial__page.vue'),
 	},
 	{
+		path: '/tutorials/update/:id',
+		name: 'update',
+		component: () => import('@/pages/UpdateTutorial__page.vue'),
+	},
+	{
 		path: '/:pathMatch(.*)*',
 		name: 'notFound',
 		component: () => import('@/pages/NotFound__page.vue'),

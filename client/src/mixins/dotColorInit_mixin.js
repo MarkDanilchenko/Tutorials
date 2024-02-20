@@ -1,7 +1,4 @@
 export default {
-	data() {
-		return {};
-	},
 	mounted() {
 		// .dot{} color initialization mode
 		// .dot{} color initialization mode
@@ -21,6 +18,4 @@ export default {
 			$('.dot').css('background', '#000000');
 		}
 	},
-	methods: {},
-	computed: {},
 };

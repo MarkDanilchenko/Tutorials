@@ -7,6 +7,7 @@ export const tutorials__store = {
 		tutorial__searchQuery: '',
 		tutorial__published: false,
 		tutorial__postError: null,
+		tutorial__putError: null,
 	}),
 	getters: {
 		displayTutorials(state) {
@@ -32,6 +33,9 @@ export const tutorials__store = {
 		},
 		setTutorialPostError(state, tutorial__postError) {
 			state.tutorial__postError = tutorial__postError;
+		},
+		setTutorialPutError(state, tutorial__putError) {
+			state.tutorial__putError = tutorial__putError;
 		},
 	},
 	actions: {
@@ -73,8 +77,8 @@ export const tutorials__store = {
 				});
 		},
 		// DRF: class TutorialViewSet - def destroy(): DELETE tutorials list
-		deleteTutorials({ commit }) {
-			axios
+		async deleteTutorials({ commit, state }) {
+			await axios
 				.delete(`http://${process.env.server_HostPort_1}/api/tutorials/`, {
 					headers: {
 						'Content-Type': 'application/json',
@@ -91,20 +95,17 @@ export const tutorials__store = {
 				});
 		},
 		// DRF: class TutorialViewSet - def create(): POST new tutorial
-		async postTutorial({ commit }, tutorial) {
-			await axios
-				.post(`http://${process.env.server_HostPort_1}/api/tutorials/`, tutorial, {
-					headers: {
-						'Content-Type': 'application/json',
-						Accept: 'application/json',
-					},
-				})
-				.catch((error) => {
-					commit('setTutorialPostError', error.message);
-				});
+		async postTutorial({ commit, state }, tutorial) {
+			await axios.post(`http://${process.env.server_HostPort_1}/api/tutorials/`, tutorial, {
+				headers: {
+					'Content-Type': 'application/json',
+					Accept: 'application/json',
+				},
+			});
+			// server's error is handled in .vue component through .then((response) => {}).catch((error) => {})
 		},
 		// DRF: class TutorialDetailedViewSet - def retrieve(): GET a single tutorial
-		async getSingleTutorial({ commit }, id) {
+		async getSingleTutorial({ commit, state }, id) {
 			await axios
 				.get(`http://${process.env.server_HostPort_1}/api/tutorials/${id}/`, {
 					headers: {
@@ -121,7 +122,7 @@ export const tutorials__store = {
 				});
 		},
 		// DRF: class TutorialDetailedViewSet - def destroy(): DELETE a single tutorial
-		async deleteSingleTutorial({ commit }, id) {
+		async deleteSingleTutorial({ commit, state }, id) {
 			await axios
 				.delete(`http://${process.env.server_HostPort_1}/api/tutorials/${id}/`, {
 					headers: {
@@ -136,6 +137,16 @@ export const tutorials__store = {
 				.catch((error) => {
 					console.log(error.message);
 				});
+		},
+		// DRF: class TutorialDetailedViewSet - def update(): PUT a single tutorial
+		async putSingleTutorial({ commit, state }, params) {
+			await axios.put(`http://${process.env.server_HostPort_1}/api/tutorials/${params.id}/`, params.updateTutorial, {
+				headers: {
+					'Content-Type': 'application/json',
+					Accept: 'application/json',
+				},
+			});
+			// server's error is handled in .vue component through .then((response) => {}).catch((error) => {})
 		},
 	},
 };
