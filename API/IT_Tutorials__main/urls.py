@@ -10,10 +10,6 @@ urlpatterns = [
             {"get": "list", "post": "create", "delete": "destroy"}
         ),
     ),
-    # path(
-    #     "api/tutorials/published/",
-    #     views.TutorialPublishedViewSet.as_view({"get": "list"}),
-    # ),
     path(
         "api/tutorials/<int:pk>/",
         views.TutorialDetailedViewSet.as_view(

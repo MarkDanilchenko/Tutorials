@@ -4,13 +4,17 @@
 # ----------
 /dist
 draft.*
-/staticfiles
+staticfiles/
+mediafiles/
 *.pdf
 *.sql
+!IT_Tutorials.sql
 db_data/
 .DS_Store
 package-lock.*
 Insomnia*
+django_logs/
+gunicorn_logs/
 
 # Editor directories and files
 *.suo

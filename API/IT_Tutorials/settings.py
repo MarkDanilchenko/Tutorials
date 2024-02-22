@@ -34,9 +34,7 @@ DEBUG = os.getenv("DEBUG", True)
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "0.0.0.0"]
 
-
 # Application definition
-
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -53,6 +51,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -123,9 +122,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "EUROPE/Moscow"
+TIME_ZONE = "Europe/Moscow"
 
-DATE_FORMAT = "%d.%m.%Y"
+DATE_FORMAT = "d.m.Y"
 
 USE_L10N = True
 
@@ -137,11 +136,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
 
-MEDIA_URL = "media/"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
-MEDIA_ROOT = os.path.join(BASE_DIR, "./media")
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+MEDIA_URL = "/media/"
+
+MEDIA_ROOT = os.path.join(BASE_DIR, "mediafiles")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -181,7 +184,6 @@ CORS_ORIGIN_WHITELIST = [
     f"http://{os.getenv('client_HostPort_3')}",
 ]
 
-
 ####################################
 ##  LOGGER CONFIGURATION ##
 ####################################
@@ -189,15 +191,15 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "handlers": {
-        "error_file": {
+        "file": {
             "level": "ERROR",
             "class": "logging.FileHandler",
-            "filename": "error.log",
+            "filename": "./django_logs/error.log",
         }
     },
     "loggers": {
         "django": {
-            "handlers": ["error_file"],
+            "handlers": ["file"],
             "level": "ERROR",
             "propagate": True,
         }

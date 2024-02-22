@@ -13,9 +13,6 @@
 **/.venv
 **/.classpath
 **/.dockerignore
-
-# <!-- **/.env -->
-
 **/.git
 **/.gitignore
 **/.project
@@ -36,14 +33,16 @@
 **/obj
 **/secrets.dev.yaml
 **/values.dev.yaml
-
-# <!-- LICENSE -->
-
-# <!-- README.md -->
-
 *.pdf
 dev.env
-error.log
+Insomnia_2024-02-14.json
 .idea
 package-lock.json
 /dist
+.nuxt
+
+<!-- allowed -->
+!**/.env
+!LICENSE
+!README.md
+<!--  -->

@@ -1,0 +1,83 @@
+version: '3.8'
+
+services:
+    # ------------------------------------------------------webserver(nginx)
+    webserver:
+        restart: always
+        build:
+            context: .
+            dockerfile: Dockerfile__webserver
+        container_name: webserver
+        volumes:
+            - ./API/staticfiles:/app/staticfiles
+            - ./API/mediafiles:/app/mediafiles
+        ports:
+            - 8080:80
+        networks:
+            - backend
+        depends_on:
+            api:
+                condition: service_healthy
+    # ------------------------------------------------------api(django rest framework)
+    api:
+        restart: always
+        build:
+            context: .
+            dockerfile: Dockerfile__api
+        container_name: api
+        command: >
+            sh -c 'python3 manage.py makemigrations
+            && python3 manage.py migrate
+            && python3 manage.py collectstatic --noinput
+            && gunicorn --log-file gunicorn_logs/error.log --access-logfile gunicorn_logs/access.log IT_Tutorials.wsgi:application -b ${server_HostPort_1}'
+        volumes:
+            - ./API/staticfiles:/app/API/staticfiles
+            - ./API/mediafiles:/app/API/mediafiles
+            - ./API/gunicorn_logs:/app/API/gunicorn_logs
+        ports:
+            - 8000:8000
+        expose:
+            - 8000
+        networks:
+            - backend
+        environment:
+            # for django-server connection to not to localhost-MySQL (as in settings.py) but to container-MySQL
+            - DATABASE_HOST=db
+        links:
+            - db
+        depends_on:
+            db:
+                condition: service_healthy
+        healthcheck:
+            test: ['CMD', 'curl', '-f', 'http://${server_HostPort_1}/']
+            timeout: 15s
+            interval: 5s
+            retries: 3
+    # ------------------------------------------------------db(mysql)
+    db:
+        restart: always
+        image: mysql:8.0
+        container_name: db
+        env_file:
+            - .env
+        ports:
+            - 3307:3306
+        networks:
+            - backend
+        volumes:
+            - ./IT_Tutorials.sql:/docker-entrypoint-initdb.d/IT_Tutorials.sql
+            - ./db_data:/var/lib/mysql
+        healthcheck:
+            test: ['CMD', 'mysqladmin', 'ping', '-h', '127.0.0.1']
+            timeout: 15s
+            interval: 5s
+            retries: 3
+    # ------------------------------------------------------other(volumes && networks)
+volumes:
+    db_data:
+    staticfiles:
+    mediafiles:
+    gunicorn_logs:
+
+networks:
+    backend:
