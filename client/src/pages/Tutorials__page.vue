@@ -51,7 +51,9 @@
                             data-bs-target="#deleteAllTutorials">Delete all</button>
                     </div>
                 </div>
-                <hr class="d-md-none">
+                <div class="d-md-none">
+                    <hr>
+                </div>
                 <div class="col-md-6 col-12">
                     <!-- search Tutorial -->
                     <!-- search Tutorial -->

@@ -14,7 +14,7 @@ services:
         ports:
             - 8080:80
         networks:
-            - backend
+            - frontend
         depends_on:
             api:
                 condition: service_healthy
@@ -34,12 +34,14 @@ services:
             - ./API/staticfiles:/app/API/staticfiles
             - ./API/mediafiles:/app/API/mediafiles
             - ./API/gunicorn_logs:/app/API/gunicorn_logs
+            - ./API/django_logs:/app/API/django_logs
         ports:
             - 8000:8000
         expose:
             - 8000
         networks:
             - backend
+            - frontend
         environment:
             # for django-server connection to not to localhost-MySQL (as in settings.py) but to container-MySQL
             - DATABASE_HOST=db
@@ -78,6 +80,8 @@ volumes:
     staticfiles:
     mediafiles:
     gunicorn_logs:
+    django_logs:
 
 networks:
     backend:
+    frontend:
