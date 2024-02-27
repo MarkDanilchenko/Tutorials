@@ -34,7 +34,7 @@ $form-check-input-checked-border-color: $green_color;
 
 /* ------- customize Bootstrap button styles via mixins -------- */
 .btn-custom-green {
-	@include button-variant($green_color_05, $green_color);
+	@include button-variant($green_color, $green_color_05, $white_color);
 }
 
 .btn-outline-custom-green {

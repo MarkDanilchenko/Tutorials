@@ -1,7 +1,7 @@
 <template>
     <section class="my-navbar">
         <nav class="navbar navbar-expand-md sticky-top bg-body">
-            <div class="container-fluid">
+            <div class="container-fluid mt-3">
                 <router-link v-if="$route.path == '/'" to="/" class="navbar-brand nav-link-active-logo me-3 p-0">
                     <img src="@/assets/IMG/Vue3_logo.png" width="30" height="30" class="d-inline-block align-text-top"
                         alt="Vue3 logo" title="Home page">
@@ -15,7 +15,7 @@
                     aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse mt-3" id="navbarSupportedContent">
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
                             <router-link v-if="$route.path == '/'" to="/"
@@ -36,10 +36,21 @@
                     <span class="navbar-text text-small me-3 d-lg-inline-block d-none">
                         This is a <b>Vue3 & DRF</b> tutorial project =&#41;
                     </span>
-                    <!-- colorMode switcher -->
-                    <!-- colorMode switcher -->
-                    <!-- colorMode switcher -->
                     <hr class="d-md-none">
+                    <!-- SignIn/SignUp -->
+                    <!-- SignIn/SignUp -->
+                    <!-- SignIn/SignUp -->
+                    <div class="d-flex justify-content-center align-items-center">
+                        <button class="btn btn-outline-custom-green me-1" type="button"
+                            @click="this.$router.push('/signin')">SignIn</button>
+                        <button class="btn btn-outline-custom-green me-1" type="button"
+                            @click="this.$router.push('/signup')">SignUp</button>
+                        <button class="btn btn-outline-secondary me-1" type="button"
+                            @click.prevent="signOut">SignOut</button>
+                    </div>
+                    <!-- colorMode switcher -->
+                    <!-- colorMode switcher -->
+                    <!-- colorMode switcher -->
                     <div class="mt-3 mt-md-0 d-flex flex-column align-items-center justify-content-center">
                         <input type="checkbox" id="colorMode_switcher" @click="changeColorMode" />
                         <label for="colorMode_switcher">
@@ -139,6 +150,10 @@ export default {
                 localStorage.setItem('colorMode', 'light');
                 $(".dot").css("background", "#000000");
             }
+        },
+        signOut() {
+            // TODO: signout
+            this.$router.push('/');
         }
     }
 }

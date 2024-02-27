@@ -12,6 +12,23 @@ from . import serializers
 # --------------------REST API----------------------
 
 
+class SignUpViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.UserSerializer
+    permission_classes = [permissions.AllowAny]
+    pagination_class = None
+
+    def create(self, request, *args, **kwargs):
+        result = self.serializer_class(data=request.data)
+        result.is_valid(raise_exception=True)
+        result.save()
+        return Response(
+            {
+                "created": f'User "{result.data.get("username")}" was successfully created.'
+            },
+            status=status.HTTP_201_CREATED,
+        )
+
+
 class TutorialViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.TutorialSerializer
     pagination_class = None
