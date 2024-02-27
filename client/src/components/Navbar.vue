@@ -37,16 +37,18 @@
                         This is a <b>Vue3 & DRF</b> tutorial project =&#41;
                     </span>
                     <hr class="d-md-none">
-                    <!-- SignIn/SignUp -->
-                    <!-- SignIn/SignUp -->
-                    <!-- SignIn/SignUp -->
+                    <!-- SignIn/SignUp/SignOut -->
+                    <!-- SignIn/SignUp/SignOut -->
+                    <!-- SignIn/SignUp/SignOut -->
                     <div class="d-flex justify-content-center align-items-center">
-                        <button class="btn btn-outline-custom-green me-1" type="button"
-                            @click="this.$router.push('/signin')">SignIn</button>
-                        <button class="btn btn-outline-custom-green me-1" type="button"
-                            @click="this.$router.push('/signup')">SignUp</button>
-                        <button class="btn btn-outline-secondary me-1" type="button"
-                            @click.prevent="signOut">SignOut</button>
+                        <button v-if="!this.currentUserSignedIn"
+                            :class="this.$route.path == '/signin' ? 'btn btn-custom-green me-1' : 'btn btn-outline-custom-green me-1'"
+                            type="button" @click="this.$router.push('/signin')">SignIn</button>
+                        <button v-if="!this.currentUserSignedIn"
+                            :class="this.$route.path == '/signup' ? 'btn btn-custom-green me-1' : 'btn btn-outline-custom-green me-1'"
+                            type="button" @click="this.$router.push('/signup')">SignUp</button>
+                        <button v-if="this.currentUserSignedIn" class="btn btn-outline-secondary me-1" type="button"
+                            @click.prevent="signOut_">SignOut</button>
                     </div>
                     <!-- colorMode switcher -->
                     <!-- colorMode switcher -->
@@ -118,6 +120,7 @@
 </template>
 
 <script>
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex';
 export default {
     name: 'Navbar',
     data() {
@@ -137,7 +140,24 @@ export default {
             $("#colorMode_switcher").attr("checked", false);
         }
     },
+    computed: {
+        ...mapState({
+            user: state => state.auth.user,
+        }),
+        ...mapGetters({
+            currentUserSignedIn: 'auth/currentUserSignedIn',
+        }),
+    },
     methods: {
+        ...mapActions({
+            signOut: 'auth/signOut'
+        }),
+        signOut_() {
+            if (localStorage.getItem('refreshToken')) {
+                this.signOut({ "refresh": localStorage.getItem('refreshToken') });
+                this.$router.push('/signin');
+            }
+        },
         changeColorMode() {
             if (this.colorMode == 'light') {
                 this.colorMode = 'dark';
@@ -151,12 +171,8 @@ export default {
                 $(".dot").css("background", "#000000");
             }
         },
-        signOut() {
-            // TODO: signout
-            this.$router.push('/');
-        }
     }
 }
 </script>
 
-<style scoped></style>
+<style scoped lang="scss"></style>

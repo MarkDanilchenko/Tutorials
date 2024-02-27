@@ -21,6 +21,7 @@ class User(AbstractUser):
 
     first_name = models.CharField(
         validators=[name_validator],
+        blank=True,
         max_length=100,
         help_text="First name",
         verbose_name="First name",
@@ -28,6 +29,7 @@ class User(AbstractUser):
 
     last_name = models.CharField(
         validators=[name_validator],
+        blank=True,
         max_length=100,
         help_text="Last name",
         verbose_name="Last name",

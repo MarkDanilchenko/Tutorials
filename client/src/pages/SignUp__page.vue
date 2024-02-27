@@ -117,6 +117,7 @@
 
 <script>
 import axios from 'axios';
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex';
 import { useVuelidate } from '@vuelidate/core';
 import { maxLength, minLength, required, helpers, email } from '@vuelidate/validators';
 const onlyLetters = (value) => !helpers.req(value) || helpers.regex(/^[a-zA-Z]{2,}$/)(value);
@@ -174,6 +175,9 @@ export default {
         }
     },
     methods: {
+        ...mapActions({
+            signIn: 'auth/signIn'
+        }),
         async signUp() {
             try {
                 if (this.form.password !== this.form.password2) {
@@ -193,6 +197,21 @@ export default {
                         }
                     }).then((response) => {
                         this.error = null
+                        // signIn with username and password from now
+                        // signIn with username and password from now
+                        // signIn with username and password from now
+                        this.signIn(
+                            { "username": this.form.username, "password": this.form.password }
+                        );
+                        this.form = {
+                            username: '',
+                            first_name: '',
+                            last_name: '',
+                            email: '',
+                            password: '',
+                            password2: ''
+                        }
+                        this.v$.$reset()
                         this.$router.push('/tutorials')
                     }).catch((error) => {
                         this.error = error.message

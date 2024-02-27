@@ -22,7 +22,6 @@ from django.urls import path, re_path, include
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
-    TokenVerifyView,
     TokenBlacklistView,
 )
 import IT_Tutorials__main.views as views
