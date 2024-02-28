@@ -41,6 +41,8 @@
                     <!-- SignIn/SignUp/SignOut -->
                     <!-- SignIn/SignUp/SignOut -->
                     <div class="d-flex justify-content-center align-items-center">
+                        <span v-if="currentUserProfile" class="text-small text-muted me-1">Welcome, {{
+                            currentUserProfile.profile.username }}!</span>
                         <button v-if="!this.currentUserSignedIn"
                             :class="this.$route.path == '/signin' ? 'btn btn-custom-green me-1' : 'btn btn-outline-custom-green me-1'"
                             type="button" @click="this.$router.push('/signin')">SignIn</button>
@@ -129,6 +131,7 @@ export default {
         }
     },
     mounted() {
+        // colorMode switcher
         try {
             if (this.colorMode == 'light') {
                 $("#colorMode_switcher").attr("checked", false);
@@ -139,21 +142,29 @@ export default {
         } catch (e) {
             $("#colorMode_switcher").attr("checked", false);
         }
+        if (localStorage.getItem('refreshToken')) {
+            this.userProfile();
+        }
     },
     computed: {
+        ...mapState({
+            currentUserProfile: state => state.auth.currentUserProfile,
+        }),
         ...mapGetters({
             currentUserSignedIn: 'auth/currentUserSignedIn',
         }),
     },
     methods: {
         ...mapActions({
-            signOut: 'auth/signOut'
+            signOut: 'auth/signOut',
+            userProfile: 'auth/userProfile',
         }),
         signOut_() {
             if (localStorage.getItem('refreshToken')) {
                 this.signOut({ "refresh": localStorage.getItem('refreshToken') })
             }
         },
+        // colorMode switcher
         changeColorMode() {
             if (this.colorMode == 'light') {
                 this.colorMode = 'dark';

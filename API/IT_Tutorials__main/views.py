@@ -29,6 +29,17 @@ class SignUpViewSet(viewsets.ModelViewSet):
         )
 
 
+class UserProfileView(viewsets.ModelViewSet):
+    serializer_class = serializers.UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    pagination_class = None
+
+    def list(self, request, *args, **kwargs):
+        currentUser = dict(self.serializer_class(request.user, many=False).data)
+        del currentUser['password']
+        return Response({"profile": currentUser}, status=status.HTTP_200_OK)
+
+
 class TutorialViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.TutorialSerializer
     # permission_classes = [permissions.IsAuthenticated]
@@ -80,13 +91,13 @@ class TutorialViewSet(viewsets.ModelViewSet):
 
     def create(self, request):
         if (
-            request.data.get("published") == False
-            or request.data.get("published") == "false"
+                request.data.get("published") == False
+                or request.data.get("published") == "false"
         ):
             pass
         elif (
-            request.data.get("published") == True
-            or request.data.get("published") == "true"
+                request.data.get("published") == True
+                or request.data.get("published") == "true"
         ):
             request.data["publish_date"] = datetime.date.today().strftime("%Y-%m-%d")
         result_serialized = self.serializer_class(data=request.data)
@@ -133,15 +144,15 @@ class TutorialDetailedViewSet(viewsets.ModelViewSet):
     def update(self, request, pk):
         result = get_object_or_404(models.Tutorial, pk=pk)
         if (
-            # from JSON: "published": "false" (string), from Insomnia: "published": false (boolean)
-            request.data.get("published") == False
-            or request.data.get("published") == "false"
+                # from JSON: "published": "false" (string), from Insomnia: "published": false (boolean)
+                request.data.get("published") == False
+                or request.data.get("published") == "false"
         ):
             pass
         elif (
-            # from JSON: "published": "true" (string), from Insomnia: "published": true (boolean)
-            request.data.get("published") == "true"
-            or request.data.get("published") == True
+                # from JSON: "published": "true" (string), from Insomnia: "published": true (boolean)
+                request.data.get("published") == "true"
+                or request.data.get("published") == True
         ):
             request.data["publish_date"] = datetime.date.today().strftime("%Y-%m-%d")
         result_serialized = self.serializer_class(result, data=request.data)

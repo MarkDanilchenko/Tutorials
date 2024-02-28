@@ -83,6 +83,7 @@ export const tutorials__store = {
 					headers: {
 						'Content-Type': 'application/json',
 						Accept: 'application/json',
+						Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
 						body: null,
 					},
 				})
@@ -100,6 +101,7 @@ export const tutorials__store = {
 				headers: {
 					'Content-Type': 'application/json',
 					Accept: 'application/json',
+					Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
 				},
 			});
 			// server's error is handled in .vue component through .then((response) => {}).catch((error) => {})
@@ -128,6 +130,7 @@ export const tutorials__store = {
 					headers: {
 						'Content-Type': 'application/json',
 						Accept: 'application/json',
+						Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
 						body: null,
 					},
 				})
@@ -144,6 +147,7 @@ export const tutorials__store = {
 				headers: {
 					'Content-Type': 'application/json',
 					Accept: 'application/json',
+					Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
 				},
 			});
 			// server's error is handled in .vue component through .then((response) => {}).catch((error) => {})

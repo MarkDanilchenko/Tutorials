@@ -36,6 +36,11 @@ urlpatterns = [
         views.SignUpViewSet.as_view({"post": "create"}),
         name="signup",
     ),
+    path(
+        "api/accounts/profile/",
+        views.UserProfileView.as_view({"get": "list"}),
+        name="profile",
+    ),
     path("", include("IT_Tutorials__main.urls")),
 ]
 
