@@ -1,5 +1,5 @@
 from rest_framework import viewsets, permissions, status, filters
-from rest_framework.decorators import action
+from rest_framework.decorators import action, permission_classes
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 import datetime
@@ -31,10 +31,28 @@ class SignUpViewSet(viewsets.ModelViewSet):
 
 class TutorialViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.TutorialSerializer
+    # permission_classes = [permissions.IsAuthenticated]
     pagination_class = None
-    permission_classes = [permissions.AllowAny]
+    permission_classes_by_action = {
+        "list": [permissions.AllowAny],
+        "create": [permissions.IsAuthenticated],
+        "destroy": [permissions.IsAdminUser],
+    }
+
+    # override get_permissions method to use permission_classes_by_action
+    # override get_permissions method to use permission_classes_by_action
+    # override get_permissions method to use permission_classes_by_action
+    def get_permissions(self):
+        try:
+            return [
+                permission()
+                for permission in self.permission_classes_by_action[self.action]
+            ]
+        except KeyError:
+            return [permission() for permission in self.permission_classes]
 
     def list(self, request, *args, **kwargs):
+        print(request.user)
         if request.query_params.get("q"):
             result = (
                 models.Tutorial.objects.filter(
@@ -87,8 +105,25 @@ class TutorialViewSet(viewsets.ModelViewSet):
 
 class TutorialDetailedViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.TutorialSerializer
+    # permission_classes = [permissions.AllowAny]
     pagination_class = None
-    permission_classes = [permissions.AllowAny]
+    permission_classes_by_action = {
+        "retrieve": [permissions.AllowAny],
+        "update": [permissions.IsAuthenticated],
+        "destroy": [permissions.IsAdminUser],
+    }
+
+    # override get_permissions method to use permission_classes_by_action
+    # override get_permissions method to use permission_classes_by_action
+    # override get_permissions method to use permission_classes_by_action
+    def get_permissions(self):
+        try:
+            return [
+                permission()
+                for permission in self.permission_classes_by_action[self.action]
+            ]
+        except KeyError:
+            return [permission() for permission in self.permission_classes]
 
     def retrieve(self, request, pk):
         result = get_object_or_404(models.Tutorial, pk=pk)

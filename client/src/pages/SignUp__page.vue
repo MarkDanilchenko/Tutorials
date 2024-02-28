@@ -200,19 +200,7 @@ export default {
                         // signIn with username and password from now
                         // signIn with username and password from now
                         // signIn with username and password from now
-                        this.signIn(
-                            { "username": this.form.username, "password": this.form.password }
-                        );
-                        this.form = {
-                            username: '',
-                            first_name: '',
-                            last_name: '',
-                            email: '',
-                            password: '',
-                            password2: ''
-                        }
-                        this.v$.$reset()
-                        this.$router.push('/tutorials')
+                        this.signIn({ "username": this.form.username, "password": this.form.password });
                     }).catch((error) => {
                         this.error = error.message
                     });

@@ -3,6 +3,7 @@ export const auth__store = {
 	namespaced: true,
 	state: () => ({
 		currentUserSignedIn: localStorage.getItem('refreshToken') ? true : false,
+		authError: null,
 	}),
 	getters: {
 		currentUserSignedIn(state) {
@@ -12,6 +13,9 @@ export const auth__store = {
 	mutations: {
 		setCurrentUserSignedIn(state, currentUserSignedIn) {
 			state.currentUserSignedIn = currentUserSignedIn;
+		},
+		setAuthError(state, authError) {
+			state.authError = authError;
 		},
 	},
 	actions: {
@@ -25,33 +29,36 @@ export const auth__store = {
 					},
 				})
 				.then((response) => {
-					commit('setCurrentUserSignedIn', true);
 					localStorage.setItem('accessToken', response.data.access);
 					localStorage.setItem('refreshToken', response.data.refresh);
+					commit('setCurrentUserSignedIn', true);
+					commit('setAuthError', null);
+                    window.location.href = '/tutorials';
 				})
 				.catch((error) => {
 					commit('setCurrentUserSignedIn', false);
-					console.log(error.message);
+					commit('setAuthError', error.response.data.detail);
 				});
 		},
 		// DRF: TokenBlacklistView.as_view() - rest_framework_simplejwt
 		async signOut({ commit, state }, credentials) {
-			await axios
-				.post(`http://${process.env.server_HostPort_1}/api/token/blacklist/`, credentials, {
-					headers: {
-						'Content-Type': 'application/json',
-						Accept: 'application/json',
-						Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-					},
-				})
-				.then((response) => {
-					commit('setCurrentUserSignedIn', false);
-					localStorage.removeItem('accessToken');
-					localStorage.removeItem('refreshToken');
-				})
-				.catch((error) => {
-					console.log(error.message);
-				});
+			await axios.post(`http://${process.env.server_HostPort_1}/api/token/blacklist/`, credentials, {
+				headers: {
+					'Content-Type': 'application/json',
+					Accept: 'application/json',
+					Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+				},
+			})
+			.then((response) => {
+			    localStorage.removeItem('accessToken');
+				localStorage.removeItem('refreshToken');
+				commit('setCurrentUserSignedIn', false);
+			    commit('setAuthError', null);
+                window.location.href = '/signin';
+			})
+			.catch((error) => {
+				commit('setAuthError', error.response.data.detail);
+			});
 		},
 	},
 };

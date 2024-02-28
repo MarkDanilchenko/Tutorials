@@ -141,9 +141,6 @@ export default {
         }
     },
     computed: {
-        ...mapState({
-            user: state => state.auth.user,
-        }),
         ...mapGetters({
             currentUserSignedIn: 'auth/currentUserSignedIn',
         }),
@@ -154,8 +151,7 @@ export default {
         }),
         signOut_() {
             if (localStorage.getItem('refreshToken')) {
-                this.signOut({ "refresh": localStorage.getItem('refreshToken') });
-                this.$router.push('/signin');
+                this.signOut({ "refresh": localStorage.getItem('refreshToken') })
             }
         },
         changeColorMode() {
