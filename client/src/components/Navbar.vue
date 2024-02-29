@@ -155,15 +155,6 @@ export default {
         }),
     },
     methods: {
-        ...mapActions({
-            signOut: 'auth/signOut',
-            userProfile: 'auth/userProfile',
-        }),
-        signOut_() {
-            if (localStorage.getItem('refreshToken')) {
-                this.signOut({ "refresh": localStorage.getItem('refreshToken') })
-            }
-        },
         // colorMode switcher
         changeColorMode() {
             if (this.colorMode == 'light') {
@@ -176,6 +167,15 @@ export default {
                 $("html").attr("data-bs-theme", "light");
                 localStorage.setItem('colorMode', 'light');
                 $(".dot").css("background", "#000000");
+            }
+        },
+        ...mapActions({
+            signOut: 'auth/signOut',
+            userProfile: 'auth/userProfile',
+        }),
+        signOut_() {
+            if (localStorage.getItem('refreshToken')) {
+                this.signOut({ "refresh": localStorage.getItem('refreshToken') })
             }
         },
     }

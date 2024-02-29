@@ -16,7 +16,7 @@ try {
 	localStorage.setItem('colorMode', 'light');
 }
 
-// color-mode switcher is defined: 
+// color-mode switcher and dots color initialization mode is defined: 
 // 
 // in the src/components/Navbar.vue
 // in the src/mixins/dotColorInit_mixin.js

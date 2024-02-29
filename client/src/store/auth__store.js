@@ -1,4 +1,6 @@
 import axios from 'axios';
+import axiosInstance from '@/services/axios__interceptors.js';
+
 export const auth__store = {
 	namespaced: true,
 	state: () => ({
@@ -25,7 +27,7 @@ export const auth__store = {
 	actions: {
 		// DRF: TokenObtainPairView.as_view() - rest_framework_simplejwt
 		async signIn({ commit, state }, credentials) {
-			await axios
+			await axiosInstance
 				.post(`http://${process.env.server_HostPort_1}/api/token/`, credentials, {
 					headers: {
 						'Content-Type': 'application/json',
@@ -46,7 +48,7 @@ export const auth__store = {
 		},
 		// DRF: UserProfileView.as_view() - def list(): GET User profile
 		async userProfile({ commit, state }) {
-			axios
+			axiosInstance
 				.get(`http://${process.env.server_HostPort_1}/api/accounts/profile/`, {
 					headers: {
 						'Content-Type': 'application/json',
@@ -64,7 +66,7 @@ export const auth__store = {
 		},
 		// DRF: TokenBlacklistView.as_view() - rest_framework_simplejwt
 		async signOut({ commit, state }, credentials) {
-			await axios
+			await axiosInstance
 				.post(`http://${process.env.server_HostPort_1}/api/token/blacklist/`, credentials, {
 					headers: {
 						'Content-Type': 'application/json',

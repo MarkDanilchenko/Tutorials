@@ -10,8 +10,9 @@
                         <legend class="border-bottom text-center mb-3">Add new Tutorial</legend>
                         <div class="mb-3">
                             <label for="tutorialTitle" class="form-label"><b>Title: *</b></label>
-                            <input v-customFocus type="text" class="form-control" id="tutorialTitle" aria-describedby="tutorialTitleHelp"
-                                placeholder="Title of the tutorial..." v-model="form.title" @input="v$.form.title.$touch()">
+                            <input v-customFocus type="text" class="form-control" id="tutorialTitle"
+                                aria-describedby="tutorialTitleHelp" placeholder="Title of the tutorial..."
+                                v-model="form.title" @input="v$.form.title.$touch()">
                             <div v-if="v$.form.title.required.$invalid" class="text-secondary text-small">This field is
                                 required.</div>
                             <div v-if="v$.form.title.maxLength.$invalid" class="text-danger text-small">Title should not be
@@ -118,13 +119,7 @@ export default {
             newTutorial.append('title', this.form.title);
             newTutorial.append('description', this.form.description);
             newTutorial.append('published', this.form.isPublished);
-            this.postTutorial(newTutorial).then((response) => {
-                this.setTutorialPostError(null);
-                this.v$.$reset();
-                this.$router.push('/tutorials');
-            }).catch((error) => {
-                this.setTutorialPostError(error.message);
-            });
+            this.postTutorial(newTutorial);
         }
     },
     mounted() {

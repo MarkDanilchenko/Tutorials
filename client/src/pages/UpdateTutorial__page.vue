@@ -117,14 +117,7 @@ export default {
             updateTutorial.append('title', this.form.title);
             updateTutorial.append('description', this.form.description);
             updateTutorial.append('published', this.form.isPublished);
-            this.putSingleTutorial({ "id": id, "updateTutorial": updateTutorial })
-                .then((response) => {
-                    this.setTutorialPutError(null);
-                    this.v$.$reset();
-                    this.$router.push('/tutorials');
-                }).catch((error) => {
-                    this.setTutorialPutError(error.message);
-                });
+            this.putSingleTutorial({ "id": id, "updateTutorial": updateTutorial });
         },
         async getTutorialForFormFill(id) {
             await axios.get(`http://${process.env.server_HostPort_1}/api/tutorials/${id}`, {

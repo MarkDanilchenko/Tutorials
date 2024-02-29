@@ -1,4 +1,7 @@
 import axios from 'axios';
+import axiosInstance from '@/services/axios__interceptors.js';
+import router from '@/router/index.js';
+
 export const tutorials__store = {
 	namespaced: true,
 	state: () => ({
@@ -41,12 +44,11 @@ export const tutorials__store = {
 	actions: {
 		// DRF: class TutorialViewSet - def list(): GET all tutorials list
 		async getTutorials({ commit, state }) {
-			await axios
+			await axiosInstance
 				.get(`http://${process.env.server_HostPort_1}/api/tutorials/`, {
 					headers: {
 						'Content-Type': 'application/json',
 						Accept: 'application/json',
-						body: null,
 					},
 				})
 				.then((response) => {
@@ -58,12 +60,11 @@ export const tutorials__store = {
 		},
 		// DRF: class TutorialViewSet - def list(): GET tutorial which contains searched query
 		async getSearchedTutorial({ commit, state }) {
-			await axios
+			await axiosInstance
 				.get(`http://${process.env.server_HostPort_1}/api/tutorials/`, {
 					headers: {
 						'Content-Type': 'application/json',
 						Accept: 'application/json',
-						body: null,
 					},
 					params: {
 						q: state.tutorial__searchQuery,
@@ -78,13 +79,12 @@ export const tutorials__store = {
 		},
 		// DRF: class TutorialViewSet - def destroy(): DELETE tutorials list
 		async deleteTutorials({ commit, state }) {
-			await axios
+			await axiosInstance
 				.delete(`http://${process.env.server_HostPort_1}/api/tutorials/`, {
 					headers: {
 						'Content-Type': 'application/json',
 						Accept: 'application/json',
 						Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-						body: null,
 					},
 				})
 				.then((response) => {
@@ -97,23 +97,29 @@ export const tutorials__store = {
 		},
 		// DRF: class TutorialViewSet - def create(): POST new tutorial
 		async postTutorial({ commit, state }, tutorial) {
-			await axios.post(`http://${process.env.server_HostPort_1}/api/tutorials/`, tutorial, {
-				headers: {
-					'Content-Type': 'application/json',
-					Accept: 'application/json',
-					Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-				},
-			});
-			// server's error is handled in .vue component through .then((response) => {}).catch((error) => {})
+			await axiosInstance
+				.post(`http://${process.env.server_HostPort_1}/api/tutorials/`, tutorial, {
+					headers: {
+						'Content-Type': 'application/json',
+						Accept: 'application/json',
+						Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+					},
+				})
+				.then((response) => {
+					commit('setTutorialPostError', null);
+					router.push('/tutorials');
+				})
+				.catch((error) => {
+					commit('setTutorialPostError', error.response.data);
+				});
 		},
 		// DRF: class TutorialDetailedViewSet - def retrieve(): GET a single tutorial
 		async getSingleTutorial({ commit, state }, id) {
-			await axios
+			await axiosInstance
 				.get(`http://${process.env.server_HostPort_1}/api/tutorials/${id}/`, {
 					headers: {
 						'Content-Type': 'application/json',
 						Accept: 'application/json',
-						body: null,
 					},
 				})
 				.then((response) => {
@@ -125,13 +131,12 @@ export const tutorials__store = {
 		},
 		// DRF: class TutorialDetailedViewSet - def destroy(): DELETE a single tutorial
 		async deleteSingleTutorial({ commit, state }, id) {
-			await axios
+			await axiosInstance
 				.delete(`http://${process.env.server_HostPort_1}/api/tutorials/${id}/`, {
 					headers: {
 						'Content-Type': 'application/json',
 						Accept: 'application/json',
 						Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-						body: null,
 					},
 				})
 				.then((response) => {
@@ -143,14 +148,21 @@ export const tutorials__store = {
 		},
 		// DRF: class TutorialDetailedViewSet - def update(): PUT a single tutorial
 		async putSingleTutorial({ commit, state }, params) {
-			await axios.put(`http://${process.env.server_HostPort_1}/api/tutorials/${params.id}/`, params.updateTutorial, {
-				headers: {
-					'Content-Type': 'application/json',
-					Accept: 'application/json',
-					Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-				},
-			});
-			// server's error is handled in .vue component through .then((response) => {}).catch((error) => {})
+			await axiosInstance
+				.put(`http://${process.env.server_HostPort_1}/api/tutorials/${params.id}/`, params.updateTutorial, {
+					headers: {
+						'Content-Type': 'application/json',
+						Accept: 'application/json',
+						Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+					},
+				})
+				.then((response) => {
+					commit('setTutorialPutError', null);
+					router.push('/tutorials');
+				})
+				.catch((error) => {
+					commit('setTutorialPutError', error.response.data);
+				});
 		},
 	},
 };
