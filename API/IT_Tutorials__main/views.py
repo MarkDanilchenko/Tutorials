@@ -1,4 +1,4 @@
-from rest_framework import viewsets, permissions, status, filters
+from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action, permission_classes
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
@@ -36,13 +36,12 @@ class UserProfileView(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         currentUser = dict(self.serializer_class(request.user, many=False).data)
-        del currentUser['password']
+        del currentUser["password"]
         return Response({"profile": currentUser}, status=status.HTTP_200_OK)
 
 
 class TutorialViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.TutorialSerializer
-    # permission_classes = [permissions.IsAuthenticated]
     pagination_class = None
     permission_classes_by_action = {
         "list": [permissions.AllowAny],
@@ -50,8 +49,6 @@ class TutorialViewSet(viewsets.ModelViewSet):
         "destroy": [permissions.IsAdminUser],
     }
 
-    # override get_permissions method to use permission_classes_by_action
-    # override get_permissions method to use permission_classes_by_action
     # override get_permissions method to use permission_classes_by_action
     def get_permissions(self):
         try:
@@ -63,13 +60,12 @@ class TutorialViewSet(viewsets.ModelViewSet):
             return [permission() for permission in self.permission_classes]
 
     def list(self, request, *args, **kwargs):
-        print(request.user)
         if request.query_params.get("q"):
             result = (
                 models.Tutorial.objects.filter(
                     title__icontains=request.query_params.get("q")
                 )
-                .order_by("title")
+                .order_by("-title")
                 .first()
             )
             if result:
@@ -85,19 +81,24 @@ class TutorialViewSet(viewsets.ModelViewSet):
                     status=status.HTTP_404_NOT_FOUND,
                 )
         else:
-            result = models.Tutorial.objects.all().order_by("title")
+            result = models.Tutorial.objects.all().order_by("-title")
             result_serialized = self.serializer_class(result, many=True).data
             return Response({"tutorials": result_serialized}, status=status.HTTP_200_OK)
 
     def create(self, request):
         if (
-                request.data.get("published") == False
-                or request.data.get("published") == "false"
+            request.data.get("published") == False
+            # from JSON: "published": "false" (string), from Insomnia: "published": false (boolean)
+            or request.data.get("published") == "false"
         ):
-            pass
+            if request.data.get("publish_date"):
+                del request.data["publish_date"]
+            else:
+                pass
         elif (
-                request.data.get("published") == True
-                or request.data.get("published") == "true"
+            request.data.get("published") == True
+            # from JSON: "published": "true" (string), from Insomnia: "published": true (boolean)
+            or request.data.get("published") == "true"
         ):
             request.data["publish_date"] = datetime.date.today().strftime("%Y-%m-%d")
         result_serialized = self.serializer_class(data=request.data)
@@ -116,7 +117,6 @@ class TutorialViewSet(viewsets.ModelViewSet):
 
 class TutorialDetailedViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.TutorialSerializer
-    # permission_classes = [permissions.AllowAny]
     pagination_class = None
     permission_classes_by_action = {
         "retrieve": [permissions.AllowAny],
@@ -124,8 +124,6 @@ class TutorialDetailedViewSet(viewsets.ModelViewSet):
         "destroy": [permissions.IsAdminUser],
     }
 
-    # override get_permissions method to use permission_classes_by_action
-    # override get_permissions method to use permission_classes_by_action
     # override get_permissions method to use permission_classes_by_action
     def get_permissions(self):
         try:
@@ -144,22 +142,24 @@ class TutorialDetailedViewSet(viewsets.ModelViewSet):
     def update(self, request, pk):
         result = get_object_or_404(models.Tutorial, pk=pk)
         if (
-                # from JSON: "published": "false" (string), from Insomnia: "published": false (boolean)
-                request.data.get("published") == False
-                or request.data.get("published") == "false"
+            request.data.get("published") == False
+            # from JSON: "published": "false" (string), from Insomnia: "published": false (boolean)
+            or request.data.get("published") == "false"
         ):
-            pass
+            if request.data.get("publish_date"):
+                del request.data["publish_date"]
+            else:
+                pass
         elif (
-                # from JSON: "published": "true" (string), from Insomnia: "published": true (boolean)
-                request.data.get("published") == "true"
-                or request.data.get("published") == True
+            request.data.get("published") == "true"
+            # from JSON: "published": "true" (string), from Insomnia: "published": true (boolean)
+            or request.data.get("published") == True
         ):
             request.data["publish_date"] = datetime.date.today().strftime("%Y-%m-%d")
         result_serialized = self.serializer_class(result, data=request.data)
         if result_serialized.is_valid():
             result_serialized.save()
             return Response(
-                {"updated": result_serialized.data},
                 status=status.HTTP_200_OK,
             )
         return Response(

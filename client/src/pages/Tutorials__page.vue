@@ -15,40 +15,38 @@
         <div v-if="tutorials.length > 0">
             <div class="row">
                 <div class="col-md-6 col-12 mb-md-0 mb-4">
+                    <!-- radios: (published/all) -->
+                    <!-- radios: (published/all) -->
+                    <!-- radios: (published/all) -->
                     <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="my-3 text-muted">Tutorials' list</h5>
-                        <!-- radios: (published/all) -->
-                        <!-- radios: (published/all) -->
-                        <!-- radios: (published/all) -->
+                        <h5 class="my-3 text-muted">All Tutorials</h5>
                         <div class="d-flex justify-content-center">
                             <div class="form-check me-3">
                                 <input class="form-check-input" type="radio" name="radioIsPublished" id="radioAll"
                                     @click="setPublishedTutorial(false)" checked>
-                                <label class="form-check-label text-small" for="radioAll">
-                                    All
-                                </label>
+                                <label class="form-check-label text-small" for="radioAll"> All </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="radioIsPublished" id="radioPublished"
                                     @click="setPublishedTutorial(true)">
-                                <label class="form-check-label text-small" for="radioPublished">
-                                    Published only
-                                </label>
+                                <label class="form-check-label text-small" for="radioPublished"> Published </label>
                             </div>
                         </div>
                     </div>
                     <!-- Tutorials__list -->
                     <!-- Tutorials__list -->
                     <!-- Tutorials__list -->
-                    <Tutorials__list :tutorials="displayTutorials" @getDetailsSingleTutorial="getDetailsSingleTutorial" />
+                    <Tutorials__list :tutorials="displayTutorials"
+                        @getDetailsSingleTutorial="getDetailsSingleTutorial" />
                     <!-- Tutorials add/del btns -->
                     <!-- Tutorials add/del btns -->
                     <!-- Tutorials add/del btns -->
                     <div class="d-flex justify-content-center mt-3">
-                        <button class="btn btn-outline-custom-green me-3" @click="$router.push('/tutorials/addNew')"
-                            type="button">New Tutorial</button>
-                        <button class="btn btn-danger" type="button" data-bs-toggle="modal"
-                            data-bs-target="#deleteAllTutorials">Delete all</button>
+                        <button v-if="currentUserSignedIn" class="btn btn-outline-custom-green me-3"
+                            @click="$router.push('/tutorials/addNew')" type="button">New Tutorial</button>
+                        <button v-if="currentUserProfile && currentUserProfile.profile.is_staff" class="btn btn-danger"
+                            type="button" data-bs-toggle="modal" data-bs-target="#deleteAllTutorials">Delete
+                            all</button>
                     </div>
                 </div>
                 <div class="d-md-none">
@@ -64,8 +62,9 @@
                         </div>
                         <div class="col-8 d-flex align-items-center justify-content-center">
                             <div class="form-floating me-1">
-                                <input :value="tutorial__searchQuery" @input="setSearchQueryTutorial($event.target.value)"
-                                    type="text" class="form-control" name="tutorial__searchInput" id="tutorial__searchInput"
+                                <input :value="tutorial__searchQuery"
+                                    @input="setSearchQueryTutorial($event.target.value)" type="text"
+                                    class="form-control" name="tutorial__searchInput" id="tutorial__searchInput"
                                     placeholder="Search..." />
                                 <label for="tutorial__searchInput" class="text-small text-muted">Search by title ...
                                 </label>
@@ -74,9 +73,9 @@
                                 type="button">Search</button>
                         </div>
                     </div>
-                    <!-- Tutorial: emptyField, search/details components -->
-                    <!-- Tutorial: emptyField, search/details components -->
-                    <!-- Tutorial: emptyField, search/details components -->
+                    <!-- Tutorial: emptyField, searched-details components -->
+                    <!-- Tutorial: emptyField, searched-details components -->
+                    <!-- Tutorial: emptyField, searched-details components -->
                     <div class="row">
                         <transition name="fade" mode="out-in">
                             <component :is="activeComponent"></component>
@@ -91,10 +90,12 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title">Delete All Tutorials</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <p>Are you sure you want to delete all tutorials? <b> <br> This action cannot be undone.</b>
+                                <p>Are you sure you want to delete all tutorials? <b> <br> This action cannot be
+                                        undone!</b>
                                 </p>
                             </div>
                             <div class="modal-footer">
@@ -112,8 +113,8 @@
         <!-- Tutorials: emptyField -->
         <div v-else class="tutorials__empty d-flex flex-column justify-content-center align-items-center">
             <p>No any Tutorial...</p> <br>
-            <button class="btn btn-outline-custom-green me-3" @click="$router.push('/tutorials/addNew')" type="button">New
-                Tutorial</button>
+            <button v-if="currentUserSignedIn" class="btn btn-outline-custom-green me-3" @click="$router.push('/tutorials/addNew')"
+                type="button">New Tutorial</button>
         </div>
     </section>
 </template>
@@ -132,14 +133,18 @@ export default {
     },
     data() {
         return {
-            activeComponent: Tutorial__emptyFieldLogo,
+            // activeComponent is defined in mounted(){}
+            activeComponent: '',
         }
     },
     computed: {
         ...mapState({
             tutorials: state => state.tutorials.tutorials,
+            tutorial__details: state => state.tutorials.tutorial__details,
             tutorial__searchQuery: state => state.tutorials.tutorial__searchQuery,
             tutorial__published: state => state.tutorials.tutorial__published,
+            currentUserSignedIn: state => state.auth.currentUserSignedIn,
+            currentUserProfile: state => state.auth.currentUserProfile
         }),
         ...mapGetters({
             displayTutorials: 'tutorials/displayTutorials',
@@ -174,6 +179,12 @@ export default {
     },
     mounted() {
         this.getTutorials();
+        // definition of activeComponent
+        if (this.tutorial__details) {
+            this.activeComponent = 'Tutorial__details';
+        } else {
+            this.activeComponent = 'Tutorial__emptyFieldLogo';
+        }
     },
 }
 </script>

@@ -11,6 +11,8 @@
 </template>
 
 <script>
+import eventBus from '@/services/eventBus.js';
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex';
 import Navbar from '@/components/Navbar.vue';
 import Footer from '@/components/Footer.vue';
 export default {
@@ -18,6 +20,30 @@ export default {
     components: {
         Navbar,
         Footer
+    },
+    mounted() {
+        eventBus.on('authError', () => {
+            this.signOut_();
+        });
+        if (localStorage.getItem('refreshToken')) {
+            this.userProfile();
+        }
+    },
+    beforeDestroy() {
+        eventBus.remove('authError');
+    },
+    methods: {
+        ...mapActions({
+            signOut: 'auth/signOut',
+            userProfile: 'auth/userProfile',
+        }),
+        signOut_() {
+            if (localStorage.getItem('refreshToken')) {
+                this.signOut({ "refresh": localStorage.getItem('refreshToken') })
+            } else {
+                this.$router.push('/signin');
+            }
+        }
     }
 }
 </script>

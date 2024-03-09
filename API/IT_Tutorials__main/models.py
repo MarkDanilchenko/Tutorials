@@ -1,14 +1,19 @@
-import datetime
 import re
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 
 def name_validator(value):
+    """
+    The function `name_validator` validates a given input value to ensure it contains only letters and
+    is at least 2 characters long.
+    """
     if re.search(r"^[a-zA-Z]{2,}$", value):
         return value
     else:
-        raise ValueError("First name or last name contains invalid characters.")
+        raise ValueError(
+            "First name or last name contains invalid characters. Only letters are allowed."
+        )
 
 
 class User(AbstractUser):
@@ -44,7 +49,7 @@ class User(AbstractUser):
     class Meta:
         verbose_name = "User"
         verbose_name_plural = "Users"
-        ordering = ["username"]
+        ordering = ["-username"]
 
     def __str__(self):
         return self.username
@@ -53,21 +58,16 @@ class User(AbstractUser):
 class Tutorial(models.Model):
     title = models.CharField(
         max_length=100,
-        blank=False,
         unique=True,
-        default="",
         help_text="Tutorial title",
         verbose_name="Tutorial title",
     )
     description = models.TextField(
         max_length=1000,
-        blank=False,
-        default="",
         help_text="Tutorial description",
         verbose_name="Tutorial description",
     )
     published = models.BooleanField(
-        blank=False,
         default=False,
         help_text="Tutorial published",
         verbose_name="Tutorial published",
@@ -83,7 +83,7 @@ class Tutorial(models.Model):
     class Meta:
         verbose_name = "Tutorial"
         verbose_name_plural = "Tutorials"
-        ordering = ["publish_date"]
+        ordering = ["-title"]
 
     def __str__(self):
         return self.title

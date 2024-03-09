@@ -14,7 +14,7 @@
             <div v-if="index == 0" :id="`collapse${index}`" class="accordion-collapse collapse show">
                 <div class="accordion-body d-flex justify-content-between align-items-center">
                     <p class="m-0">
-                        <span class="text-small text-muted">Tutorial title:</span> <b>"{{ tutorial.title }}"</b>
+                        <span><b>Title:</b></span> "{{ tutorial.title }}"
                     </p>
                     <!-- $emit data for the GET single Tutorial method directly to the Tutorials__page.vue to the getDetailsSingleTutorial(id){} -->
                     <button class="btn btn-outline-custom-green"
@@ -24,7 +24,7 @@
             <div v-else :id="`collapse${index}`" class="accordion-collapse collapse">
                 <div class="accordion-body d-flex justify-content-between align-items-center">
                     <p class="m-0">
-                        <span class="text-small text-muted">Tutorial title:</span> <b>"{{ tutorial.title }}"</b>
+                        <span><b>Title:</b></span> "{{ tutorial.title }}"
                     </p>
                     <!-- $emit data for the GET single Tutorial method directly to the Tutorials__page.vue to the getDetailsSingleTutorial(id){} -->
                     <button class="btn btn-outline-custom-green"

@@ -20,10 +20,7 @@
                             <div v-if="v$.form.username.required.$invalid" class="text-secondary text-small">This field is
                                 required.</div>
                             <div v-if="v$.form.username.maxLength.$invalid" class="text-danger text-small">Username should
-                                not
-                                be longer than
-                                {{
-                                    v$.form.username.maxLength.$params.max }} symbols.</div>
+                                not be longer than {{ v$.form.username.maxLength.$params.max }} symbols.</div>
                         </div>
                         <div class="mb-3">
                             <label for="first_name" class="form-label">First name</label>
@@ -91,25 +88,25 @@
                     </fieldset>
                     <div class="d-flex justify-content-center">
                         <button class="btn btn-outline-custom-green" type="submit" :disabled="btnSubmitDisabled"
-                            @click.prevent="signUp">SignUp!</button>
+                            @click.prevent="signUp_">SignUp!</button>
                     </div>
                 </form>
-                <!-- error block -->
-                <!-- error block -->
-                <!-- error block -->
-                <p class="text-danger mt-3" v-if="error">{{ error }}</p>
                 <!-- form bottom -->
                 <!-- form bottom -->
                 <!-- form bottom -->
                 <p class="text-center text-secondary mt-3" style="font-size: smaller">
-                    <i>After a successful registration<br /> - redirected to home page.</i>
+                    <i>After a successful registration<br /> - redirected to main tutorials page.</i>
                 </p>
                 <div class="text-end mb-5">
                     <small class="text-muted">
-                        Already registered? <router-link class="nav-link" to="/"
+                        Already registered? <router-link class="nav-link" to="/signin"
                             title="SignIn!"><b>SignIn!</b></router-link>
                     </small>
                 </div>
+                <!-- error block -->
+                <!-- error block -->
+                <!-- error block -->
+                <p class="text-danger mt-3" v-if="RegError">{{ RegError }}</p>
             </div>
         </div>
     </section>
@@ -139,7 +136,7 @@ export default {
                 password: '',
                 password2: ''
             },
-            error: null
+            RegError: null
         }
     },
     validations() {
@@ -178,12 +175,12 @@ export default {
         ...mapActions({
             signIn: 'auth/signIn'
         }),
-        async signUp() {
+        async signUp_() {
             try {
                 if (this.form.password !== this.form.password2) {
                     throw new Error('Passwords do not match!');
                 } else {
-                    this.error = null;
+                    this.RegError = null;
                     let newUser = new FormData();
                     newUser.append('username', this.form.username);
                     newUser.append('first_name', this.form.first_name);
@@ -196,17 +193,14 @@ export default {
                             Accept: 'application/json',
                         }
                     }).then((response) => {
-                        this.error = null
-                        // signIn with username and password from now
-                        // signIn with username and password from now
-                        // signIn with username and password from now
+                        // signIn with username and password immediately!
                         this.signIn({ "username": this.form.username, "password": this.form.password });
                     }).catch((error) => {
-                        this.error = error.message
+                        this.RegError = error.message
                     });
                 }
             } catch (error) {
-                this.error = error.message
+                this.RegError = error.message
             }
         }
     }

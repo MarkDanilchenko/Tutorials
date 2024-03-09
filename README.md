@@ -1,6 +1,6 @@
 ## App Description
 
-This is a simple CRUD project **'IT_Tutorials'** that is build using:
+This is a simple CRUD project with JWT authorization that is build using:
 
 - MySQL;
 - Django Rest Framework;
@@ -10,6 +10,7 @@ This is a simple CRUD project **'IT_Tutorials'** that is build using:
 - Webpack;
 - Docker + Compose;
 - NGINX;
+- JWT (libraries for the API);
 - CSS/SCSS/HTML.
 
 ## Launch instructions
@@ -101,19 +102,25 @@ This is a simple CRUD project **'IT_Tutorials'** that is build using:
 ![Main page(dark theme)](screenshots/ScrShot_1.png)
 ![Main page(light theme)](screenshots/ScrShot_2.png)
   
-2. *Tutorials page with content*
+2. *SignUp/SignIn blocks*
+
+![SignUpForm](screenshots/ScrShot_9.png)
+![SignInForm](screenshots/ScrShot_10.png)
+
+3. *Tutorials page with content*
 
 ![Tutorials content 1](screenshots/ScrShot_3.png)
 ![Tutorials content 2](screenshots/ScrShot_4.png)
 
-3. *Tutorial update form*
+4. *Tutorial update form*
 
 ![Update form](screenshots/ScrShot_5.png)
 
-4. *Mobile look like*
+5. *Mobile look like*
 
 <div align="center">
   <img src="screenshots/ScrShot_6.png" width="50%" height="50%" alt='Mobile look 1'>
   <img src="screenshots/ScrShot_7.png" width="50%" height="50%" alt='Mobile look 2'>
   <img src="screenshots/ScrShot_8.png" width="50%" height="50%" alt='Mobile look 3'>
+  <img src="screenshots/ScrShot_11.png" width="50%" height="50%" alt='Mobile look 4'>
 </div>

@@ -15,23 +15,21 @@
                                 v-model="form.title" @input="v$.form.title.$touch()">
                             <div v-if="v$.form.title.required.$invalid" class="text-secondary text-small">This field is
                                 required.</div>
-                            <div v-if="v$.form.title.maxLength.$invalid" class="text-danger text-small">Title should not be
-                                longer than
-                                {{
-                                    v$.form.title.maxLength.$params.max }} symbols.</div>
-                            <!-- <div v-if="v$.form.title.onlyLetters.$invalid" class="text-danger text-small">!!!</div> -->
+                            <div v-if="v$.form.title.maxLength.$invalid" class="text-danger text-small">Title should not
+                                be
+                                longer than {{ v$.form.title.maxLength.$params.max }} symbols.</div>
                         </div>
                         <div class="mb-3">
                             <label for="tutorialDescription" class="form-label"><b>Description: *</b></label>
                             <textarea class="form-control" id="tutorialDescription" rows="5" cols="30"
                                 placeholder="Description of the tutorial..." v-model="form.description"
                                 @input="v$.form.description.$touch()"></textarea>
-                            <div v-if="v$.form.description.required.$invalid" class="text-secondary text-small">This field
-                                is
-                                required.</div>
-                            <div v-if="v$.form.description.maxLength.$invalid" class="text-danger text-small">Description
-                                should
-                                not be longer than {{ v$.form.description.maxLength.$params.max }} symbols.</div>
+                            <div v-if="v$.form.description.required.$invalid" class="text-secondary text-small">This
+                                field
+                                is required.</div>
+                            <div v-if="v$.form.description.maxLength.$invalid" class="text-danger text-small">
+                                Description
+                                should not be longer than {{ v$.form.description.maxLength.$params.max }} symbols.</div>
                         </div>
                         <div class="form-check mb-3">
                             <input type="checkbox" class="form-check-input" name="isPublished" id="isPublished"
@@ -41,17 +39,9 @@
                     </fieldset>
                     <div class="d-flex justify-content-center align-items-center">
                         <button class="btn btn-outline-custom-green" type="submit" :disabled="btnSubmitDisabled"
-                            @click.prevent="addNewTutorial">Add!</button>
+                            @click.prevent="addNewTutorial">Add new!</button>
                     </div>
                 </form>
-                <!-- form bottom -->
-                <!-- form bottom -->
-                <!-- form bottom -->
-                <div class="mt-5">
-                    <p class="text-center text-muted text-small">
-                        <i>Redirect to Tutorials page after creating.</i>
-                    </p>
-                </div>
                 <!-- error block -->
                 <!-- error block -->
                 <!-- error block -->
@@ -67,7 +57,6 @@
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex';
 import { useVuelidate } from '@vuelidate/core';
 import { maxLength, minLength, required, helpers } from '@vuelidate/validators';
-// const onlyLetters = (value) => !helpers.req(value) || helpers.regex(/^[a-zA-Z]*$/)(value);
 export default {
     name: 'NewTutorial__page',
     setup() {
@@ -90,7 +79,6 @@ export default {
                 title: {
                     required,
                     maxLength: maxLength(100),
-                    // onlyLetters
                 },
                 description: {
                     required,

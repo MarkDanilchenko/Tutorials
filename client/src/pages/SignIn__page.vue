@@ -2,6 +2,9 @@
     <section class="my-signIn">
         <div class="mt-3 row">
             <div class="d-flex flex-column align-items-center">
+                <!-- SignIn form -->
+                <!-- SignIn form -->
+                <!-- SignIn form -->
                 <form action="" class="col-lg-4 col-6" id="form-signIn" name="form-signIn">
                     <fieldset class="form-group mb-3">
                         <router-link to="/" class="d-flex justify-content-center align-items-center mb-3" title="Home page">
@@ -27,16 +30,16 @@
                             @click.prevent="signIn_">SignIn!</button>
                     </div>
                 </form>
-                <!-- error block -->
-                <!-- error block -->
-                <!-- error block -->
-                <p class="text-danger mt-3" v-if="authError">{{ authError }}</p>
                 <!-- form bottom -->
                 <!-- form bottom -->
                 <!-- form bottom -->
                 <p class="text-center text-secondary mt-3" style="font-size: smaller">
-                    <i>After a successful authentication<br /> - redirected to home page.</i>
+                    <i>After a successful authentication<br /> - redirected to main tutorials page.</i>
                 </p>
+                <!-- error block -->
+                <!-- error block -->
+                <!-- error block -->
+                <p class="text-danger mt-3" v-if="authError">{{ authError }}</p>
             </div>
         </div>
     </section>

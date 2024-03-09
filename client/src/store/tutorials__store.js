@@ -55,6 +55,7 @@ export const tutorials__store = {
 					commit('setTutorials', response.data.tutorials);
 				})
 				.catch((error) => {
+					commit('setTutorials', []);
 					console.log(error.message);
 				});
 		},
@@ -74,6 +75,7 @@ export const tutorials__store = {
 					commit('setSingleAndSearchedTutorial', response.data.tutorial);
 				})
 				.catch((error) => {
+					commit('setSingleAndSearchedTutorial', null);
 					console.log(error.response.data.tutorial);
 				});
 		},
@@ -106,8 +108,10 @@ export const tutorials__store = {
 					},
 				})
 				.then((response) => {
-					commit('setTutorialPostError', null);
-					router.push('/tutorials');
+					if (response !== undefined) {
+						commit('setTutorialPostError', null);
+						router.push('/tutorials');
+					}
 				})
 				.catch((error) => {
 					commit('setTutorialPostError', error.response.data);
@@ -126,11 +130,12 @@ export const tutorials__store = {
 					commit('setSingleAndSearchedTutorial', response.data.tutorial);
 				})
 				.catch((error) => {
+					commit('setSingleAndSearchedTutorial', null);
 					console.log(error.message);
 				});
 		},
 		// DRF: class TutorialDetailedViewSet - def destroy(): DELETE a single tutorial
-		async deleteSingleTutorial({ commit, state }, id) {
+		async deleteSingleTutorial({ commit, state, dispatch }, id) {
 			await axiosInstance
 				.delete(`http://${process.env.server_HostPort_1}/api/tutorials/${id}/`, {
 					headers: {
@@ -140,14 +145,17 @@ export const tutorials__store = {
 					},
 				})
 				.then((response) => {
-					commit('setSingleAndSearchedTutorial', null);
+					if (response !== undefined) {
+						commit('setSingleAndSearchedTutorial', null);
+						dispatch('getTutorials');
+					}
 				})
 				.catch((error) => {
 					console.log(error.message);
 				});
 		},
 		// DRF: class TutorialDetailedViewSet - def update(): PUT a single tutorial
-		async putSingleTutorial({ commit, state }, params) {
+		async putSingleTutorial({ commit, state, dispatch }, params) {
 			await axiosInstance
 				.put(`http://${process.env.server_HostPort_1}/api/tutorials/${params.id}/`, params.updateTutorial, {
 					headers: {
@@ -158,10 +166,12 @@ export const tutorials__store = {
 				})
 				.then((response) => {
 					commit('setTutorialPutError', null);
+					dispatch('getSingleTutorial', params.id);
 					router.push('/tutorials');
 				})
 				.catch((error) => {
 					commit('setTutorialPutError', error.response.data);
+					commit('setSingleAndSearchedTutorial', null);
 				});
 		},
 	},

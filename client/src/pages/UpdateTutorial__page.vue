@@ -10,26 +10,24 @@
                         <legend class="border-bottom text-center mb-3">Tutorial Update</legend>
                         <div class="mb-3">
                             <label for="tutorialTitle" class="form-label"><b>Title: *</b></label>
-                            <input type="text" class="form-control" id="tutorialTitle" aria-describedby="tutorialTitleHelp"
-                                placeholder="Title of the tutorial..." v-model="form.title" @input="v$.form.title.$touch()">
+                            <input type="text" class="form-control" id="tutorialTitle"
+                                aria-describedby="tutorialTitleHelp" placeholder="Title of the tutorial..."
+                                v-model="form.title" @input="v$.form.title.$touch()">
                             <div v-if="v$.form.title.required.$invalid" class="text-secondary text-small">This field is
                                 required.</div>
-                            <div v-if="v$.form.title.maxLength.$invalid" class="text-danger text-small">Title should not be
-                                longer than
-                                {{
-                                    v$.form.title.maxLength.$params.max }} symbols.</div>
+                            <div v-if="v$.form.title.maxLength.$invalid" class="text-danger text-small">Title should not
+                                be longer than {{ v$.form.title.maxLength.$params.max }} symbols.</div>
                         </div>
                         <div class="mb-3">
                             <label for="tutorialDescription" class="form-label"><b>Description: *</b></label>
                             <textarea class="form-control" id="tutorialDescription" rows="5" cols="30"
                                 placeholder="Description of the tutorial..." v-model="form.description"
                                 @input="v$.form.description.$touch()"></textarea>
-                            <div v-if="v$.form.description.required.$invalid" class="text-secondary text-small">This field
-                                is
-                                required.</div>
-                            <div v-if="v$.form.description.maxLength.$invalid" class="text-danger text-small">Description
-                                should
-                                not be longer than {{ v$.form.description.maxLength.$params.max }} symbols.</div>
+                            <div v-if="v$.form.description.required.$invalid" class="text-secondary text-small">This
+                                field is required.</div>
+                            <div v-if="v$.form.description.maxLength.$invalid" class="text-danger text-small">
+                                Description should not be longer than {{ v$.form.description.maxLength.$params.max }}
+                                symbols.</div>
                         </div>
                         <div class="form-check mb-3">
                             <input type="checkbox" class="form-check-input" name="isPublished" id="isPublished"
@@ -42,19 +40,11 @@
                             @click.prevent="updateTutorial(this.$route.params.id)">Update!</button>
                     </div>
                 </form>
-                <!-- form bottom -->
-                <!-- form bottom -->
-                <!-- form bottom -->
-                <div class="mt-5">
-                    <p class="text-center text-muted text-small">
-                        <i>Redirect to Tutorials page after creating.</i>
-                    </p>
-                </div>
                 <!-- error block -->
                 <!-- error block -->
                 <!-- error block -->
                 <div v-if="error" class="d-flex justify-content-center">
-                    <p class="text-danger mt-3">Error occurred: <br>"{{ error }}"</p>
+                    <p class="text-danger mt-3">Error occurred: <br>"{{ UpdateError }}"</p>
                 </div>
             </div>
         </div>
@@ -99,7 +89,7 @@ export default {
     },
     computed: {
         ...mapState({
-            error: state => state.tutorials.tutorial__putError
+            UpdateError: state => state.tutorials.tutorial__putError
         }),
         btnSubmitDisabled() {
             return this.v$.$invalid ? true : false

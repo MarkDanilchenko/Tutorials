@@ -15,8 +15,8 @@ class User_Admin(UserAdmin):
         "date_joined",
         "last_login",
     )
-    search_fields = ("username", "first_name", "last_name", "email")
     list_filter = ("is_staff", "is_active", "is_superuser", "date_joined", "last_login")
+    search_fields = ("username", "first_name", "last_name", "email")
     ordering = ("-username",)
 
 
@@ -44,6 +44,7 @@ class TutorialAdmin(admin.ModelAdmin):
         "title",
         "description",
     )
+    ordering = ("-title",)
 
 
 admin.site.register(models.Tutorial, TutorialAdmin)

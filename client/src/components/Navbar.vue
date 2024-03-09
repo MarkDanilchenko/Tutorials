@@ -2,6 +2,9 @@
     <section class="my-navbar">
         <nav class="navbar navbar-expand-md sticky-top bg-body">
             <div class="container-fluid mt-3">
+                <!-- navigation logo -->
+                <!-- navigation logo -->
+                <!-- navigation logo -->
                 <router-link v-if="$route.path == '/'" to="/" class="navbar-brand nav-link-active-logo me-3 p-0">
                     <img src="@/assets/IMG/Vue3_logo.png" width="30" height="30" class="d-inline-block align-text-top"
                         alt="Vue3 logo" title="Home page">
@@ -11,11 +14,14 @@
                         alt="Vue3 logo" title="Home page">
                 </router-link>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                    aria-label="Toggle navigation">
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <!-- navigation sections -->
+                    <!-- navigation sections -->
+                    <!-- navigation sections -->
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
                             <router-link v-if="$route.path == '/'" to="/"
@@ -27,7 +33,7 @@
                                 class="nav-link nav-link-active">Tutorials</router-link>
                             <router-link v-else to="/tutorials" class="nav-link">Tutorials</router-link>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" v-if="currentUserSignedIn">
                             <router-link v-if="$route.path == '/tutorials/addNew'" to="/tutorials/addNew"
                                 class="nav-link nav-link-active">New Tutorial</router-link>
                             <router-link v-else to="/tutorials/addNew" class="nav-link">New Tutorial</router-link>
@@ -37,12 +43,12 @@
                         This is a <b>Vue3 & DRF</b> tutorial project =&#41;
                     </span>
                     <hr class="d-md-none">
-                    <!-- SignIn/SignUp/SignOut -->
-                    <!-- SignIn/SignUp/SignOut -->
-                    <!-- SignIn/SignUp/SignOut -->
+                    <!-- SignIn/SignUp/SignOut btns -->
+                    <!-- SignIn/SignUp/SignOut btns -->
+                    <!-- SignIn/SignUp/SignOut btns -->
                     <div class="d-flex justify-content-center align-items-center">
                         <span v-if="currentUserProfile" class="text-small text-muted me-1">Welcome, {{
-                            currentUserProfile.profile.username }}!</span>
+                    currentUserProfile.profile.username }}!</span>
                         <button v-if="!this.currentUserSignedIn"
                             :class="this.$route.path == '/signin' ? 'btn btn-custom-green me-1' : 'btn btn-outline-custom-green me-1'"
                             type="button" @click="this.$router.push('/signin')">SignIn</button>
@@ -64,8 +70,9 @@
                                 <rect x="152.994" y="58.921"
                                     transform="matrix(0.3827 0.9239 -0.9239 0.3827 168.6176 -118.5145)" width="40.001"
                                     height="16" />
-                                <rect x="46.9" y="164.979" transform="matrix(0.9239 0.3827 -0.3827 0.9239 71.29 -12.4346)"
-                                    width="40.001" height="16" />
+                                <rect x="46.9" y="164.979"
+                                    transform="matrix(0.9239 0.3827 -0.3827 0.9239 71.29 -12.4346)" width="40.001"
+                                    height="16" />
                                 <rect x="46.947" y="315.048"
                                     transform="matrix(0.9239 -0.3827 0.3827 0.9239 -118.531 50.2116)" width="40.001"
                                     height="16" />
@@ -131,7 +138,7 @@ export default {
         }
     },
     mounted() {
-        // colorMode switcher
+        // colorMode switcher settings
         try {
             if (this.colorMode == 'light') {
                 $("#colorMode_switcher").attr("checked", false);
@@ -142,20 +149,15 @@ export default {
         } catch (e) {
             $("#colorMode_switcher").attr("checked", false);
         }
-        if (localStorage.getItem('refreshToken')) {
-            this.userProfile();
-        }
     },
     computed: {
         ...mapState({
             currentUserProfile: state => state.auth.currentUserProfile,
-        }),
-        ...mapGetters({
-            currentUserSignedIn: 'auth/currentUserSignedIn',
+            currentUserSignedIn: state => state.auth.currentUserSignedIn,
         }),
     },
     methods: {
-        // colorMode switcher
+        // colorMode switcher settings
         changeColorMode() {
             if (this.colorMode == 'light') {
                 this.colorMode = 'dark';
@@ -171,12 +173,9 @@ export default {
         },
         ...mapActions({
             signOut: 'auth/signOut',
-            userProfile: 'auth/userProfile',
         }),
         signOut_() {
-            if (localStorage.getItem('refreshToken')) {
-                this.signOut({ "refresh": localStorage.getItem('refreshToken') })
-            }
+            this.signOut({ "refresh": localStorage.getItem('refreshToken') })
         },
     }
 }

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import eventBus from '@/services/eventBus.js';
 
 const axiosInstance = axios.create();
 
@@ -12,7 +13,7 @@ axiosInstance.interceptors.response.use(
 			if (error.response.status === 401 && !originalRequestConfig._retry) {
 				originalRequestConfig._retry = true;
 				// DRF: TokenRefreshView.as_view() - rest_framework_simplejwt
-				return axiosInstance
+				return await axios
 					.post(
 						`http://${process.env.server_HostPort_1}/api/token/refresh/`,
 						{
@@ -31,7 +32,13 @@ axiosInstance.interceptors.response.use(
 						return axiosInstance(originalRequestConfig);
 					})
 					.catch((_error) => {
-						return Promise.reject(_error);
+						if (originalRequestConfig.url === `http://${process.env.server_HostPort_1}/api/token/blacklist/`) {
+							return Promise.reject(_error);
+						} else if (originalRequestConfig.url === `http://${process.env.server_HostPort_1}/api/accounts/profile/`) {
+							return Promise.reject(_error);
+						} else {
+							eventBus.dispatch('authError');
+						}
 					});
 			}
 		}

@@ -2,9 +2,9 @@
     <section class="my-home">
         <router-link to="/tutorials" class="nav-link" alt="Home page" title="Home page">
             <div class="d-flex flex-column align-items-center justify-content-center">
-                <!-- .dot animation -->
-                <!-- .dot animation -->
-                <!-- .dot animation -->
+                <!-- .dots animation -->
+                <!-- .dots animation -->
+                <!-- .dots animation -->
                 <div class="text-center lead">
                     <div class="mod">
                         <div class="cube">
