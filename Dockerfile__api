@@ -21,6 +21,8 @@ RUN pip install -r requirements.txt
 
 COPY ./API .
 
+RUN mkdir -p django_logs
+
 WORKDIR /app
 
 COPY ./.env .
