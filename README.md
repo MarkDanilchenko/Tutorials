@@ -1,101 +1,106 @@
-## App Description
+## App Description &#128209;
 
-This is a simple CRUD project with JWT authorization that is build using:
+This is a simple CRUD project with JWT authorization based on using such technologies as: Vue3, Bootstrap5, Django Rest Framework, Webpack, PostgreSQL and NGINX.
 
-- MySQL;
-- Django Rest Framework;
-- Gunicorn;
+## Launch instructions &#128190;
+
+&#9881;**Frontend**:
+
 - Vue3;
 - Bootstrap5;
-- Webpack;
-- Docker + Compose;
+- Webpack + prettier + eslint.
+  
+&#9881;**Backend**:
+
+- DRF;
+- Docker;
+- PostgresQL;
 - NGINX;
-- JWT (libraries for the API);
-- CSS/SCSS/HTML.
 
-## Launch instructions
+<div style="display: flex; justify-content: end;">
+  <p>Git and Docker should be installed locally on Your PC.</p>
+</div>
 
-1. Clone repository/archive to your **local folder**;
-2. Open Terminal and make sure You are in **local folder**:
+---
 
-    ```
-    cd '.../local_folder'
-    ```
+1. Clone repository to Your local path:
 
-3. Copy file dev.env and rename to .env in the same root directory:
-
-    ```
-    cp dev.env .env
+    ```sh
+    cd <your_local_path> && git clone <http/ssh-link>
     ```
 
-4. Open and follow the instructions properly in the new created .env file;
-5. For this step you should already have installed Docker and Compose on your PC. Start installation:
+2. Run compose:
 
-    ```
-    docker compose up --build
-    ```
-
-- Installation can take some time, it depends on your PC resources;
-- After the installation is completed, the app will start automatically on localhost:8080;
-- Open app using <http://localhost:8080> in your browser;
-
-5. The superuser (admin) has been already created;
-
-- You can login under current superuser (admin) using <http://localhost:8080/admin> with standart credentials:
-
-  ```
-  login: admin
-
-  pass: admin
-  ```
-
-- For password change - open **another Terminal** and enter:
-
-   ```
-   docker exec -it api sh
-
-   python3 manage.py changepassword admin
-   ```
-
-- Create new password, confirm and then exit:
-
-    ```
-    exit
+    ```sh
+    cd Tutorials && docker compose --env-file ./.env.public up --build
     ```
 
-  *(close Terminal after successful password replacement)*
+3. After the installation is complete the web-app will start on `_`;
 
-6. To stop the app (server):
+- Open web-app in browser using URL: <http://_/>
 
+4. The superuser(admin) is NOT created automatically. To create it by yourself follow the instructions below in the new terminal (related docker containers must be in use):
+
+    4.1 Create superuser:
+
+    ```sh
+    docker exec -it server python manage.py createsuperuser --noinput --username admin --email admin@example.com
     ```
+
+    4.2 Note, that default password is already preset in the script above. Default credentials are:
+
+    ```js
+        {
+          username: admin;
+          email: admin@example.com;
+          password: admin;
+        }
+    ```
+
+    - for another password preset it should be **changed FIRST** in ./.env.public `DJANGO_SUPERUSER_PASSWORD=` and then run point 4.1.
+
+    4.3 For changing already existing superuser's password (not password preset):
+
+    ```sh
+    docker exec -it server python manage.py changepassword admin
+    ```
+
+    - you will be prompted to set another password.
+
+5. Stop the web-app press in current terminal:
+
+    ```sh
     Ctrl + C
     ```
 
-7. To **stop app** (stop all docker containers):
+    or
 
-    ```
-    docker compose stop
-    ```
-
-8. To **start app** (start all docker containers):
-
-    ```
-    docker compose start
+    ```sh
+    docker compose --env-file ./.env.public stop
     ```
 
-9. To completely **remove** all created docker containers, images and volumes:
+6. Start again the web-app:
 
-   ```
-   docker compose down --volumes --rmi all
-   ```
+    ```sh
+    docker compose --env-file ./.env.public start
+    ```
 
-**p.s.:**
+7. To completely remove all related docker containers, docker images, volumes and related data:
 
-  ---> ./API/django_logs/ : contains **drango rest framework** error logs.
+    ```sh
+    docker compose --env-file ./.env.public down --volumes --rmi all
+    ```
 
-  ---> ./API/gunicorn_logs/ : contains **Gunicorn** access and error logs.
+    <span style="color: rgb(255, 0, 0)">After this step, it is need to go back to point №2 to run web-app again.</span>
 
-### Screenshots
+---
+
+### p.s
+
+- Local environment variables can be changed in the `./.env.public`<br/>
+- Outer ports of both django-server & postgresql are `8001` & `5433` respectively and could not be changed via environment.
+
+## Screenshots &#127745;
 
 1. *Main page (light & dark themes)*
 

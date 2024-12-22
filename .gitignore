@@ -1,20 +1,16 @@
-# COMMON IGNORE
-# COMMON IGNORE
-# COMMON IGNORE
-# ----------
-/dist
-draft.*
-staticfiles/
-mediafiles/
+# Common
+.DS_Store
+package-lock.json
+media
 *.pdf
 *.sql
-!IT_Tutorials.sql
 db_data/
-.DS_Store
-package-lock.*
-Insomnia*
-django_logs/
-gunicorn_logs/
+compose.development.yaml
+
+# If your build process includes running collectstatic, then you probably don't need or want to include staticfiles/
+# in your Git repository.
+staticfiles/
+mediafiles/
 
 # Editor directories and files
 *.suo
@@ -24,10 +20,7 @@ gunicorn_logs/
 *.sw?
 /.vscode
 
-# NUXT2/Vue3 IGNORE
-# NUXT2/Vue3 IGNORE
-# NUXT2/Vue3 IGNORE
-# ----------
+# Vue3
 # Logs
 /logs
 *.log
@@ -91,9 +84,6 @@ typings/
 # nuxt.js build output
 .nuxt
 
-# Nuxt generate
-dist
-
 # vuepress build output
 .vuepress/dist
 
@@ -106,17 +96,12 @@ sw.*
 # Vim swap files
 *.swp
 
-# DJANGO/PYTHON IGNORE
-# DJANGO/PYTHON IGNORE
-# DJANGO/PYTHON IGNORE
-# ----------
-*.pyc
-
-### Python template
+# Python3
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
+*.pyc
 
 # C extensions
 *.so
@@ -125,7 +110,7 @@ __pycache__/
 .Python
 build/
 develop-eggs/
-# dist/
+**/dist/**
 downloads/
 eggs/
 .eggs/
@@ -171,6 +156,7 @@ cover/
 *.pot
 
 # Django stuff:
+*.log
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
@@ -234,7 +220,8 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
+.env.*
+!.env.public
 .venv
 env/
 venv/
