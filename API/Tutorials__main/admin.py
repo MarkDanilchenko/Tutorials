@@ -25,26 +25,31 @@ admin.site.register(models.User, User_Admin)
 
 class TutorialAdmin(admin.ModelAdmin):
     fieldsets = (
-        ("Tutorial headers and description", {"fields": ("title", "description")}),
-        ("Tutorial publish date", {"fields": ("publish_date",)}),
-        ("Tutorial publish status", {"fields": ("published",)}),
+        ("Tutorial title and description", {"fields": ("title", "description")}),
+        ("Is published", {"fields": ("isPublished", "published_at")}),
+        ("Creation & update date", {"fields": ("created_at", "updated_at")}),
     )
     list_display = (
         "title",
         "description",
-        "published",
-        "publish_date",
+        "isPublished",
+        "published_at",
+        "created_at",
+        "updated_at",
     )
     list_filter = (
-        "published",
-        "publish_date",
+        "title",
+        "isPublished",
+        "published_at",
+        "created_at",
+        "updated_at",
     )
     list_per_page = 10
     search_fields = (
         "title",
         "description",
     )
-    ordering = ("-title",)
+    ordering = ("-created_at",)
 
 
 admin.site.register(models.Tutorial, TutorialAdmin)
