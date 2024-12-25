@@ -36,7 +36,10 @@ class TutorialViewSet(viewsets.ModelViewSet):
     pagination_class = None
     permission_classes_by_action = {
         "list": [permissions.AllowAny],
+        "retrieve": [permissions.AllowAny],
         "create": [permissions.IsAuthenticated],
+        "update": [permissions.IsAuthenticated],
+        "destroy": [permissions.IsAdminUser],
         "destroyAll": [permissions.IsAdminUser],
     }
 
@@ -68,11 +71,17 @@ class TutorialViewSet(viewsets.ModelViewSet):
 
         return Response({"tutorials": tutorials_serialized}, status=status.HTTP_200_OK)
 
+    def retrieve(self, request, uuid):
+        tutorial = get_object_or_404(models.Tutorial, pk=uuid)
+        tutorial_serialized = self.serializer_class(tutorial, many=False).data
+
+        return Response({"tutorial": tutorial_serialized}, status=status.HTTP_200_OK)
+
     def create(self, request):
         isPublished = request.data.get("isPublished")
 
         if isPublished:
-            request.data["published_at"] = datetime.date.today().strftime("%Y-%m-%d")
+            request.data["published_at"] = datetime.datetime.now()
 
         tutorial_serialized = self.serializer_class(data=request.data)
 
@@ -80,6 +89,20 @@ class TutorialViewSet(viewsets.ModelViewSet):
             tutorial_serialized.save()
 
             return Response(status=status.HTTP_201_CREATED)
+
+    def update(self, request, uuid):
+        tutorial = get_object_or_404(models.Tutorial, pk=uuid)
+        isPublished = request.data.get("isPublished")
+
+        if isPublished:
+            request.data["published_at"] = datetime.datetime.now()
+
+        tutorial_serialized = self.serializer_class(tutorial, data=request.data)
+
+        if tutorial_serialized.is_valid(raise_exception=True):
+            tutorial_serialized.save()
+
+            return Response(status=status.HTTP_200_OK)
 
     def deleteAll(self, request):
         result = models.Tutorial.objects.all()
@@ -92,55 +115,3 @@ class TutorialViewSet(viewsets.ModelViewSet):
         tutorial.delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-class TutorialDetailedViewSet(viewsets.ModelViewSet):
-    serializer_class = serializers.TutorialSerializer
-    pagination_class = None
-    permission_classes_by_action = {
-        "retrieve": [permissions.AllowAny],
-        "update": [permissions.IsAuthenticated],
-        "destroy": [permissions.IsAdminUser],
-    }
-
-    # override get_permissions method to use permission_classes_by_action
-    def get_permissions(self):
-        try:
-            return [
-                permission()
-                for permission in self.permission_classes_by_action[self.action]
-            ]
-        except KeyError:
-            return [permission() for permission in self.permission_classes]
-
-    def retrieve(self, request, pk):
-        result = get_object_or_404(models.Tutorial, pk=pk)
-        result_serialized = self.serializer_class(result).data
-        return Response({"tutorial": result_serialized}, status=status.HTTP_200_OK)
-
-    def update(self, request, pk):
-        result = get_object_or_404(models.Tutorial, pk=pk)
-        if (
-            request.data.get("published") == False
-            # from JSON: "published": "false" (string), from Insomnia: "published": false (boolean)
-            or request.data.get("published") == "false"
-        ):
-            if request.data.get("publish_date"):
-                del request.data["publish_date"]
-            else:
-                pass
-        elif (
-            request.data.get("published") == "true"
-            # from JSON: "published": "true" (string), from Insomnia: "published": true (boolean)
-            or request.data.get("published") == True
-        ):
-            request.data["publish_date"] = datetime.date.today().strftime("%Y-%m-%d")
-        result_serialized = self.serializer_class(result, data=request.data)
-        if result_serialized.is_valid():
-            result_serialized.save()
-            return Response(
-                status=status.HTTP_200_OK,
-            )
-        return Response(
-            {"error": result_serialized.errors}, status=status.HTTP_400_BAD_REQUEST
-        )
