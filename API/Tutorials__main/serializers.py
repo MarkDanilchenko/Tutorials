@@ -1,14 +1,14 @@
-from . import models
 from rest_framework import serializers
+from . import models
 
 
 class UserSerializer(serializers.ModelSerializer):
-    def create(self, validated_data):
-        username = validated_data.get("username")
-        first_name = validated_data.get("first_name")
-        last_name = validated_data.get("last_name")
-        email = validated_data.get("email")
-        password = validated_data.get("password")
+    def create(self, data):
+        username = data.get("username")
+        first_name = data.get("first_name")
+        last_name = data.get("last_name")
+        email = data.get("email")
+        password = data.get("password")
         user = models.User(
             username=username,
             first_name=first_name,
@@ -17,6 +17,7 @@ class UserSerializer(serializers.ModelSerializer):
         )
         user.set_password(password)
         user.save()
+
         return user
 
     class Meta:
@@ -25,7 +26,6 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class TutorialSerializer(serializers.ModelSerializer):
-    publish_date = serializers.DateField(format="%Y-%m-%d", default=None)
 
     class Meta:
         model = models.Tutorial

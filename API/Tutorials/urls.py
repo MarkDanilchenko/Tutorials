@@ -11,20 +11,24 @@ from rest_framework_simplejwt.views import (
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/token/retrieve/", TokenObtainPairView.as_view(), name="token_retrieve"),
-    path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
-    path("api/token/blacklist/", TokenBlacklistView.as_view(), name="token_blacklist"),
     path(
-        "api/accounts/signup/",
-        views.SignUpViewSet.as_view({"post": "create"}),
+        "api/v1/token/retrieve/", TokenObtainPairView.as_view(), name="token_retrieve"
+    ),
+    path("api/v1/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    path(
+        "api/v1/token/blacklist/", TokenBlacklistView.as_view(), name="token_blacklist"
+    ),
+    path(
+        "api/v1/account/signup/",
+        views.AccountViewSet.as_view({"post": "create"}),
         name="signup",
     ),
     path(
-        "api/accounts/profile/",
-        views.UserProfileView.as_view({"get": "list"}),
+        "api/v1/account/profile/",
+        views.AccountViewSet.as_view({"get": "retrieve"}),
         name="profile",
     ),
-    path("", include("Tutorials__main.urls")),
+    path("api/v1/", include("Tutorials__main.urls")),
 ]
 
 if settings.DEBUG:

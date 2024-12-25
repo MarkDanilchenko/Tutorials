@@ -133,7 +133,7 @@ class Tutorial(models.Model):
     class Meta:
         verbose_name = "Tutorial"
         verbose_name_plural = "Tutorials"
-        ordering = ["-created_at"]
+        ordering = ["-updated_at"]
 
     def __str__(self):
         return self.title
