@@ -81,9 +81,15 @@ class TutorialViewSet(viewsets.ModelViewSet):
 
             return Response(status=status.HTTP_201_CREATED)
 
-    def destroyAll(self, request):
+    def deleteAll(self, request):
         result = models.Tutorial.objects.all()
         result.delete()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def deleteOne(self, request, uuid):
+        tutorial = get_object_or_404(models.Tutorial, pk=uuid)
+        tutorial.delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -137,12 +143,4 @@ class TutorialDetailedViewSet(viewsets.ModelViewSet):
             )
         return Response(
             {"error": result_serialized.errors}, status=status.HTTP_400_BAD_REQUEST
-        )
-
-    def destroy(self, request, pk):
-        result = get_object_or_404(models.Tutorial, pk=pk)
-        result.delete()
-        return Response(
-            {"deleted": f"Tutorial was successfully deleted (ID: {pk})"},
-            status=status.HTTP_200_OK,
         )

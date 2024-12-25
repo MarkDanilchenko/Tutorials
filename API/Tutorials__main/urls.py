@@ -7,13 +7,13 @@ urlpatterns = [
     path(
         "tutorials/",
         views.TutorialViewSet.as_view(
-            {"get": "list", "post": "create", "delete": "destroyAll"}
+            {"get": "list", "post": "create", "delete": "deleteAll"}
         ),
     ),
     path(
-        "tutorials/<int:pk>/",
+        "tutorials/<str:uuid>/",
         views.TutorialViewSet.as_view(
-            {"get": "retrieve", "put": "update", "delete": "destroyOne"}
+            {"get": "retrieve", "put": "update", "delete": "deleteOne"}
         ),
     ),
 ]

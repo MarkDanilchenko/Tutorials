@@ -38,6 +38,10 @@ def email_validator(value: str) -> str:
 
 
 class User(AbstractUser):
+    pk = models.UUIDField(
+        primary_key=True, null=False, auto_created=True, help_text="User ID"
+    )
+
     username = models.CharField(
         max_length=100,
         unique=True,
@@ -86,6 +90,10 @@ class User(AbstractUser):
 
 
 class Tutorial(models.Model):
+    pk = models.UUIDField(
+        primary_key=True, null=False, auto_created=True, help_text="Tutorial ID"
+    )
+
     title = models.CharField(
         max_length=100,
         unique=True,
