@@ -38,7 +38,7 @@ def email_validator(value: str) -> str:
 
 
 class User(AbstractUser):
-    pk = models.UUIDField(
+    id = models.UUIDField(
         primary_key=True, null=False, auto_created=True, help_text="User ID"
     )
 
@@ -55,7 +55,6 @@ class User(AbstractUser):
         blank=True,
         null=True,
         default="",
-        min_length=2,
         max_length=100,
         help_text="First name",
         verbose_name="First name",
@@ -66,7 +65,6 @@ class User(AbstractUser):
         blank=True,
         null=True,
         default="",
-        min_length=2,
         max_length=100,
         help_text="Last name",
         verbose_name="Last name",
@@ -90,7 +88,7 @@ class User(AbstractUser):
 
 
 class Tutorial(models.Model):
-    pk = models.UUIDField(
+    id = models.UUIDField(
         primary_key=True, null=False, auto_created=True, help_text="Tutorial ID"
     )
 

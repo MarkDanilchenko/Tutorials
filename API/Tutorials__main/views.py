@@ -72,7 +72,7 @@ class TutorialViewSet(viewsets.ModelViewSet):
         return Response({"tutorials": tutorials_serialized}, status=status.HTTP_200_OK)
 
     def retrieve(self, request, uuid):
-        tutorial = get_object_or_404(models.Tutorial, pk=uuid)
+        tutorial = get_object_or_404(models.Tutorial, id=uuid)
         tutorial_serialized = self.serializer_class(tutorial, many=False).data
 
         return Response({"tutorial": tutorial_serialized}, status=status.HTTP_200_OK)
@@ -91,7 +91,7 @@ class TutorialViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_201_CREATED)
 
     def update(self, request, uuid):
-        tutorial = get_object_or_404(models.Tutorial, pk=uuid)
+        tutorial = get_object_or_404(models.Tutorial, id=uuid)
         isPublished = request.data.get("isPublished")
 
         if isPublished:
@@ -111,7 +111,7 @@ class TutorialViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def deleteOne(self, request, uuid):
-        tutorial = get_object_or_404(models.Tutorial, pk=uuid)
+        tutorial = get_object_or_404(models.Tutorial, id=uuid)
         tutorial.delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)

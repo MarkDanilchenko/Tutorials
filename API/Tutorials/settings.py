@@ -98,7 +98,7 @@ USE_I18N = True
 USE_TZ = True
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "./static"),
+    os.path.join(BASE_DIR, "static"),
 ]
 STATIC_URL = "static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
@@ -126,10 +126,10 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": datetime.timedelta(
-        minutes=os.getenv("ACCESS_TOKEN_LIFETIME")
+        minutes=float(os.getenv("ACCESS_TOKEN_LIFETIME"))
     ),
     "REFRESH_TOKEN_LIFETIME": datetime.timedelta(
-        minutes=os.getenv("REFRESH_TOKEN_LIFETIME")
+        minutes=float(os.getenv("REFRESH_TOKEN_LIFETIME"))
     ),
 }
 
