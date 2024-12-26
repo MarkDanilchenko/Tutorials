@@ -136,6 +136,14 @@ class Tutorial(models.Model):
         verbose_name="Date and time when the tutorial was last updated",
     )
 
+    created_by = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        null=True,
+        help_text="User who created the tutorial",
+        verbose_name="User who created the tutorial",
+    )
+
     class Meta:
         verbose_name = "Tutorial"
         verbose_name_plural = "Tutorials"

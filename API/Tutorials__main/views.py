@@ -94,6 +94,11 @@ class TutorialViewSet(viewsets.ModelViewSet):
         tutorial = get_object_or_404(models.Tutorial, id=uuid)
         isPublished = request.data.get("isPublished")
 
+        if tutorial.created_by.id != request.user.id:
+            return Response(
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
         if isPublished:
             request.data["published_at"] = datetime.datetime.now()
 
