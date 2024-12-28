@@ -1,4 +1,5 @@
 import re
+import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
@@ -39,7 +40,10 @@ def email_validator(value: str) -> str:
 
 class User(AbstractUser):
     id = models.UUIDField(
-        primary_key=True, null=False, auto_created=True, help_text="User ID"
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False,
+        help_text="User ID",
     )
 
     username = models.CharField(
@@ -89,7 +93,10 @@ class User(AbstractUser):
 
 class Tutorial(models.Model):
     id = models.UUIDField(
-        primary_key=True, null=False, auto_created=True, help_text="Tutorial ID"
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False,
+        help_text="Tutorial ID",
     )
 
     title = models.CharField(
