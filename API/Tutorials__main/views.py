@@ -8,8 +8,20 @@ from . import models, serializers
 
 class AccountViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.UserSerializer
-    permission_classes = [permissions.AllowAny]
     pagination_class = None
+    permission_classes_by_action = {
+        "create": [permissions.AllowAny],
+        "retrieve": [permissions.IsAuthenticated],
+    }
+
+    def get_permissions(self):
+        try:
+            return [
+                permission()
+                for permission in self.permission_classes_by_action[self.action]
+            ]
+        except KeyError:
+            return [permission() for permission in self.permission_classes]
 
     def create(self, request, *args, **kwargs):
         user = self.serializer_class(data=request.data)
@@ -20,9 +32,6 @@ class AccountViewSet(viewsets.ModelViewSet):
             status=status.HTTP_201_CREATED,
         )
 
-    @action(
-        methods=["get"], detail=True, permission_classes=[permissions.IsAuthenticated]
-    )
     def retrieve(self, request, *args, **kwargs):
         user = request.user
         user_serialized = dict(self.serializer_class(user, many=False).data)
