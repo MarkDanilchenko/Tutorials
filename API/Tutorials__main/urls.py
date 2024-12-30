@@ -13,7 +13,7 @@ urlpatterns = [
     path(
         "tutorials/<str:uuid>/",
         views.TutorialViewSet.as_view(
-            {"get": "retrieve", "put": "update", "delete": "deleteOne"}
+            {"get": "retrieve", "patch": "update", "delete": "deleteOne"}
         ),
     ),
 ]

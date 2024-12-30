@@ -39,7 +39,17 @@ class UserSerializer(DynamicFieldsModelSerializer):
 
 
 class TutorialSerializer(serializers.ModelSerializer):
-    created_by = UserSerializer(fields=["username", "first_name", "last_name", "email"])
+    created_by = serializers.PrimaryKeyRelatedField(
+        queryset=models.User.objects.all(), many=False
+    )
+
+    def to_representation(self, instance):
+        result = super().to_representation(instance)
+        result["created_by"] = UserSerializer(
+            instance.created_by, fields=["username", "first_name", "last_name", "email"]
+        ).data
+
+        return result
 
     class Meta:
         model = models.Tutorial

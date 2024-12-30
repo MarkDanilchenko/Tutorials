@@ -34,7 +34,7 @@ class AccountViewSet(viewsets.ModelViewSet):
 
     def retrieve(self, request, *args, **kwargs):
         user = request.user
-        user_serialized = dict(self.serializer_class(user, many=False).data)
+        user_serialized = self.serializer_class(user, many=False).data
 
         return Response({"profile": user_serialized}, status=status.HTTP_200_OK)
 
@@ -47,8 +47,8 @@ class TutorialViewSet(viewsets.ModelViewSet):
         "retrieve": [permissions.AllowAny],
         "create": [permissions.IsAuthenticated],
         "update": [permissions.IsAuthenticated],
-        "destroy": [permissions.IsAdminUser],
-        "destroyAll": [permissions.IsAdminUser],
+        "deleteOne": [permissions.IsAdminUser],
+        "deleteAll": [permissions.IsAdminUser],
     }
 
     def get_permissions(self):
@@ -60,7 +60,7 @@ class TutorialViewSet(viewsets.ModelViewSet):
         except KeyError:
             return [permission() for permission in self.permission_classes]
 
-    def list(self, request, *args, **kwargs):
+    def list(self, request):
         query = request.query_params.get("q")
 
         if query:
@@ -87,10 +87,13 @@ class TutorialViewSet(viewsets.ModelViewSet):
         return Response({"tutorial": tutorial_serialized}, status=status.HTTP_200_OK)
 
     def create(self, request):
-        isPublished = request.data.get("isPublished").lower()
+        userId = request.user.id
+        isPublished = request.data.get("isPublished")
 
-        if isPublished and isPublished == "true":
+        if isPublished and isPublished.lower() == "true":
             request.data["published_at"] = datetime.datetime.now()
+
+        request.data["created_by"] = userId
 
         tutorial_serialized = self.serializer_class(data=request.data)
 
@@ -100,18 +103,25 @@ class TutorialViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_201_CREATED)
 
     def update(self, request, uuid):
-        tutorial = get_object_or_404(models.Tutorial, id=uuid)
+        tutorial = get_object_or_404(models.Tutorial.objects.filter(id=uuid))
         isPublished = request.data.get("isPublished")
 
-        if tutorial.created_by.id != request.user.id:
+        if tutorial.created_by.id != request.user.id and not request.user.is_staff:
             return Response(
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        if isPublished:
+        if request.data.get("created_by"):
+            return Response(
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if isPublished and isPublished.lower() == "true":
             request.data["published_at"] = datetime.datetime.now()
 
-        tutorial_serialized = self.serializer_class(tutorial, data=request.data)
+        tutorial_serialized = self.serializer_class(
+            tutorial, data=request.data, partial=True
+        )
 
         if tutorial_serialized.is_valid(raise_exception=True):
             tutorial_serialized.save()
