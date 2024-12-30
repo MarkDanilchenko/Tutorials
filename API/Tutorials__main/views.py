@@ -1,9 +1,29 @@
-from rest_framework import viewsets, permissions, status
-from rest_framework.decorators import action, permission_classes
+from rest_framework import viewsets, permissions, status, pagination
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 import datetime
 from . import models, serializers
+from . import constants
+
+
+class TutorialPagination(pagination.PageNumberPagination):
+    page_size = constants.DJANGO_PAGINATION_LIMIT
+    max_page_size = constants.DJANGO_PAGINATION_MAX_LIMIT
+    page_size_query_param = constants.DJANGO_PAGE_SIZE_QUERY_PARAM
+    page_query_param = constants.DJANGO_PAGE_QUERY_PARAM
+
+    def get_paginated_response(self, data):
+        return Response(
+            {
+                "links": {
+                    "next": self.get_next_link(),
+                    "previous": self.get_previous_link(),
+                },
+                "count": self.page.paginator.count,
+                "tutorials": data,
+            },
+            status=status.HTTP_200_OK,
+        )
 
 
 class AccountViewSet(viewsets.ModelViewSet):
@@ -41,7 +61,7 @@ class AccountViewSet(viewsets.ModelViewSet):
 
 class TutorialViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.TutorialSerializer
-    pagination_class = None
+    pagination_class = TutorialPagination
     permission_classes_by_action = {
         "list": [permissions.AllowAny],
         "retrieve": [permissions.AllowAny],
@@ -76,8 +96,10 @@ class TutorialViewSet(viewsets.ModelViewSet):
             )
 
         tutorials_serialized = self.serializer_class(tutorials, many=True).data
+        paginated_tutorials = self.paginate_queryset(tutorials_serialized)
+        paginated_response = self.get_paginated_response(paginated_tutorials)
 
-        return Response({"tutorials": tutorials_serialized}, status=status.HTTP_200_OK)
+        return paginated_response
 
     def retrieve(self, request, uuid):
         tutorial = get_object_or_404(models.Tutorial.objects.filter(id=uuid))
