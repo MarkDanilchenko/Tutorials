@@ -35,7 +35,6 @@ class AccountViewSet(viewsets.ModelViewSet):
     def retrieve(self, request, *args, **kwargs):
         user = request.user
         user_serialized = dict(self.serializer_class(user, many=False).data)
-        del user_serialized["password"]
 
         return Response({"profile": user_serialized}, status=status.HTTP_200_OK)
 
@@ -81,15 +80,16 @@ class TutorialViewSet(viewsets.ModelViewSet):
         return Response({"tutorials": tutorials_serialized}, status=status.HTTP_200_OK)
 
     def retrieve(self, request, uuid):
-        tutorial = get_object_or_404(models.Tutorial, id=uuid)
+        tutorial = get_object_or_404(models.Tutorial.objects.filter(id=uuid))
+
         tutorial_serialized = self.serializer_class(tutorial, many=False).data
 
         return Response({"tutorial": tutorial_serialized}, status=status.HTTP_200_OK)
 
     def create(self, request):
-        isPublished = request.data.get("isPublished")
+        isPublished = request.data.get("isPublished").lower()
 
-        if isPublished:
+        if isPublished and isPublished == "true":
             request.data["published_at"] = datetime.datetime.now()
 
         tutorial_serialized = self.serializer_class(data=request.data)

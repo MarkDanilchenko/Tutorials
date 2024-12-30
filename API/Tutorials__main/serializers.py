@@ -2,7 +2,20 @@ from rest_framework import serializers
 from . import models
 
 
-class UserSerializer(serializers.ModelSerializer):
+class DynamicFieldsModelSerializer(serializers.ModelSerializer):
+    def __init__(self, *args, **kwargs):
+        fields = kwargs.pop("fields", None)
+
+        super().__init__(*args, **kwargs)
+
+        if fields is not None:
+            allowed = set(fields)
+            existing = set(self.fields)
+            for field_name in existing - allowed:
+                self.fields.pop(field_name)
+
+
+class UserSerializer(DynamicFieldsModelSerializer):
     def create(self, data):
         username = data.get("username")
         first_name = data.get("first_name")
@@ -22,11 +35,13 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.User
-        fields = "__all__"
+        exclude = ["password"]
 
 
 class TutorialSerializer(serializers.ModelSerializer):
+    created_by = UserSerializer(fields=["username", "first_name", "last_name", "email"])
 
     class Meta:
         model = models.Tutorial
         fields = "__all__"
+        depth = 1

@@ -4,6 +4,7 @@ from . import models
 
 
 class TutorialInline(admin.TabularInline):
+    extra = 1
     model = models.Tutorial
 
 
