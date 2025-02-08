@@ -12,14 +12,7 @@ export default [
     files: ["**/*.{js,mjs,cjs,vue}"],
   },
   {
-    ignores: [
-      "**/node_modules/**",
-      "**/dist/**",
-      "**/build/**",
-      "**/coverage/**",
-      ".nuxt/**",
-      ".output/**",
-    ],
+    ignores: ["**/node_modules/**", "**/dist/**", "**/build/**", "**/coverage/**", ".nuxt/**", ".output/**"],
   },
   {
     languageOptions: {
@@ -38,6 +31,7 @@ export default [
         "error",
         {
           doubleQuote: true,
+          printWidth: 120,
         },
       ],
       "vue/multi-word-component-names": "off",
