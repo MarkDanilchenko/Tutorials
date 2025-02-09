@@ -1,5 +1,5 @@
 import axios from "axios";
-import axiosWithInterceptor from "@/services/interceptors.js";
+import axiosWithInterceptor from "@/services/interceptor.js";
 import eventBus from "@/services/eventBus";
 import { djangoOptions } from "@/env.js";
 

@@ -15,6 +15,7 @@ import eventBus from "@/services/eventBus.js";
 import Navbar from "@/components/Navbar.vue";
 import Bottom from "@/components/Bottom.vue";
 import { mapActions } from "vuex";
+import colorModeInit from "./mixins/colorModeInit";
 
 export default {
   name: "App",
@@ -22,6 +23,7 @@ export default {
     Navbar,
     Bottom,
   },
+  mixins: [colorModeInit],
   mounted() {
     let refresh = localStorage.getItem("refreshToken");
 
