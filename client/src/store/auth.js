@@ -8,7 +8,8 @@ const auth = {
   state: () => ({
     isSignedIn: localStorage.getItem("refreshToken") ? true : false,
     profile: null,
-    authError: null,
+    signInError: null,
+    signUpError: null,
   }),
   getters: {},
   mutations: {
@@ -18,11 +19,25 @@ const auth = {
     setProfile(state, profile) {
       state.profile = profile;
     },
-    setAuthError(state, authError) {
-      state.authError = authError;
+    setSignInError(state, signInError) {
+      state.signInError = signInError;
+    },
+    setSignUpError(state, signUpError) {
+      state.signUpError = signUpError;
     },
   },
   actions: {
+    async signUp({ commit }, newUser) {
+      try {
+        await axios.post(`http://${djangoOptions.host}:${djangoOptions.port}/api/v1/account/signup/`, newUser, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+      } catch (error) {
+        commit("setSignUpError", error.response.data);
+      }
+    },
     async signIn({ commit }, credentials) {
       try {
         const { refresh, access } = await axios.post(
@@ -39,8 +54,8 @@ const auth = {
         commit("isSignedIn", true);
         window.location.href = "/tutorials";
       } catch (error) {
-        commit("isSignedIn", false);
-        commit("setAuthError", error.response.data);
+        commit("setSignInError", error.response.data);
+        eventBus.dispatch("authError");
       }
     },
     async profile({ commit }) {

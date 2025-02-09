@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from . import models
 
-
+# If there is an OTM relation, the main model serializer should be inherited from the dynamic serializer,
+# then in the child model you can select fields from the main table to display.
 class DynamicFieldsModelSerializer(serializers.ModelSerializer):
     def __init__(self, *args, **kwargs):
         fields = kwargs.pop("fields", None)
@@ -43,6 +44,7 @@ class TutorialSerializer(serializers.ModelSerializer):
         queryset=models.User.objects.all(), many=False
     )
 
+    # GET method: Custom representation with part of data from the main table in a linked table
     def to_representation(self, instance):
         result = super().to_representation(instance)
         result["created_by"] = UserSerializer(
