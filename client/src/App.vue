@@ -26,25 +26,25 @@ export default {
     let refresh = localStorage.getItem("refreshToken");
 
     if (refresh) {
-      this.userProfile();
+      this.profile();
     }
 
-    eventBus.on("authCheck", () => {
+    eventBus.on("authError", () => {
       refresh = localStorage.getItem("refreshToken");
-      this.authCheck(refresh);
+      this.signOut(refresh);
     });
   },
   beforeUnmount() {
-    eventBus.remove("authCheck");
+    eventBus.remove("authError");
   },
   methods: {
     ...mapActions({
-      signOut: "auth/signOut", // TODO rename this method in vuex
-      userProfile: "auth/userProfile",
+      invalidateTokens: "auth/invalidateTokens",
+      profile: "auth/profile",
     }),
-    authCheck(refresh) {
+    signOut(refresh) {
       if (refresh) {
-        return this.signOut({ refresh });
+        return this.invalidateTokens({ refresh });
       }
 
       this.$router.push("/signin");
