@@ -1,7 +1,7 @@
 @import "colors.scss";
 @import "fonts.scss";
 
-/* ------- customize Bootstrap accordion styles via variables -------- */
+/* ------- customize Bootstrap -------- */
 $accordion-border-color: $green_color_05;
 $accordion-button-active-bg: $green_color_05;
 $accordion-button-active-color: $white_color;
@@ -14,7 +14,6 @@ $accordion-icon-active-color: $white_color;
   --bs-accordion-btn-active-icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='#{$accordion-icon-active-color}'><path fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/></svg>") !important;
 }
 
-/* ------- customize Bootstrap radio styles via variables -------- */
 $form-check-input-focus-border: $green_color_05;
 $form-check-input-focus-box-shadow: 0 0 0 0.15rem $green_color_05;
 $form-check-input-checked-bg-color: $green_color;
@@ -22,21 +21,18 @@ $form-check-input-checked-border-color: $green_color;
 
 /* import the Bootstrap */
 @import "../../../node_modules/bootstrap/scss/bootstrap.scss";
-/* import custom styles */
-@import "style_common.scss";
-@import "style_bottom.scss";
-@import "style_dotCube.scss";
-@import "style_colorMode.scss";
-@import "style_mainLogo.scss";
-// some styles defined currently in .vue files !!!
-// some styles defined currently in .vue files !!!
-// some styles defined currently in .vue files !!!
+/* import other styles */
+/* some styles defined directly in components */
+@import "common.scss";
+@import "dotCube.scss";
+@import "colorModeSwitcher.scss";
+@import "mainLogo.scss";
 
 /* ------- customize Bootstrap button styles via mixins -------- */
-.btn-custom-green {
+.btn-green-custom {
   @include button-variant($green_color, $green_color_05, $white_color);
 }
 
-.btn-outline-custom-green {
+.btn-outline-green-custom {
   @include button-outline-variant($green_color, $white_color);
 }
