@@ -1,2 +1,3 @@
-import customFocus from '@/directives/custom_focus.js';
-export default [customFocus];
+import focusCustom from "@/directives/focus.js";
+
+export default [focusCustom];

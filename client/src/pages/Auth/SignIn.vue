@@ -19,7 +19,7 @@
               <input
                 id="username"
                 v-model="form.username"
-                v-customFocus
+                v-focusCustom
                 type="text"
                 name="username"
                 class="form-control"
