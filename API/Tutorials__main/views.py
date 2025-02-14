@@ -56,7 +56,7 @@ class AccountViewSet(viewsets.ModelViewSet):
         user = request.user
         user_serialized = self.serializer_class(user, many=False).data
 
-        return Response({"profile": user_serialized}, status=status.HTTP_200_OK)
+        return Response(user_serialized, status=status.HTTP_200_OK)
 
 
 class TutorialViewSet(viewsets.ModelViewSet):

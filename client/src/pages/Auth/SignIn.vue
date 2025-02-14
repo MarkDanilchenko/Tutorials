@@ -82,8 +82,8 @@ export default {
     ...mapActions({
       signInAction: "auth/signIn",
     }),
-    async signIn() {
-      await this.signInAction({ username: this.form.username, password: this.form.password });
+    signIn() {
+      this.signInAction({ username: this.form.username, password: this.form.password });
     },
   },
 };

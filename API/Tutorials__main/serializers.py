@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from . import models
 
+
 # If there is an OTM relation, the main model serializer should be inherited from the dynamic serializer,
 # then in the child model you can select fields from the main table to display.
 class DynamicFieldsModelSerializer(serializers.ModelSerializer):
@@ -36,7 +37,14 @@ class UserSerializer(DynamicFieldsModelSerializer):
 
     class Meta:
         model = models.User
-        exclude = ["password"]
+        exclude = [
+            "password",
+            "groups",
+            "user_permissions",
+            "is_active",
+            "is_staff",
+            "is_superuser",
+        ]
 
 
 class TutorialSerializer(serializers.ModelSerializer):
