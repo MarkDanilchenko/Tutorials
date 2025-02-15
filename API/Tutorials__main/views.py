@@ -7,10 +7,10 @@ from . import constants
 
 
 class TutorialPagination(pagination.PageNumberPagination):
-    page_size = constants.DJANGO_PAGINATION_LIMIT
-    max_page_size = constants.DJANGO_PAGINATION_MAX_LIMIT
-    page_size_query_param = constants.DJANGO_PAGE_SIZE_QUERY_PARAM
-    page_query_param = constants.DJANGO_PAGE_QUERY_PARAM
+    page_size = constants.PAGINATION_LIMIT
+    max_page_size = constants.PAGINATION_MAX_LIMIT
+    page_size_query_param = constants.PAGE_SIZE_NAME
+    page_query_param = constants.PAGE_NAME
 
     def get_paginated_response(self, data):
         return Response(
