@@ -49,7 +49,7 @@
           </span>
           <hr class="d-md-none" />
           <div class="d-flex justify-content-center align-items-center">
-            <span v-if="profile && isSignedIn" class="text-small text-muted me-1"
+            <span v-if="profile && isSignedIn" class="text-small text-muted me-3"
               >Welcome, {{ profile.username }}!</span
             >
             <button
@@ -224,6 +224,9 @@ export default {
     }),
   },
   methods: {
+    ...mapActions({
+      invalidateTokens: "auth/invalidateTokens",
+    }),
     changeColorMode() {
       const colorMode = $("html").attr("data-bs-theme");
 
@@ -241,14 +244,14 @@ export default {
           break;
       }
     },
-    ...mapActions({
-      invalidateTokens: "auth/invalidateTokens",
-    }),
-
     signOut() {
       const refresh = localStorage.getItem("refreshToken");
 
-      this.invalidateTokens({ refresh });
+      if (refresh) {
+        return this.invalidateTokens({ refresh });
+      }
+
+      this.$router.push("/signin");
     },
   },
 };

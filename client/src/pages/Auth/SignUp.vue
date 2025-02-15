@@ -239,23 +239,19 @@ export default {
       setSignUpError: "auth/setSignUpError",
     }),
     async signUp() {
-      try {
-        if (this.form.password !== this.form.passwordConfirmation) {
-          throw new Error("Password confirmation failed!");
-        }
-
-        await this.signUpAction({
-          username: this.form.username,
-          first_name: this.form.first_name,
-          last_name: this.form.last_name,
-          email: this.form.email,
-          password: this.form.password,
-        });
-
-        await this.signInAction({ username: this.form.username, password: this.form.password });
-      } catch (error) {
-        this.setSignUpError(error.message);
+      if (this.form.password !== this.form.passwordConfirmation) {
+        return this.setSignUpError("Password confirmation failed!");
       }
+
+      await this.signUpAction({
+        username: this.form.username,
+        first_name: this.form.first_name,
+        last_name: this.form.last_name,
+        email: this.form.email,
+        password: this.form.password,
+      }).then(async () => {
+        await this.signInAction({ username: this.form.username, password: this.form.password });
+      });
     },
   },
 };
