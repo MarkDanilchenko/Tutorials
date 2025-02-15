@@ -106,7 +106,7 @@ class TutorialViewSet(viewsets.ModelViewSet):
 
         tutorial_serialized = self.serializer_class(tutorial, many=False).data
 
-        return Response({"tutorial": tutorial_serialized}, status=status.HTTP_200_OK)
+        return Response(tutorial_serialized, status=status.HTTP_200_OK)
 
     def create(self, request):
         userId = request.user.id
@@ -135,6 +135,7 @@ class TutorialViewSet(viewsets.ModelViewSet):
 
         if request.data.get("created_by"):
             return Response(
+                "You cannot change the user who created the tutorial",
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
