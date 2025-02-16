@@ -42,8 +42,6 @@ class UserSerializer(DynamicFieldsModelSerializer):
             "groups",
             "user_permissions",
             "is_active",
-            "is_staff",
-            "is_superuser",
         ]
 
 

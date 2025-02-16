@@ -1,5 +1,5 @@
 import { createStore } from "vuex";
-import { tutorials__store } from "@/store/tutorials__store.js";
+import tutorials from "@/store/tutorials.js";
 import auth from "@/store/auth.js";
 
 export default createStore({
@@ -8,7 +8,7 @@ export default createStore({
   mutations: {},
   actions: {},
   modules: {
-    tutorials: tutorials__store,
+    tutorials,
     auth,
   },
 });
