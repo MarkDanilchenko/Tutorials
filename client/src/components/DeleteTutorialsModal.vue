@@ -32,13 +32,20 @@ import { mapActions } from "vuex";
 export default {
   name: "DeleteTutorialsModal",
   methods: {
-    ...mapActions({}),
-    deleteTutorials() {},
+    ...mapActions({
+      deleteTutorialsAction: "tutorials/deleteTutorials",
+    }),
+    deleteTutorials() {
+      this.deleteTutorialsAction();
+      this.$router.push("/tutorials");
+    },
   },
 };
 </script>
 
 <style scoped lang="scss">
+@import "@/assets/scss/colors.scss";
+
 .modal-body span {
   color: $red_color;
 }

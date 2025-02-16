@@ -79,8 +79,23 @@ const tutorials = {
           }
         );
 
-        commit("setTutorial", null);
+        commit("setTutorial", {});
         dispatch("tutorialsList");
+      } catch (error) {
+        /* empty */
+      }
+    },
+    async deleteTutorials({ commit }) {
+      try {
+        await axiosWithInterceptor.delete(`http://${djangoOptions.host}:${djangoOptions.port}/api/v1/tutorials/`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        });
+
+        commit("setTutorials", {});
+        commit("setTutorial", {});
       } catch (error) {
         /* empty */
       }
@@ -104,24 +119,6 @@ const tutorials = {
     //     .catch((error) => {
     //       commit("setSingleAndSearchedTutorial", null);
     //       console.log(error.response.data.tutorial);
-    //     });
-    // },
-    // // DRF: class TutorialViewSet - def destroy(): DELETE tutorials list
-    // async deleteTutorials({ commit, state }) {
-    //   await axiosWithInterceptor
-    //     .delete(`http://${process.env.server_HostPort_1}/api/tutorials/`, {
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //         Accept: "application/json",
-    //         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-    //       },
-    //     })
-    //     .then((response) => {
-    //       commit("setTutorials", []);
-    //       commit("setSingleAndSearchedTutorial", null);
-    //     })
-    //     .catch((error) => {
-    //       console.log(error.message);
     //     });
     // },
     // // DRF: class TutorialViewSet - def create(): POST new tutorial
