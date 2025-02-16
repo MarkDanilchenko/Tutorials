@@ -157,8 +157,8 @@
             </button>
           </div>
         </form>
-        <div class="d-flex justify-content-center flex-column align-items-end mt-2 mb-5">
-          <small class="text-muted"> Already registered? </small>
+        <div class="d-flex justify-content-center align-items-center mt-2 mb-5">
+          <span class="text-muted text-small me-3"> Already registered? </span>
           <router-link class="nav-link" to="/signin" title="SignIn!"><b>SignIn!</b></router-link>
         </div>
         <p v-if="signUpError" class="text-danger mt-3">{{ signUpError }}</p>
@@ -239,30 +239,22 @@ export default {
       setSignUpError: "auth/setSignUpError",
     }),
     async signUp() {
-      try {
-        if (this.form.password !== this.form.passwordConfirmation) {
-          throw new Error("Password confirmation failed!");
-        }
-
-        await this.signUpAction({
-          username: this.form.username,
-          first_name: this.form.first_name,
-          last_name: this.form.last_name,
-          email: this.form.email,
-          password: this.form.password,
-        });
-
-        await this.signInAction({ username: this.form.username, password: this.form.password });
-      } catch (error) {
-        this.setSignUpError(error.message);
+      if (this.form.password !== this.form.passwordConfirmation) {
+        return this.setSignUpError("Password confirmation failed!");
       }
+
+      await this.signUpAction({
+        username: this.form.username,
+        first_name: this.form.first_name,
+        last_name: this.form.last_name,
+        email: this.form.email,
+        password: this.form.password,
+      }).then(async () => {
+        await this.signInAction({ username: this.form.username, password: this.form.password });
+      });
     },
   },
 };
 </script>
 
-<style scoped lang="scss">
-p {
-  font-size: smaller;
-}
-</style>
+<style scoped lang="scss"></style>

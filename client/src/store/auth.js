@@ -35,12 +35,12 @@ const auth = {
           },
         });
       } catch (error) {
-        commit("setSignUpError", error.response.data);
+        commit("setSignUpError", error.message);
       }
     },
     async signIn({ commit }, credentials) {
       try {
-        const { refresh, access } = await axios.post(
+        const { data } = await axios.post(
           `http://${djangoOptions.host}:${djangoOptions.port}/api/v1/token/retrieve/`,
           credentials,
           {
@@ -49,12 +49,13 @@ const auth = {
             },
           }
         );
-        localStorage.setItem("accessToken", access);
-        localStorage.setItem("refreshToken", refresh);
-        commit("isSignedIn", true);
+
+        localStorage.setItem("accessToken", data.access);
+        localStorage.setItem("refreshToken", data.refresh);
+        commit("setIsSignedIn", true);
         window.location.href = "/tutorials";
       } catch (error) {
-        commit("setSignInError", error.response.data);
+        commit("setSignInError", error.message);
         eventBus.dispatch("authError");
       }
     },

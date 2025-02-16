@@ -1,5 +1,5 @@
 <template>
-  <section class="my-notFound">
+  <section class="my-notFoundPage">
     <div class="d-flex flex-column justify-content-center align-items-center notFoundPage">
       <p class="text-center">
         <span class="text-green">404</span>
@@ -16,12 +16,4 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-.notFoundPage {
-  font-size: 5rem;
-  position: absolute;
-  top: 45%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-</style>
+<style scoped lang="scss"></style>
