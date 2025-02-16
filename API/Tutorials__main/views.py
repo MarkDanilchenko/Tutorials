@@ -67,7 +67,7 @@ class TutorialViewSet(viewsets.ModelViewSet):
         "retrieve": [permissions.AllowAny],
         "create": [permissions.IsAuthenticated],
         "update": [permissions.IsAuthenticated],
-        "deleteOne": [permissions.IsAdminUser],
+        "deleteOne": [permissions.IsAuthenticated],
         "deleteAll": [permissions.IsAdminUser],
     }
 
@@ -159,6 +159,12 @@ class TutorialViewSet(viewsets.ModelViewSet):
 
     def deleteOne(self, request, uuid):
         tutorial = get_object_or_404(models.Tutorial, id=uuid)
+
+        if tutorial.created_by.id != request.user.id and not request.user.is_staff:
+            return Response(
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
         tutorial.delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
