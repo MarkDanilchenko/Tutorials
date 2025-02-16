@@ -6,7 +6,7 @@
         :key="tutorial.id"
         :tutorial="tutorial"
         :index="index"
-        @tutorial-details="$emit('tutorial-details', $event)"
+        @tutorial-info="$emit('tutorial-info', $event)"
       />
     </div>
   </section>
@@ -26,7 +26,7 @@ export default {
       default: () => [],
     },
   },
-  emits: ["tutorial-details"],
+  emits: ["tutorial-info"],
 };
 </script>
 

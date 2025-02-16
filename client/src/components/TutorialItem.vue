@@ -29,7 +29,7 @@
             <span><b>Title:</b></span> "{{ tutorial.title }}"
           </p>
           <!-- $emit data for the Tutorials details -->
-          <button class="btn btn-outline-green-custom" @click="$emit('tutorial-details', tutorial.id)">More</button>
+          <button class="btn btn-outline-green-custom" @click="$emit('tutorial-info', tutorial.id)">More</button>
         </div>
       </div>
       <div v-else :id="`collapse${index}`" class="accordion-collapse collapse">
@@ -38,7 +38,7 @@
             <span><b>Title:</b></span> "{{ tutorial.title }}"
           </p>
           <!-- $emit data for the Tutorials details -->
-          <button class="btn btn-outline-green-custom" @click="$emit('tutorial-details', tutorial.id)">More</button>
+          <button class="btn btn-outline-green-custom" @click="$emit('tutorial-info', tutorial.id)">More</button>
         </div>
       </div>
     </div>
@@ -58,7 +58,7 @@ export default {
       required: true,
     },
   },
-  emits: ["tutorial-details"],
+  emits: ["tutorial-info"],
 };
 </script>
 
