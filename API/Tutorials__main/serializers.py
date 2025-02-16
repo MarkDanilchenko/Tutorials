@@ -54,7 +54,7 @@ class TutorialSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         result = super().to_representation(instance)
         result["created_by"] = UserSerializer(
-            instance.created_by, fields=["username", "first_name", "last_name", "email"]
+            instance.created_by, fields=["id", "username", "first_name", "last_name", "email"]
         ).data
 
         return result

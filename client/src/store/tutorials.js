@@ -7,9 +7,9 @@ const tutorials = {
   namespaced: true,
   state: () => ({
     tutorials: {},
-    // tutorial__details: null,
-    // tutorial__searchQuery: "",
+    tutorial: {},
     filterCondition: "all",
+    // tutorial__searchQuery: "",
     // tutorial__postError: null,
     // tutorial__putError: null,
   }),
@@ -17,6 +17,9 @@ const tutorials = {
   mutations: {
     setTutorials(state, tutorials) {
       state.tutorials = tutorials;
+    },
+    setTutorial(state, tutorial) {
+      state.tutorial = tutorial;
     },
     setFilterCondition(state, filterCondition) {
       if (!["all", "published", "notPublished"].includes(filterCondition)) {
@@ -38,7 +41,7 @@ const tutorials = {
     // },
   },
   actions: {
-    async tutorialsList({ commit, state }) {
+    async tutorialsList({ commit }) {
       try {
         const response = await axios.get(`http://${djangoOptions.host}:${djangoOptions.port}/api/v1/tutorials/`, {
           headers: {
@@ -51,6 +54,38 @@ const tutorials = {
         commit("setTutorials", {});
       }
     },
+    async tutorialItem({ commit }, id) {
+      try {
+        const response = await axios.get(`http://${djangoOptions.host}:${djangoOptions.port}/api/v1/tutorials/${id}`, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        commit("setTutorial", response.data);
+      } catch (error) {
+        commit("setTutorial", {});
+      }
+    },
+    async deleteTutorialItem({ commit, dispatch }, id) {
+      try {
+        await axiosWithInterceptor.delete(
+          `http://${djangoOptions.host}:${djangoOptions.port}/api/v1/tutorials/${id}/`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            },
+          }
+        );
+
+        commit("setTutorial", null);
+        dispatch("tutorialsList");
+      } catch (error) {
+        /* empty */
+      }
+    },
+
     // // DRF: class TutorialViewSet - def list(): GET tutorial which contains searched query
     // async getSearchedTutorial({ commit, state }) {
     //   await axiosWithInterceptor
@@ -109,43 +144,7 @@ const tutorials = {
     //       commit("setTutorialPostError", error.response.data);
     //     });
     // },
-    // // DRF: class TutorialDetailedViewSet - def retrieve(): GET a single tutorial
-    // async getSingleTutorial({ commit, state }, id) {
-    //   await axiosWithInterceptor
-    //     .get(`http://${process.env.server_HostPort_1}/api/tutorials/${id}/`, {
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //         Accept: "application/json",
-    //       },
-    //     })
-    //     .then((response) => {
-    //       commit("setSingleAndSearchedTutorial", response.data.tutorial);
-    //     })
-    //     .catch((error) => {
-    //       commit("setSingleAndSearchedTutorial", null);
-    //       console.log(error.message);
-    //     });
-    // },
-    // // DRF: class TutorialDetailedViewSet - def destroy(): DELETE a single tutorial
-    // async deleteSingleTutorial({ commit, state, dispatch }, id) {
-    //   await axiosWithInterceptor
-    //     .delete(`http://${process.env.server_HostPort_1}/api/tutorials/${id}/`, {
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //         Accept: "application/json",
-    //         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-    //       },
-    //     })
-    //     .then((response) => {
-    //       if (response !== undefined) {
-    //         commit("setSingleAndSearchedTutorial", null);
-    //         dispatch("getTutorials");
-    //       }
-    //     })
-    //     .catch((error) => {
-    //       console.log(error.message);
-    //     });
-    // },
+
     // // DRF: class TutorialDetailedViewSet - def update(): PUT a single tutorial
     // async putSingleTutorial({ commit, state, dispatch }, params) {
     //   await axiosWithInterceptor

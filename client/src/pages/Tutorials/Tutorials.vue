@@ -1,69 +1,87 @@
 <template>
   <section class="my-tutorials">
-    <!-- LOGO -->
-    <!-- LOGO -->
-    <!-- LOGO -->
     <div id="mainLogo" class="d-flex justify-content-center align-items-center">
       <section class="wrapper">
         <div class="top">Tutorials</div>
         <div class="bottom" aria-hidden="true">Tutorials</div>
       </section>
     </div>
-    <!-- Tutorials block -->
-    <!-- Tutorials block -->
-    <!-- Tutorials block -->
-    <div v-if="tutorials.length > 0">
-      <div class="row">
-        <div class="col-md-6 col-12 mb-md-0 mb-4">
-          <!-- radios: (published/all) -->
-          <!-- radios: (published/all) -->
-          <!-- radios: (published/all) -->
-          <div class="d-flex justify-content-between align-items-center">
-            <h5 class="my-3 text-muted">All Tutorials</h5>
-            <div class="d-flex justify-content-center">
-              <div class="form-check me-3">
-                <input
-                  id="radioAll"
-                  class="form-check-input"
-                  type="radio"
-                  name="radioIsPublished"
-                  checked
-                  @click="setPublishedTutorial(false)"
-                />
-                <label class="form-check-label text-small" for="radioAll"> All </label>
-              </div>
-              <div class="form-check">
-                <input
-                  id="radioPublished"
-                  class="form-check-input"
-                  type="radio"
-                  name="radioIsPublished"
-                  @click="setPublishedTutorial(true)"
-                />
-                <label class="form-check-label text-small" for="radioPublished"> Published </label>
-              </div>
-            </div>
+    <div class="row">
+      <div class="d-flex justify-content-md-between flex-md-row flex-column">
+        <!-- radios to filter Tutorials -->
+        <div class="d-flex align-items-center justify-content-md-between justify-content-center mb-md-0 mb-3">
+          <div class="form-check me-3">
+            <input
+              id="tutorialsAllRadio"
+              class="form-check-input"
+              type="radio"
+              name="tutorialsRadio"
+              checked
+              @click="setFilterCondition('all')"
+            />
+            <label class="form-check-label text-small" for="tutorialsAllRadio">All</label>
           </div>
-          <!-- Tutorials__list -->
-          <!-- Tutorials__list -->
-          <!-- Tutorials__list -->
-          <Tutorials__list :tutorials="displayTutorials" @get-details-single-tutorial="getDetailsSingleTutorial" />
-          <!-- Tutorials add/del btns -->
-          <!-- Tutorials add/del btns -->
-          <!-- Tutorials add/del btns -->
+          <div class="form-check me-3">
+            <input
+              id="tutorialsPublishedRadio"
+              class="form-check-input"
+              type="radio"
+              name="tutorialsRadio"
+              @click="setFilterCondition('published')"
+            />
+            <label class="form-check-label text-small" for="tutorialsPublishedRadio">Published</label>
+          </div>
+          <div class="form-check">
+            <input
+              id="tutorialsNotPublishedRadio"
+              class="form-check-input"
+              type="radio"
+              name="tutorialsRadio"
+              @click="setFilterCondition('notPublished')"
+            />
+            <label class="form-check-label text-small" for="tutorialsNotPublishedRadio">Not published</label>
+          </div>
+        </div>
+        <!-- search field -->
+        <div class="d-flex align-items-center justify-content-md-between justify-content-center">
+          <div class="form-floating me-1">
+            <input
+              id="searchField"
+              v-model="inputSearchQuery"
+              type="text"
+              class="form-control"
+              name="searchField"
+              placeholder=""
+            />
+            <label for="searchField" class="text-muted">&#128269; search... </label>
+          </div>
+          <button id="searchBtn" class="btn btn-outline-green-custom" @click="searchTutorials">Search</button>
+        </div>
+      </div>
+    </div>
+    <div class="d-md-none">
+      <hr />
+    </div>
+    <div v-if="tutorials.count">
+      <div class="row">
+        <!-- tutorials list(accordion), pagination, create/delete btns -->
+        <div class="col-md-6 col-12 mb-md-0 mb-3">
+          <TutorialsList :tutorials="tutorials.tutorials" @tutorial-info="tutorialInfo" />
+          <div>
+            <!-- pagination -->
+            <!-- pagination -->
+            <!-- pagination -->
+            <!-- pagination -->
+            <!-- pagination -->
+            <!-- pagination -->
+          </div>
           <div class="d-flex justify-content-center mt-3">
-            <button
-              v-if="currentUserSignedIn"
-              class="btn btn-outline-green-custom me-3"
-              type="button"
-              @click="$router.push('/tutorials/addNew')"
-            >
+            <button v-if="isSignedIn" class="btn btn-outline-green-custom" @click="$router.push('/tutorials/create')">
               New Tutorial
             </button>
             <button
-              v-if="currentUserProfile && currentUserProfile.profile.is_staff"
-              class="btn btn-danger"
-              type="button"
+              v-if="isSignedIn && profile && (profile.is_staff || profile.is_superuser)"
+              class="btn btn-danger ms-3"
               data-bs-toggle="modal"
               data-bs-target="#deleteAllTutorials"
             >
@@ -71,46 +89,12 @@
             </button>
           </div>
         </div>
-        <div class="d-md-none">
-          <hr />
-        </div>
+        <!-- tutorials details and search filed -->
         <div class="col-md-6 col-12">
-          <!-- search Tutorial -->
-          <!-- search Tutorial -->
-          <!-- search Tutorial -->
-          <div class="row d-flex justify-content-between mb-3">
-            <div class="col-4 d-flex align-items-center justify-content-center">
-              <h5 class="m-0 text-muted text-center">&#128269; Tutorial</h5>
-            </div>
-            <div class="col-8 d-flex align-items-center justify-content-center">
-              <div class="form-floating me-1">
-                <input
-                  id="tutorial__searchInput"
-                  :value="tutorial__searchQuery"
-                  type="text"
-                  class="form-control"
-                  name="tutorial__searchInput"
-                  placeholder="Search..."
-                  @input="setSearchQueryTutorial($event.target.value)"
-                />
-                <label for="tutorial__searchInput" class="text-small text-muted">Search by title ... </label>
-              </div>
-              <button class="btn btn-outline-green-custom" style="height: 100%" type="button" @click="searchTutorial">
-                Search
-              </button>
-            </div>
-          </div>
-          <!-- Tutorial: emptyField, searched-details components -->
-          <!-- Tutorial: emptyField, searched-details components -->
-          <!-- Tutorial: emptyField, searched-details components -->
-          <div class="row">
-            <transition name="fade" mode="out-in">
-              <component :is="activeComponent"></component>
-            </transition>
-          </div>
+          <transition name="fade" mode="out-in">
+            <component :is="activeComponent" />
+          </transition>
         </div>
-        <!-- Delete all Tutorials modal -->
-        <!-- Delete all Tutorials modal -->
         <!-- Delete all Tutorials modal -->
         <div id="deleteAllTutorials" class="modal fade" tabindex="-1" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered">
@@ -139,90 +123,77 @@
         </div>
       </div>
     </div>
-    <!-- Tutorials: emptyField -->
-    <!-- Tutorials: emptyField -->
-    <!-- Tutorials: emptyField -->
-    <div v-else class="tutorials__empty d-flex flex-column justify-content-center align-items-center">
-      <p>No any Tutorial...</p>
-      <br />
-      <button
-        v-if="currentUserSignedIn"
-        class="btn btn-outline-green-custom me-3"
-        type="button"
-        @click="$router.push('/tutorials/addNew')"
-      >
-        New Tutorial
-      </button>
+    <div v-else>
+      <NotFound />
     </div>
   </section>
 </template>
 
 <script>
-import Tutorials__list from "@/components/Tutorials__list.vue";
-import Tutorial__details from "@/components/Tutorial__details.vue";
-import Tutorial__emptyFieldLogo from "@/components/Tutorial__emptyFieldLogo.vue";
-import { mapState, mapActions, mapGetters, mapMutations } from "vuex";
+import { mapState, mapActions, mapMutations } from "vuex";
+import TutorialsList from "@/components/TutorialsList.vue";
+import TutorialInfo from "@/components/TutorialInfo.vue";
+import TutorialEmptyBlock from "@/components/TutorialEmptyBlock.vue";
+import NotFound from "@/components/NotFound.vue";
+
 export default {
-  name: "Tutorials__page",
+  name: "Tutorials",
   components: {
-    Tutorials__list,
-    Tutorial__details,
-    Tutorial__emptyFieldLogo,
+    TutorialsList,
+    TutorialInfo,
+    TutorialEmptyBlock,
+    NotFound,
   },
   data() {
     return {
-      // activeComponent is defined in mounted(){}
+      // activeComponent is ether info or search component;
       activeComponent: "",
+      inputSearchQuery: "",
     };
   },
   computed: {
     ...mapState({
+      isSignedIn: (state) => state.auth.isSignedIn,
+      profile: (state) => state.auth.profile,
       tutorials: (state) => state.tutorials.tutorials,
-      tutorial__details: (state) => state.tutorials.tutorial__details,
-      tutorial__searchQuery: (state) => state.tutorials.tutorial__searchQuery,
-      tutorial__published: (state) => state.tutorials.tutorial__published,
-      currentUserSignedIn: (state) => state.auth.currentUserSignedIn,
-      currentUserProfile: (state) => state.auth.currentUserProfile,
-    }),
-    ...mapGetters({
-      displayTutorials: "tutorials/displayTutorials",
+      tutorial: (state) => state.tutorials.tutorial,
     }),
   },
-  methods: {
-    ...mapActions({
-      getTutorials: "tutorials/getTutorials",
-      getSearchedTutorial: "tutorials/getSearchedTutorial",
-      deleteTutorials: "tutorials/deleteTutorials",
-      getSingleTutorial: "tutorials/getSingleTutorial",
-    }),
-    ...mapMutations({
-      setSearchQueryTutorial: "tutorials/setSearchQueryTutorial",
-      setSingleAndSearchedTutorial: "tutorials/setSingleAndSearchedTutorial",
-      setPublishedTutorial: "tutorials/setPublishedTutorial",
-    }),
-    searchTutorial() {
-      this.setSingleAndSearchedTutorial(null);
-      this.getSearchedTutorial();
-      this.setSearchQueryTutorial("");
-      this.activeComponent = "Tutorial__details";
-    },
-    deleteAllTutorials() {
-      this.activeComponent = "Tutorial__emptyFieldLogo";
-      this.deleteTutorials();
-    },
-    getDetailsSingleTutorial(id) {
-      this.getSingleTutorial(id);
-      this.activeComponent = "Tutorial__details";
+  watch: {
+    tutorial() {
+      this.activeComponent = this.tutorial ? "TutorialInfo" : "TutorialEmptyBlock";
     },
   },
   mounted() {
-    this.getTutorials();
-    // definition of activeComponent
-    if (this.tutorial__details) {
-      this.activeComponent = "Tutorial__details";
-    } else {
-      this.activeComponent = "Tutorial__emptyFieldLogo";
-    }
+    this.activeComponent = "TutorialEmptyBlock";
+    this.tutorialsList();
+  },
+  methods: {
+    ...mapActions({
+      tutorialsList: "tutorials/tutorialsList",
+      tutorialItem: "tutorials/tutorialItem",
+      //     getSearchedTutorial: "tutorials/getSearchedTutorial",
+      //     deleteTutorials: "tutorials/deleteTutorials",
+    }),
+    ...mapMutations({
+      //     setSearchQueryTutorial: "tutorials/setSearchQueryTutorial",
+      //     setSingleAndSearchedTutorial: "tutorials/setSingleAndSearchedTutorial",
+      setFilterCondition: "tutorials/setFilterCondition",
+    }),
+    searchTutorials() {},
+    tutorialInfo(id) {
+      this.tutorialItem(id);
+    },
+    //   searchTutorial() {
+    //     this.setSingleAndSearchedTutorial(null);
+    //     this.getSearchedTutorial();
+    //     this.setSearchQueryTutorial("");
+    //     this.activeComponent = "Tutorial__details";
+    //   },
+    //   deleteAllTutorials() {
+    //     this.activeComponent = "Tutorial__emptyFieldLogo";
+    //     this.deleteTutorials();
+    //   },
   },
 };
 </script>
@@ -230,12 +201,8 @@ export default {
 <style scoped lang="scss">
 @import "@/assets/scss/colors.scss";
 
-.tutorials__empty {
-  position: relative;
-  top: 10vh;
-  color: $green-color;
-  font-weight: 700;
-  font-size: 32px;
+#searchBtn {
+  height: 100%;
 }
 
 .fade-enter-active,
