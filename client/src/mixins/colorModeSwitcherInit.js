@@ -1,6 +1,6 @@
 export default {
   mounted() {
-    const colorMode = $("html").attr("data-bs-theme");
+    const colorMode = localStorage.getItem("colorMode");
 
     if (colorMode === "light") {
       $("#colorMode_switcher").attr("checked", false);

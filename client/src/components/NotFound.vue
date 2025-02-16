@@ -22,13 +22,23 @@
         <span class="n"></span>
         <span class="d"></span>
       </figcaption>
+      <button v-if="isSignedIn" class="btn btn-outline-green-custom" @click="$router.push('/tutorials/create')">
+        New Tutorial
+      </button>
     </figure>
   </section>
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "NotFound",
+  computed: {
+    ...mapState({
+      isSignedIn: (state) => state.auth.isSignedIn,
+    }),
+  },
 };
 </script>
 
