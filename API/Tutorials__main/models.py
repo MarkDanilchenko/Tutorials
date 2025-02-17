@@ -110,7 +110,6 @@ class Tutorial(models.Model):
     description = models.TextField(
         blank=True,
         null=True,
-        default="",
         max_length=1000,
         help_text="Tutorial description",
         verbose_name="Tutorial description",
@@ -124,9 +123,7 @@ class Tutorial(models.Model):
     )
 
     published_at = models.DateTimeField(
-        blank=False,
         null=True,
-        default=None,
         help_text="Date and time when the tutorial was published",
         verbose_name="Date and time when the tutorial was published",
     )
@@ -146,7 +143,7 @@ class Tutorial(models.Model):
     created_by = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        null=True,
+        null=False,
         help_text="User who created the tutorial",
         verbose_name="User who created the tutorial",
     )
