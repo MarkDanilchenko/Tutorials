@@ -128,7 +128,9 @@ class TutorialViewSet(viewsets.ModelViewSet):
         tutorial = get_object_or_404(models.Tutorial.objects.filter(id=uuid))
         isPublished = request.data.get("isPublished")
 
-        if tutorial.created_by.id != request.user.id and not request.user.is_staff:
+        if tutorial.created_by.id != request.user.id and not (
+            request.user.is_staff or request.user.is_superuser
+        ):
             return Response(
                 status=status.HTTP_403_FORBIDDEN,
             )
@@ -160,7 +162,9 @@ class TutorialViewSet(viewsets.ModelViewSet):
     def deleteOne(self, request, uuid):
         tutorial = get_object_or_404(models.Tutorial, id=uuid)
 
-        if tutorial.created_by.id != request.user.id and not request.user.is_staff:
+        if tutorial.created_by.id != request.user.id and not (
+            request.user.is_staff or request.user.is_superuser
+        ):
             return Response(
                 status=status.HTTP_403_FORBIDDEN,
             )
