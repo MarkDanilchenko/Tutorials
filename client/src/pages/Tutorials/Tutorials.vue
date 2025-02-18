@@ -143,7 +143,7 @@ export default {
     },
   },
   mounted() {
-    this.activeComponent = "TutorialEmptyBlock";
+    this.activeComponent = this.tutorial ? "TutorialInfo" : "TutorialEmptyBlock";
     this.tutorialsList();
   },
   methods: {

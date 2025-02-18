@@ -59,7 +59,7 @@ const tutorials = {
         commit("setTutorial", null);
       }
     },
-    async deleteTutorialItem({ commit, dispatch }, id) {
+    async deleteTutorialItem({ commit }, id) {
       try {
         await axiosWithInterceptor.delete(
           `http://${djangoOptions.host}:${djangoOptions.port}/api/v1/tutorials/${id}/`,
@@ -72,7 +72,6 @@ const tutorials = {
         );
 
         commit("setTutorial", null);
-        dispatch("tutorialsList");
       } catch (error) {
         /* empty */
       }
@@ -92,11 +91,29 @@ const tutorials = {
         /* empty */
       }
     },
-    async createTutorial({ commit }, newTutorial) {
+    async createTutorial({ commit }, params) {
       try {
         await axiosWithInterceptor.post(
           `http://${djangoOptions.host}:${djangoOptions.port}/api/v1/tutorials/`,
-          newTutorial,
+          params,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            },
+          }
+        );
+
+        commit("setCreateOrUpdateError", null);
+      } catch (error) {
+        commit("setCreateOrUpdateError", error.message);
+      }
+    },
+    async updateTutorial({ commit }, params) {
+      try {
+        await axiosWithInterceptor.patch(
+          `http://${djangoOptions.host}:${djangoOptions.port}/api/v1/tutorials/${params.id}/`,
+          params,
           {
             headers: {
               "Content-Type": "application/json",
@@ -129,27 +146,6 @@ const tutorials = {
     //     .catch((error) => {
     //       commit("setSingleAndSearchedTutorial", null);
     //       console.log(error.response.data.tutorial);
-    //     });
-    // },
-
-    // // DRF: class TutorialDetailedViewSet - def update(): PUT a single tutorial
-    // async putSingleTutorial({ commit, state, dispatch }, params) {
-    //   await axiosWithInterceptor
-    //     .put(`http://${process.env.server_HostPort_1}/api/tutorials/${params.id}/`, params.updateTutorial, {
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //         Accept: "application/json",
-    //         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-    //       },
-    //     })
-    //     .then((response) => {
-    //       commit("setTutorialPutError", null);
-    //       dispatch("getSingleTutorial", params.id);
-    //       router.push("/tutorials");
-    //     })
-    //     .catch((error) => {
-    //       commit("setTutorialPutError", error.response.data);
-    //       commit("setSingleAndSearchedTutorial", null);
     //     });
     // },
   },

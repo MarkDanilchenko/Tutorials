@@ -1,10 +1,10 @@
 <template>
-  <section class="my-TutorialCreate">
+  <section class="my-TutorialUpdate">
     <div class="row">
       <div class="d-flex flex-column justify-content-center align-items-center mt-5">
-        <form id="createTutorial__form" action="" class="col-lg-6 col-md-8 col-10" name="createTutorial__form">
+        <form id="updateTutorial__form" action="" class="col-lg-6 col-md-8 col-10" name="updateTutorial__form">
           <fieldset class="form-group mb-3">
-            <legend class="border-bottom text-center mb-3">Create Tutorial</legend>
+            <legend class="border-bottom text-center mb-3">Update Tutorial</legend>
             <div class="mb-3">
               <label for="tutorialTitle" class="form-label">
                 <b><sup>*</sup>Title:</b>
@@ -58,11 +58,10 @@
               class="btn btn-outline-green-custom"
               type="submit"
               :disabled="btnDisabled"
-              @click.prevent="createTutorial"
+              @click.prevent="updateTutorial"
             >
-              Create!
+              Update!
             </button>
-            <button class="btn btn-outline-secondary ms-1" type="button" @click="$router.go(-1)">Back</button>
           </div>
         </form>
         <div v-if="createOrUpdateError" class="d-flex justify-content-center">
@@ -79,7 +78,7 @@ import { useVuelidate } from "@vuelidate/core";
 import { maxLength, required } from "@vuelidate/validators";
 
 export default {
-  name: "TutorialCreate",
+  name: "TutorialUpdate",
   setup() {
     return {
       v$: useVuelidate(),
@@ -110,29 +109,45 @@ export default {
   computed: {
     ...mapState({
       createOrUpdateError: (state) => state.tutorials.createOrUpdateError,
+      tutorial: (state) => state.tutorials.tutorial,
     }),
     btnDisabled() {
       return this.v$.$invalid ? true : false;
     },
   },
-  mounted() {
+  async mounted() {
+    const tutorialId = this.$route.params.id;
+
+    if (!this.tutorial) {
+      await this.tutorialItem(tutorialId);
+    }
+    // Fill form with current tutorial's data;
+    this.form.title = this.tutorial.title;
+    this.form.description = this.tutorial.description;
+    this.form.isPublished = this.tutorial.isPublished;
+
     this.setCreateOrUpdateError(null);
   },
   methods: {
+    ...mapActions({
+      updateTutorialAction: "tutorials/updateTutorial",
+      tutorialItem: "tutorials/tutorialItem",
+    }),
     ...mapMutations({
       setCreateOrUpdateError: "tutorials/setCreateOrUpdateError",
     }),
-    ...mapActions({
-      createTutorialAction: "tutorials/createTutorial",
-    }),
-    async createTutorial() {
-      await this.createTutorialAction({
+    async updateTutorial() {
+      const tutorialId = this.$route.params.id;
+
+      await this.updateTutorialAction({
+        id: tutorialId,
         title: this.form.title,
         description: this.form.description,
         isPublished: this.form.isPublished,
       });
 
       if (!this.createOrUpdateError) {
+        await this.tutorialItem(tutorialId);
         this.$router.push("/tutorials");
       }
     },

@@ -14,18 +14,22 @@
       <span><b>Created at:</b> {{ new Date(tutorial.created_at).toLocaleString() }}</span>
       <div class="d-flex justify-content-end align-items-center mt-3">
         <button
-          v-if="isSignedIn && tutorial.created_by.id === profile.id"
+          v-if="
+            isSignedIn && profile && (tutorial.created_by.id === profile.id || profile.is_staff || profile.is_superuser)
+          "
           class="btn btn-danger"
           @click="deleteTutorial(tutorial.id)"
         >
           Delete
         </button>
         <button
-          v-if="isSignedIn"
+          v-if="
+            isSignedIn && profile && (tutorial.created_by.id === profile.id || profile.is_staff || profile.is_superuser)
+          "
           class="btn btn-outline-green-custom ms-1"
           @click="$router.push(`/tutorials/update/${tutorial.id}`)"
         >
-          Edit
+          Update
         </button>
       </div>
     </div>
@@ -47,9 +51,11 @@ export default {
   methods: {
     ...mapActions({
       deleteTutorialItem: "tutorials/deleteTutorialItem",
+      tutorialsList: "tutorials/tutorialsList",
     }),
-    deleteTutorial(tutorialId) {
-      this.deleteTutorialItem(tutorialId);
+    async deleteTutorial(tutorialId) {
+      await this.deleteTutorialItem(tutorialId);
+      this.tutorialsList();
     },
   },
 };
