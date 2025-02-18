@@ -101,8 +101,8 @@ class TutorialViewSet(viewsets.ModelViewSet):
 
         return paginated_response
 
-    def retrieve(self, request, uuid):
-        tutorial = get_object_or_404(models.Tutorial.objects.filter(id=uuid))
+    def retrieve(self, request, id):
+        tutorial = get_object_or_404(models.Tutorial.objects.filter(id=id))
 
         tutorial_serialized = self.serializer_class(tutorial, many=False).data
 
@@ -124,8 +124,8 @@ class TutorialViewSet(viewsets.ModelViewSet):
 
             return Response(status=status.HTTP_201_CREATED)
 
-    def update(self, request, uuid):
-        tutorial = get_object_or_404(models.Tutorial.objects.filter(id=uuid))
+    def update(self, request, id):
+        tutorial = get_object_or_404(models.Tutorial.objects.filter(id=id))
         isPublished = request.data.get("isPublished")
 
         if tutorial.created_by.id != request.user.id and not (
@@ -141,7 +141,7 @@ class TutorialViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if isPublished and isPublished.lower() == "true":
+        if isPublished is True:
             request.data["published_at"] = datetime.datetime.now()
 
         tutorial_serialized = self.serializer_class(
@@ -159,8 +159,8 @@ class TutorialViewSet(viewsets.ModelViewSet):
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    def deleteOne(self, request, uuid):
-        tutorial = get_object_or_404(models.Tutorial, id=uuid)
+    def deleteOne(self, request, id):
+        tutorial = get_object_or_404(models.Tutorial.objects.filter(id=id))
 
         if tutorial.created_by.id != request.user.id and not (
             request.user.is_staff or request.user.is_superuser
