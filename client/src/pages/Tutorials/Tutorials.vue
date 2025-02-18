@@ -62,7 +62,7 @@
     <div class="d-md-none">
       <hr />
     </div>
-    <div v-if="tutorials.count">
+    <div v-if="tutorials && tutorials.count">
       <div class="row">
         <!-- tutorials list(accordion), pagination, deleteAll/create btns -->
         <div class="col-md-6 col-12 mb-md-0 mb-3">

@@ -1,13 +1,12 @@
 import axiosWithInterceptor from "@/services/interceptor.js";
 import axios from "axios";
-import router from "@/router/index.js";
 import { djangoOptions } from "@/env.js";
 
 const tutorials = {
   namespaced: true,
   state: () => ({
-    tutorials: {},
-    tutorial: {},
+    tutorials: null,
+    tutorial: null,
     filterCondition: "all",
     createOrUpdateError: null,
     // tutorial__searchQuery: "",
@@ -44,7 +43,7 @@ const tutorials = {
 
         commit("setTutorials", response.data);
       } catch (error) {
-        commit("setTutorials", {});
+        commit("setTutorials", null);
       }
     },
     async tutorialItem({ commit }, id) {
@@ -57,7 +56,7 @@ const tutorials = {
 
         commit("setTutorial", response.data);
       } catch (error) {
-        commit("setTutorial", {});
+        commit("setTutorial", null);
       }
     },
     async deleteTutorialItem({ commit, dispatch }, id) {
@@ -72,7 +71,7 @@ const tutorials = {
           }
         );
 
-        commit("setTutorial", {});
+        commit("setTutorial", null);
         dispatch("tutorialsList");
       } catch (error) {
         /* empty */
@@ -87,8 +86,8 @@ const tutorials = {
           },
         });
 
-        commit("setTutorials", {});
-        commit("setTutorial", {});
+        commit("setTutorials", null);
+        commit("setTutorial", null);
       } catch (error) {
         /* empty */
       }
@@ -130,26 +129,6 @@ const tutorials = {
     //     .catch((error) => {
     //       commit("setSingleAndSearchedTutorial", null);
     //       console.log(error.response.data.tutorial);
-    //     });
-    // },
-    // // DRF: class TutorialViewSet - def create(): POST new tutorial
-    // async postTutorial({ commit, state }, tutorial) {
-    //   await axiosWithInterceptor
-    //     .post(`http://${process.env.server_HostPort_1}/api/tutorials/`, tutorial, {
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //         Accept: "application/json",
-    //         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-    //       },
-    //     })
-    //     .then((response) => {
-    //       if (response !== undefined) {
-    //         commit("setTutorialPostError", null);
-    //         router.push("/tutorials");
-    //       }
-    //     })
-    //     .catch((error) => {
-    //       commit("setTutorialPostError", error.response.data);
     //     });
     // },
 

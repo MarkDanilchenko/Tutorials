@@ -48,8 +48,8 @@ export default {
     ...mapActions({
       deleteTutorialItem: "tutorials/deleteTutorialItem",
     }),
-    deleteTutorial(id) {
-      this.deleteTutorialItem(id);
+    deleteTutorial(tutorialId) {
+      this.deleteTutorialItem(tutorialId);
     },
   },
 };
