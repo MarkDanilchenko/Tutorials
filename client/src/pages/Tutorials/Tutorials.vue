@@ -43,19 +43,22 @@
           </div>
         </div>
         <!-- search field -->
-        <div class="d-flex align-items-center justify-content-md-between justify-content-center">
-          <div class="form-floating me-1">
-            <input
-              id="searchField"
-              v-model="inputSearchQuery"
-              type="text"
-              class="form-control"
-              name="searchField"
-              placeholder=""
-            />
-            <label for="searchField" class="text-muted">&#128269; search... </label>
+        <div class="d-flex flex-column align-items-center">
+          <div class="d-flex align-items-center justify-content-center">
+            <div class="form-floating me-1">
+              <input
+                id="searchField"
+                type="text"
+                class="form-control"
+                name="searchField"
+                placeholder=""
+                @input="setSearchQuery($event.target.value)"
+              />
+              <label for="searchField" class="text-muted">&#128269; search... </label>
+            </div>
+            <button id="searchBtn" class="btn btn-outline-green-custom" @click="searchTutorials">Search</button>
           </div>
-          <button id="searchBtn" class="btn btn-outline-green-custom" @click="searchTutorials">Search</button>
+          <span class="text-small text-muted"><i>Search via title and description</i></span>
         </div>
       </div>
     </div>
@@ -126,7 +129,6 @@ export default {
     return {
       // activeComponent is ether info or empty block component;
       activeComponent: "",
-      inputSearchQuery: "",
     };
   },
   computed: {
@@ -153,8 +155,12 @@ export default {
     }),
     ...mapMutations({
       setFilter: "tutorials/setFilter",
+      setSearchQuery: "tutorials/setSearchQuery",
     }),
-    searchTutorials() {},
+    searchTutorials() {
+      this.tutorialsList();
+      $("#searchField").val("");
+    },
     tutorialInfo(id) {
       this.tutorialItem(id);
     },

@@ -8,8 +8,8 @@ const tutorials = {
     tutorials: null,
     tutorial: null,
     filter: "",
+    searchQuery: "",
     createOrUpdateError: null,
-    // tutorial__searchQuery: "",
   }),
   getters: {},
   mutations: {
@@ -22,19 +22,23 @@ const tutorials = {
     setFilter(state, filter) {
       state.filter = filter;
     },
+    setSearchQuery(state, searchQuery) {
+      state.searchQuery = searchQuery;
+    },
     setCreateOrUpdateError(state, createOrUpdateError) {
       state.createOrUpdateError = createOrUpdateError;
     },
-    // setSearchQueryTutorial(state, tutorial__searchQuery) {
-    //   state.tutorial__searchQuery = tutorial__searchQuery;
-    // },
   },
   actions: {
-    async tutorialsList({ commit }) {
+    async tutorialsList({ commit, state }) {
       try {
         const response = await axios.get(`http://${djangoOptions.host}:${djangoOptions.port}/api/v1/tutorials/`, {
           headers: {
             "Content-Type": "application/json",
+          },
+          params: {
+            q: state.searchQuery,
+            filter: state.filter,
           },
         });
 
@@ -124,27 +128,6 @@ const tutorials = {
         commit("setCreateOrUpdateError", error.message);
       }
     },
-
-    // // DRF: class TutorialViewSet - def list(): GET tutorial which contains searched query
-    // async getSearchedTutorial({ commit, state }) {
-    //   await axiosWithInterceptor
-    //     .get(`http://${process.env.server_HostPort_1}/api/tutorials/`, {
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //         Accept: "application/json",
-    //       },
-    //       params: {
-    //         q: state.tutorial__searchQuery,
-    //       },
-    //     })
-    //     .then((response) => {
-    //       commit("setSingleAndSearchedTutorial", response.data.tutorial);
-    //     })
-    //     .catch((error) => {
-    //       commit("setSingleAndSearchedTutorial", null);
-    //       console.log(error.response.data.tutorial);
-    //     });
-    // },
   },
 };
 
