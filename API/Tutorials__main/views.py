@@ -4,6 +4,7 @@ from rest_framework.response import Response
 import datetime
 from . import models, serializers
 from . import constants
+from django.db.models import Q
 
 
 class TutorialPagination(pagination.PageNumberPagination):
@@ -82,13 +83,23 @@ class TutorialViewSet(viewsets.ModelViewSet):
 
     def list(self, request):
         query = request.query_params.get("q")
+        filter = request.query_params.get("filter")
 
-        if query:
-            tutorials = models.Tutorial.objects.filter(title__icontains=query).order_by(
-                "-updated_at"
-            )
+        if filter == "published":
+            tutorials = models.Tutorial.objects.filter(
+                published_at__isnull=False
+            ).order_by("-updated_at")
+        elif filter == "notPublished":
+            tutorials = models.Tutorial.objects.filter(
+                published_at__isnull=True
+            ).order_by("-updated_at")
         else:
             tutorials = models.Tutorial.objects.all().order_by("-updated_at")
+
+        if query:
+            tutorials = tutorials.filter(
+                Q(title__icontains=query) | Q(description__icontains=query)
+            )
 
         if not len(tutorials):
             return Response(
