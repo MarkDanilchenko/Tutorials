@@ -2,7 +2,7 @@
   <section class="my-signIn">
     <div class="mt-3 row">
       <div class="d-flex flex-column align-items-center">
-        <form id="form-signIn" action="" class="col-lg-4 col-6" name="form-signIn">
+        <form id="signIn__form" action="" class="col-lg-4 col-6" name="signIn__form">
           <fieldset class="form-group mb-3">
             <router-link to="/" class="d-flex justify-content-center align-items-center mb-3" title="Home page">
               <img
@@ -41,12 +41,7 @@
             </div>
           </fieldset>
           <div class="d-flex justify-content-center">
-            <button
-              class="btn btn-outline-green-custom"
-              type="submit"
-              :disabled="btnSubmitDisabled"
-              @click.prevent="signIn"
-            >
+            <button class="btn btn-outline-green-custom" type="submit" :disabled="btnDisabled" @click.prevent="signIn">
               SignIn!
             </button>
           </div>
@@ -74,7 +69,7 @@ export default {
     ...mapState({
       signInError: (state) => state.auth.signInError,
     }),
-    btnSubmitDisabled() {
+    btnDisabled() {
       return this.form.username && this.form.password ? false : true;
     },
   },
@@ -82,8 +77,12 @@ export default {
     ...mapActions({
       signInAction: "auth/signIn",
     }),
-    signIn() {
-      this.signInAction({ username: this.form.username, password: this.form.password });
+    async signIn() {
+      await this.signInAction({ username: this.form.username, password: this.form.password });
+
+      if (!this.signInError) {
+        this.$router.push("/tutorials");
+      }
     },
   },
 };

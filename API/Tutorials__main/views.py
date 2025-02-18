@@ -112,7 +112,7 @@ class TutorialViewSet(viewsets.ModelViewSet):
         userId = request.user.id
         isPublished = request.data.get("isPublished")
 
-        if isPublished and isPublished.lower() == "true":
+        if isPublished is True:
             request.data["published_at"] = datetime.datetime.now()
 
         request.data["created_by"] = userId

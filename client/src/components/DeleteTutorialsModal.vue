@@ -36,8 +36,9 @@ export default {
       deleteTutorialsAction: "tutorials/deleteTutorials",
     }),
     deleteTutorials() {
-      this.deleteTutorialsAction();
-      this.$router.push("/tutorials");
+      this.deleteTutorialsAction().then(() => {
+        this.$router.push("/tutorials");
+      });
     },
   },
 };

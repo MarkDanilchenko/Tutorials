@@ -37,9 +37,9 @@
             </li>
             <li v-if="isSignedIn" class="nav-item">
               <router-link
-                to="/tutorials/addNew"
+                to="/tutorials/create"
                 class="nav-link"
-                :class="{ 'nav-link-active': $route.path == '/tutorials/addNew' }"
+                :class="{ 'nav-link-active': $route.path == '/tutorials/create' }"
                 >New Tutorial</router-link
               >
             </li>

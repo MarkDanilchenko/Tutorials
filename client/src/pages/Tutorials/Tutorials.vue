@@ -64,7 +64,7 @@
     </div>
     <div v-if="tutorials.count">
       <div class="row">
-        <!-- tutorials list(accordion), pagination, delete all btn (for admin) -->
+        <!-- tutorials list(accordion), pagination, deleteAll/create btns -->
         <div class="col-md-6 col-12 mb-md-0 mb-3">
           <TutorialsList :tutorials="tutorials.tutorials" @tutorial-info="tutorialInfo" />
           <div>
@@ -89,7 +89,7 @@
             </button>
           </div>
         </div>
-        <!-- tutorials info and search field -->
+        <!-- tutorials info field -->
         <div class="col-md-6 col-12">
           <transition name="fade" mode="out-in">
             <component :is="activeComponent" />
@@ -124,7 +124,7 @@ export default {
   },
   data() {
     return {
-      // activeComponent is ether info or search component;
+      // activeComponent is ether info or empty block component;
       activeComponent: "",
       inputSearchQuery: "",
     };

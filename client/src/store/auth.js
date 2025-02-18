@@ -34,6 +34,8 @@ const auth = {
             "Content-Type": "application/json",
           },
         });
+
+        commit("setSignUpError", null);
       } catch (error) {
         commit("setSignUpError", error.message);
       }
@@ -50,10 +52,10 @@ const auth = {
           }
         );
 
+        commit("setSignInError", null);
         localStorage.setItem("accessToken", data.access);
         localStorage.setItem("refreshToken", data.refresh);
         commit("setIsSignedIn", true);
-        window.location.href = "/tutorials";
       } catch (error) {
         commit("setSignInError", error.message);
         eventBus.dispatch("authError");

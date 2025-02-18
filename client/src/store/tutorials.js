@@ -9,9 +9,8 @@ const tutorials = {
     tutorials: {},
     tutorial: {},
     filterCondition: "all",
+    createOrUpdateError: null,
     // tutorial__searchQuery: "",
-    // tutorial__postError: null,
-    // tutorial__putError: null,
   }),
   getters: {},
   mutations: {
@@ -27,17 +26,11 @@ const tutorials = {
       }
       state.filterCondition = filterCondition;
     },
-    // setSingleAndSearchedTutorial(state, tutorial__details) {
-    //   state.tutorial__details = tutorial__details;
-    // },
+    setCreateOrUpdateError(state, createOrUpdateError) {
+      state.createOrUpdateError = createOrUpdateError;
+    },
     // setSearchQueryTutorial(state, tutorial__searchQuery) {
     //   state.tutorial__searchQuery = tutorial__searchQuery;
-    // },
-    // setTutorialPostError(state, tutorial__postError) {
-    //   state.tutorial__postError = tutorial__postError;
-    // },
-    // setTutorialPutError(state, tutorial__putError) {
-    //   state.tutorial__putError = tutorial__putError;
     // },
   },
   actions: {
@@ -98,6 +91,24 @@ const tutorials = {
         commit("setTutorial", {});
       } catch (error) {
         /* empty */
+      }
+    },
+    async createTutorial({ commit }, newTutorial) {
+      try {
+        await axiosWithInterceptor.post(
+          `http://${djangoOptions.host}:${djangoOptions.port}/api/v1/tutorials/`,
+          newTutorial,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            },
+          }
+        );
+
+        commit("setCreateOrUpdateError", null);
+      } catch (error) {
+        commit("setCreateOrUpdateError", error.message);
       }
     },
 

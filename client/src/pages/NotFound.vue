@@ -5,7 +5,7 @@
         <span class="text-green">404</span>
         <br />Page not found
       </p>
-      <button class="btn btn-outline-green-custom" @click="$router.go(-1)">Back</button>
+      <button class="btn btn-outline-secondary" @click="$router.go(-1)">Back</button>
     </div>
   </section>
 </template>

@@ -12,7 +12,7 @@
       </div>
       <span><b>Created by:</b> {{ tutorial.created_by.username }}</span>
       <span><b>Created at:</b> {{ new Date(tutorial.created_at).toLocaleString() }}</span>
-      <div class="d-flex justify-content-end align-items-center">
+      <div class="d-flex justify-content-end align-items-center mt-3">
         <button
           v-if="isSignedIn && tutorial.created_by.id === profile.id"
           class="btn btn-danger"

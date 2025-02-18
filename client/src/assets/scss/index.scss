@@ -19,6 +19,10 @@ $form-check-input-focus-box-shadow: 0 0 0 0.15rem $green_color_05;
 $form-check-input-checked-bg-color: $green_color;
 $form-check-input-checked-border-color: $green_color;
 
+$input-border-color: $green_color_05;
+$input-focus-box-shadow: 0 0 0 0.15rem $green_color_05;
+$input-focus-border-color: $green_color;
+
 /* import the Bootstrap */
 @import "../../../node_modules/bootstrap/scss/bootstrap.scss";
 /* import other styles */

@@ -2,7 +2,7 @@
   <section class="my-signUp">
     <div class="row mt-3">
       <div class="d-flex flex-column align-items-center">
-        <form id="form__signUp" action="" class="col-lg-4 col-6" name="form__signUp">
+        <form id="signUp__form" action="" class="col-lg-4 col-6" name="signUp__form">
           <fieldset class="form-group mb-3">
             <router-link to="/" class="d-flex justify-content-center align-items-center mb-3" title="Home page">
               <img
@@ -147,12 +147,7 @@
             </div>
           </fieldset>
           <div class="d-flex justify-content-center">
-            <button
-              class="btn btn-outline-green-custom"
-              type="submit"
-              :disabled="btnSubmitDisabled"
-              @click.prevent="signUp"
-            >
+            <button class="btn btn-outline-green-custom" type="submit" :disabled="btnDisabled" @click.prevent="signUp">
               SignUp!
             </button>
           </div>
@@ -226,7 +221,7 @@ export default {
     ...mapState({
       signUpError: (state) => state.auth.signUpError,
     }),
-    btnSubmitDisabled() {
+    btnDisabled() {
       return this.v$.$invalid ? true : false;
     },
   },
@@ -249,9 +244,11 @@ export default {
         last_name: this.form.last_name,
         email: this.form.email,
         password: this.form.password,
-      }).then(async () => {
-        await this.signInAction({ username: this.form.username, password: this.form.password });
       });
+
+      if (!this.signUpError) {
+        this.signInAction({ username: this.form.username, password: this.form.password });
+      }
     },
   },
 };
