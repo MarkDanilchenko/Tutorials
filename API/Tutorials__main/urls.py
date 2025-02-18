@@ -11,7 +11,7 @@ urlpatterns = [
         ),
     ),
     path(
-        "tutorials/<str:uuid>/",
+        "tutorials/<str:id>/",
         views.TutorialViewSet.as_view(
             {"get": "retrieve", "patch": "update", "delete": "deleteOne"}
         ),
