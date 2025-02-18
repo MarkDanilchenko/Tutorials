@@ -137,11 +137,15 @@ export default {
       profile: (state) => state.auth.profile,
       tutorials: (state) => state.tutorials.tutorials,
       tutorial: (state) => state.tutorials.tutorial,
+      filter: (state) => state.tutorials.filter,
     }),
   },
   watch: {
     tutorial() {
       this.activeComponent = this.tutorial ? "TutorialInfo" : "TutorialEmptyBlock";
+    },
+    filter() {
+      this.tutorialsList();
     },
   },
   mounted() {
@@ -159,6 +163,7 @@ export default {
     }),
     searchTutorials() {
       this.tutorialsList();
+      this.setSearchQuery("");
       $("#searchField").val("");
     },
     tutorialInfo(id) {
