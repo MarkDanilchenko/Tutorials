@@ -17,7 +17,7 @@
               type="radio"
               name="tutorialsRadio"
               checked
-              @click="setFilterCondition('all')"
+              @click="setFilter('')"
             />
             <label class="form-check-label text-small" for="tutorialsAllRadio">All</label>
           </div>
@@ -27,7 +27,7 @@
               class="form-check-input"
               type="radio"
               name="tutorialsRadio"
-              @click="setFilterCondition('published')"
+              @click="setFilter('published')"
             />
             <label class="form-check-label text-small" for="tutorialsPublishedRadio">Published</label>
           </div>
@@ -37,7 +37,7 @@
               class="form-check-input"
               type="radio"
               name="tutorialsRadio"
-              @click="setFilterCondition('notPublished')"
+              @click="setFilter('notPublished')"
             />
             <label class="form-check-label text-small" for="tutorialsNotPublishedRadio">Not published</label>
           </div>
@@ -150,28 +150,14 @@ export default {
     ...mapActions({
       tutorialsList: "tutorials/tutorialsList",
       tutorialItem: "tutorials/tutorialItem",
-      //     getSearchedTutorial: "tutorials/getSearchedTutorial",
-      //     deleteTutorials: "tutorials/deleteTutorials",
     }),
     ...mapMutations({
-      //     setSearchQueryTutorial: "tutorials/setSearchQueryTutorial",
-      //     setSingleAndSearchedTutorial: "tutorials/setSingleAndSearchedTutorial",
-      setFilterCondition: "tutorials/setFilterCondition",
+      setFilter: "tutorials/setFilter",
     }),
     searchTutorials() {},
     tutorialInfo(id) {
       this.tutorialItem(id);
     },
-    //   searchTutorial() {
-    //     this.setSingleAndSearchedTutorial(null);
-    //     this.getSearchedTutorial();
-    //     this.setSearchQueryTutorial("");
-    //     this.activeComponent = "Tutorial__details";
-    //   },
-    //   deleteAllTutorials() {
-    //     this.activeComponent = "Tutorial__emptyFieldLogo";
-    //     this.deleteTutorials();
-    //   },
   },
 };
 </script>

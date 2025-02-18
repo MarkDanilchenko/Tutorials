@@ -7,7 +7,7 @@ const tutorials = {
   state: () => ({
     tutorials: null,
     tutorial: null,
-    filterCondition: "all",
+    filter: "",
     createOrUpdateError: null,
     // tutorial__searchQuery: "",
   }),
@@ -19,11 +19,8 @@ const tutorials = {
     setTutorial(state, tutorial) {
       state.tutorial = tutorial;
     },
-    setFilterCondition(state, filterCondition) {
-      if (!["all", "published", "notPublished"].includes(filterCondition)) {
-        return (state.filterCondition = "all");
-      }
-      state.filterCondition = filterCondition;
+    setFilter(state, filter) {
+      state.filter = filter;
     },
     setCreateOrUpdateError(state, createOrUpdateError) {
       state.createOrUpdateError = createOrUpdateError;
