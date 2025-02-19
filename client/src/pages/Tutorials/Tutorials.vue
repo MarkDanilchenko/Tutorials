@@ -71,12 +71,7 @@
         <div class="col-md-6 col-12 mb-md-0 mb-3">
           <TutorialsList :tutorials="tutorials.tutorials" @tutorial-info="tutorialInfo" />
           <div>
-            <!-- pagination -->
-            <!-- pagination -->
-            <!-- pagination -->
-            <!-- pagination -->
-            <!-- pagination -->
-            <!-- pagination -->
+            <Pagination />
           </div>
           <div class="d-flex justify-content-center mt-3">
             <button v-if="isSignedIn" class="btn btn-outline-green-custom" @click="$router.push('/tutorials/create')">
@@ -115,6 +110,7 @@ import TutorialInfo from "@/components/TutorialInfo.vue";
 import TutorialEmptyBlock from "@/components/TutorialEmptyBlock.vue";
 import DeleteTutorialsModal from "@/components/DeleteTutorialsModal.vue";
 import NotFound from "@/components/NotFound.vue";
+import Pagination from "@/components/Pagination.vue";
 
 export default {
   name: "Tutorials",
@@ -124,6 +120,7 @@ export default {
     TutorialEmptyBlock,
     DeleteTutorialsModal,
     NotFound,
+    Pagination,
   },
   data() {
     return {
