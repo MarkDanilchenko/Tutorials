@@ -1,12 +1,12 @@
 <template>
   <section class="my-pagination">
     <nav aria-label="Page navigation" class="my-3">
-      <ul class="pagination">
+      <ul class="pagination pagination-sm">
         <!-- First -->
         <li class="page-item" :class="{ disabled: currentPage === 1 }">
-          <router-link class="page-link" to="#" aria-label="First" title="First" @click.prevent="changePage(1)"
-            >First</router-link
-          >
+          <router-link class="page-link" to="#" aria-label="First" title="First" @click.prevent="changePage(1)">
+            <span aria-hidden="true">❮❮</span>
+          </router-link>
         </li>
         <!-- Previous -->
         <li class="page-item" :class="{ disabled: currentPage === 1 }">
@@ -16,8 +16,9 @@
             aria-label="Previous"
             title="Previous"
             @click.prevent="changePage(currentPage - 1)"
-            >Previous</router-link
           >
+            <span aria-hidden="true">❮</span>
+          </router-link>
         </li>
         <!-- Pages -->
         <li v-for="page in visiblePages" :key="page" class="page-item" :class="{ active: page === currentPage }">
@@ -31,14 +32,15 @@
             aria-label="Next"
             title="Next"
             @click.prevent="changePage(currentPage + 1)"
-            >Next</router-link
           >
+            <span aria-hidden="true">❯</span>
+          </router-link>
         </li>
         <!-- Last -->
         <li class="page-item" :class="{ disabled: currentPage === totalPages }">
-          <router-link class="page-link" to="#" aria-label="Last" title="Last" @click.prevent="changePage(totalPages)"
-            >Last</router-link
-          >
+          <router-link class="page-link" to="#" aria-label="Last" title="Last" @click.prevent="changePage(totalPages)">
+            <span aria-hidden="true">❯❯</span>
+          </router-link>
         </li>
       </ul>
     </nav>

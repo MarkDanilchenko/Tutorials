@@ -23,6 +23,11 @@ $input-border-color: $green_color_05;
 $input-focus-box-shadow: 0 0 0 0.15rem $green_color_05;
 $input-focus-border-color: $green_color;
 
+$pagination-color: $green_color_05;
+$pagination-focus-box-shadow: 0 0 0 0.15rem $green_color_05;
+$pagination-focus-color: $green_color;
+$pagination-hover-color: $green_color;
+
 /* import the Bootstrap */
 @import "../../../node_modules/bootstrap/scss/bootstrap.scss";
 /* import other styles */
