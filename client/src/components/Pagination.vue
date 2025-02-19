@@ -20,7 +20,7 @@
           >
         </li>
         <!-- Pages -->
-        <li v-for="page in pages" :key="page" class="page-item" :class="{ active: page === currentPage }">
+        <li v-for="page in visiblePages" :key="page" class="page-item" :class="{ active: page === currentPage }">
           <router-link class="page-link" to="#" @click.prevent="changePage(page)">{{ page }}</router-link>
         </li>
         <!-- Next -->
@@ -63,11 +63,38 @@ export default {
     },
     maxVisiblePages: {
       type: Number,
-      default: 5,
+      default: 3,
     },
   },
-  computed: {},
+  emits: ["pageChanged"],
+  computed: {
+    totalPages() {
+      return Math.ceil(this.totalItemsCount / this.limit);
+    },
+    visiblePages() {
+      const start = Math.max(1, this.currentPage - Math.floor(this.maxVisiblePages / 2));
+      const end = Math.min(this.totalPages, start + this.maxVisiblePages - 1);
+
+      return Array.from({ length: end - start + 1 }, (_, index) => start + index);
+    },
+  },
+  methods: {
+    changePage(page) {
+      if (page >= 1 && page <= this.totalPages) {
+        this.$emit("pageChanged", page);
+      }
+    },
+  },
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped lang="scss">
+.my-pagination > nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  ul {
+    margin: 0;
+  }
+}
+</style>
