@@ -27,6 +27,8 @@ $pagination-color: $green_color_05;
 $pagination-focus-box-shadow: 0 0 0 0.15rem $green_color_05;
 $pagination-focus-color: $green_color;
 $pagination-hover-color: $green_color;
+$pagination-active-bg: $green_color_05;
+$pagination-active-border-color: $green_color_05;
 
 /* import the Bootstrap */
 @import "../../../node_modules/bootstrap/scss/bootstrap.scss";
