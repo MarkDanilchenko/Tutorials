@@ -8,38 +8,49 @@
     </div>
     <div class="row">
       <div class="d-flex justify-content-md-between flex-md-row flex-column">
-        <!-- radios to filter Tutorials -->
-        <div class="d-flex align-items-center justify-content-md-between justify-content-center mb-md-0 mb-3">
-          <div class="form-check me-3">
-            <input
-              id="tutorialsAllRadio"
-              class="form-check-input"
-              type="radio"
-              name="tutorialsRadio"
-              checked
-              @click="setFilter('')"
-            />
-            <label class="form-check-label text-small" for="tutorialsAllRadio">All</label>
+        <!-- radios to filter Tutorials and display per page selector -->
+        <div class="d-flex justify-content-md-between justify-content-around mb-3 col-md-6 col-12">
+          <div class="d-flex flex-column ms-md-3 ms-0">
+            <span class="text-small text-muted">Filter by:</span>
+            <div class="form-check me-3">
+              <input
+                id="tutorialsAllRadio"
+                class="form-check-input"
+                type="radio"
+                name="tutorialsRadio"
+                checked
+                @click="setFilter('')"
+              />
+              <label class="form-check-label text-small" for="tutorialsAllRadio">All</label>
+            </div>
+            <div class="form-check me-3">
+              <input
+                id="tutorialsPublishedRadio"
+                class="form-check-input"
+                type="radio"
+                name="tutorialsRadio"
+                @click="setFilter('published')"
+              />
+              <label class="form-check-label text-small" for="tutorialsPublishedRadio">Published</label>
+            </div>
+            <div class="form-check">
+              <input
+                id="tutorialsNotPublishedRadio"
+                class="form-check-input"
+                type="radio"
+                name="tutorialsRadio"
+                @click="setFilter('notPublished')"
+              />
+              <label class="form-check-label text-small" for="tutorialsNotPublishedRadio">Not published</label>
+            </div>
           </div>
-          <div class="form-check me-3">
-            <input
-              id="tutorialsPublishedRadio"
-              class="form-check-input"
-              type="radio"
-              name="tutorialsRadio"
-              @click="setFilter('published')"
-            />
-            <label class="form-check-label text-small" for="tutorialsPublishedRadio">Published</label>
-          </div>
-          <div class="form-check">
-            <input
-              id="tutorialsNotPublishedRadio"
-              class="form-check-input"
-              type="radio"
-              name="tutorialsRadio"
-              @click="setFilter('notPublished')"
-            />
-            <label class="form-check-label text-small" for="tutorialsNotPublishedRadio">Not published</label>
+          <div class="me-md-3 me-0">
+            <span class="text-small text-muted">Display per:</span>
+            <select v-model="limit" class="form-select form-select-sm" aria-label="Pagination limit">
+              <option value="5" selected>5</option>
+              <option value="10">10</option>
+              <option value="15">15</option>
+            </select>
           </div>
         </div>
         <!-- search field -->
@@ -70,9 +81,12 @@
         <!-- tutorials list(accordion), pagination, deleteAll/create btns -->
         <div class="col-md-6 col-12 mb-md-0 mb-3">
           <TutorialsList :tutorials="tutorials.tutorials" @tutorial-info="tutorialInfo" />
-          <div>
-            <Pagination />
-          </div>
+          <Pagination
+            :current-page="currentPage"
+            :total-items-count="tutorials.count"
+            :limit="limit"
+            @change-page="changePage"
+          />
           <div class="d-flex justify-content-center mt-3">
             <button v-if="isSignedIn" class="btn btn-outline-green-custom" @click="$router.push('/tutorials/create')">
               New Tutorial
@@ -126,6 +140,8 @@ export default {
     return {
       // activeComponent is ether info or empty block component;
       activeComponent: "",
+      currentPage: 1,
+      limit: 5,
     };
   },
   computed: {
@@ -143,6 +159,13 @@ export default {
     },
     filter() {
       this.tutorialsList();
+    },
+    limit() {
+      this.currentPage = 1;
+      this.tutorialsList({
+        page: this.currentPage,
+        limit: this.limit,
+      });
     },
   },
   mounted() {
@@ -165,6 +188,13 @@ export default {
     },
     tutorialInfo(id) {
       this.tutorialItem(id);
+    },
+    changePage(page) {
+      this.currentPage = page;
+      this.tutorialsList({
+        page: this.currentPage,
+        limit: this.limit,
+      });
     },
   },
 };

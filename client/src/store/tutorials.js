@@ -30,16 +30,20 @@ const tutorials = {
     },
   },
   actions: {
-    async tutorialsList({ commit, state }) {
+    async tutorialsList({ commit, state }, params) {
       try {
+        if (state.filter) {
+          params.filter = state.filter;
+        }
+        if (state.searchQuery) {
+          params.q = state.searchQuery;
+        }
+
         const response = await axios.get(`http://${djangoOptions.host}:${djangoOptions.port}/api/v1/tutorials/`, {
           headers: {
             "Content-Type": "application/json",
           },
-          params: {
-            q: state.searchQuery,
-            filter: state.filter,
-          },
+          params,
         });
 
         commit("setTutorials", response.data);
