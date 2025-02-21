@@ -68,7 +68,7 @@ export default {
       default: 3,
     },
   },
-  emits: ["pageChanged"],
+  emits: ["changePage"],
   computed: {
     totalPages() {
       return Math.ceil(this.totalItemsCount / this.limit);
@@ -83,7 +83,7 @@ export default {
   methods: {
     changePage(page) {
       if (page >= 1 && page <= this.totalPages) {
-        this.$emit("pageChanged", page);
+        this.$emit("changePage", page);
       }
     },
   },
