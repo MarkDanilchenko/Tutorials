@@ -30,7 +30,7 @@ const tutorials = {
     },
   },
   actions: {
-    async tutorialsList({ commit, state }, params) {
+    async tutorialsList({ commit, state }, params = {}) {
       try {
         if (state.filter) {
           params.filter = state.filter;
