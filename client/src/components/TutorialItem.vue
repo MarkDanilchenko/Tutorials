@@ -10,7 +10,7 @@
           :data-bs-target="`#collapse${index}`"
           :aria-controls="`collapse${index}`"
         >
-          <span>Tutorial № {{ index + 1 }}</span>
+          <span>Tutorial № {{ accordionNN }}</span>
         </button>
         <button
           v-else
@@ -20,7 +20,7 @@
           :data-bs-target="`#collapse${index}`"
           :aria-controls="`collapse${index}`"
         >
-          <span>Tutorial № {{ index + 1 }}</span>
+          <span>Tutorial № {{ accordionNN }}</span>
         </button>
       </h2>
       <div v-if="index == 0" :id="`collapse${index}`" class="accordion-collapse collapse show">
@@ -57,8 +57,25 @@ export default {
       type: Number,
       required: true,
     },
+    currentPage: {
+      type: Number,
+      required: true,
+    },
+    limit: {
+      type: Number,
+      required: true,
+    },
   },
   emits: ["tutorial-info"],
+  computed: {
+    accordionNN() {
+      if (this.currentPage == 1) {
+        return this.index + 1;
+      }
+
+      return (this.currentPage - 1) * this.limit + this.index + 1;
+    },
+  },
 };
 </script>
 

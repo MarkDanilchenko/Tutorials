@@ -6,6 +6,8 @@
         :key="tutorial.id"
         :tutorial="tutorial"
         :index="index"
+        :current-page="currentPage"
+        :limit="limit"
         @tutorial-info="$emit('tutorial-info', $event)"
       />
     </div>
@@ -24,6 +26,14 @@ export default {
     tutorials: {
       type: Array,
       default: () => [],
+    },
+    currentPage: {
+      type: Number,
+      required: true,
+    },
+    limit: {
+      type: Number,
+      required: true,
     },
   },
   emits: ["tutorial-info"],

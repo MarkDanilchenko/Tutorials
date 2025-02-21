@@ -80,7 +80,12 @@
       <div class="row">
         <!-- tutorials list(accordion), pagination, deleteAll/create btns -->
         <div class="col-md-6 col-12 mb-md-0 mb-3">
-          <TutorialsList :tutorials="tutorials.tutorials" @tutorial-info="tutorialInfo" />
+          <TutorialsList
+            :tutorials="tutorials.tutorials"
+            :current-page="currentPage"
+            :limit="limit"
+            @tutorial-info="tutorialInfo"
+          />
           <Pagination
             :current-page="currentPage"
             :total-items-count="tutorials.count"
