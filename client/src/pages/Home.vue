@@ -124,7 +124,11 @@ export default {
   name: "Home",
   mixins: [dotInit],
   mounted() {
-    this.profile();
+    const refresh = localStorage.getItem("refreshToken");
+
+    if (refresh) {
+      this.profile();
+    }
   },
   methods: {
     ...mapActions({
