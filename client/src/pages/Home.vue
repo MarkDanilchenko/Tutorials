@@ -118,10 +118,19 @@
 
 <script>
 import dotInit from "@/mixins/dotsInit.js";
+import { mapActions } from "vuex";
 
 export default {
   name: "Home",
   mixins: [dotInit],
+  mounted() {
+    this.profile();
+  },
+  methods: {
+    ...mapActions({
+      profile: "auth/profile",
+    }),
+  },
 };
 </script>
 

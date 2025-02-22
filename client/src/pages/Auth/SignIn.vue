@@ -81,7 +81,7 @@ export default {
       await this.signInAction({ username: this.form.username, password: this.form.password });
 
       if (!this.signInError) {
-        this.$router.push("/tutorials");
+        this.$router.push("/");
       }
     },
   },
