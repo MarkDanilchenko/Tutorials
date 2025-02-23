@@ -32,22 +32,22 @@ This is a simple CRUD project with JWT authorization based on using such technol
 2. Run compose:
 
     ```sh
-    cd Tutorials && docker compose --env-file ./.env.public up --build
+    cd Tutorials && docker compose --env-file ./.env.public up --build    
     ```
 
-3. After the installation is complete the web-app will start on `_`;
+3. After the installation is complete the web-app will start on `localhost:8080`;
 
-- Open web-app in browser using URL: <http://_/>
+- Open web-app in browser using URL: <http://localhost:8080/>
 
 4. The superuser(admin) is NOT created automatically. To create it by yourself follow the instructions below in the new terminal (related docker containers must be in use):
 
     4.1 Create superuser:
 
     ```sh
-    docker exec -it server python manage.py createsuperuser --noinput --username admin --email admin@example.com
+    docker exec -it api python3 manage.py createsuperuser --noinput --username admin --email admin@example.com
     ```
 
-    4.2 Note, that default password is already preset in the script above. Default credentials are:
+    4.2 Note, that default password is already preset in the script above. So default credentials are:
 
     ```js
         {
@@ -57,12 +57,12 @@ This is a simple CRUD project with JWT authorization based on using such technol
         }
     ```
 
-    - for another password preset it should be **changed FIRST** in ./.env.public `DJANGO_SUPERUSER_PASSWORD=` and then run point 4.1.
+    - for another password preset it should be **changed FIRST** in ./.env.public `DJANGO_SUPERUSER_PASSWORD=` and then run point 4.1 again.
 
     4.3 For changing already existing superuser's password (not password preset):
 
     ```sh
-    docker exec -it server python manage.py changepassword admin
+    docker exec -it server python3 manage.py changepassword admin
     ```
 
     - you will be prompted to set another password.
@@ -98,7 +98,8 @@ This is a simple CRUD project with JWT authorization based on using such technol
 ### p.s
 
 - Local environment variables can be changed in the `./.env.public`<br/>
-- Outer ports of both drf-server & postgresql are `8001` & `5433` respectively and could not be changed via environment.
+- Outer ports of postgresql and nginx are `5433` & `8080` respectively and could not be changed via environment.
+- API inner and outer ports are the same and could be changed via environment, default `8000`.
 
 ## Screenshots &#127745;
 
