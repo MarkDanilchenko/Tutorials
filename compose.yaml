@@ -1,87 +1,69 @@
-version: '3.8'
-
 services:
-    # ------------------------------------------------------webserver(nginx)
-    webserver:
-        restart: always
-        build:
-            context: .
-            dockerfile: Dockerfile__webserver
-        container_name: webserver
-        volumes:
-            - ./API/staticfiles:/app/staticfiles
-            - ./API/mediafiles:/app/mediafiles
-        ports:
-            - 8080:80
-        networks:
-            - frontend
-        depends_on:
-            api:
-                condition: service_healthy
-    # ------------------------------------------------------api(django rest framework)
-    api:
-        restart: always
-        build:
-            context: .
-            dockerfile: Dockerfile__api
-        container_name: api
-        command: >
-            sh -c 'python3 manage.py makemigrations
-            && python3 manage.py migrate
-            && python3 manage.py collectstatic --noinput
-            && gunicorn --log-file gunicorn_logs/error.log --access-logfile gunicorn_logs/access.log IT_Tutorials.wsgi:application -b ${server_HostPort_1}'
-        volumes:
-            - ./API/staticfiles:/app/API/staticfiles
-            - ./API/mediafiles:/app/API/mediafiles
-            - ./API/gunicorn_logs:/app/API/gunicorn_logs
-            - ./API/django_logs:/app/API/django_logs
-        ports:
-            - 8000:8000
-        expose:
-            - 8000
-        networks:
-            - backend
-            - frontend
-        environment:
-            # for django-server connection to not to localhost-MySQL (as in settings.py) but to container-MySQL
-            - DATABASE_HOST=db
-        links:
-            - db
-        depends_on:
-            db:
-                condition: service_healthy
-        healthcheck:
-            test: ['CMD', 'curl', '-f', 'http://${server_HostPort_1}/']
-            timeout: 15s
-            interval: 5s
-            retries: 3
-    # ------------------------------------------------------db(mysql)
-    db:
-        restart: always
-        image: mysql:8.0
-        container_name: db
-        env_file:
-            - .env
-        ports:
-            - 3307:3306
-        networks:
-            - backend
-        volumes:
-            - ./IT_Tutorials.sql:/docker-entrypoint-initdb.d/IT_Tutorials.sql
-            - ./db_data:/var/lib/mysql
-        healthcheck:
-            test: ['CMD', 'mysqladmin', 'ping', '-h', '127.0.0.1']
-            timeout: 15s
-            interval: 5s
-            retries: 3
-    # ------------------------------------------------------other(volumes && networks)
+  api:
+    restart: always
+    build:
+      context: .
+      dockerfile: DockerfileAPIserver
+    container_name: api
+    command: >
+      sh -c 'python3 manage.py makemigrations
+      && python3 manage.py migrate
+      && python3 manage.py collectstatic --noinput
+      && gunicorn Tutorials.wsgi:application --bind ${DJANGO_SERVER_HOST}:${DJANGO_SERVER_PORT}'
+    ports:
+      - ${DJANGO_SERVER_PORT}:${DJANGO_SERVER_PORT}
+    environment:
+      - DATABASE_HOST=db
+    volumes:
+      - ./API/staticfiles:/app/API/staticfiles
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://${DJANGO_SERVER_HOST}:${DJANGO_SERVER_PORT}/test/"]
+      timeout: 15s
+      interval: 5s
+      retries: 3
+    networks:
+      - app_network
+  db:
+    restart: always
+    image: postgres:16.4
+    container_name: db
+    ports:
+      - 5433:${DATABASE_PORT}
+    env_file:
+      - .env.public
+    volumes:
+      - ./db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "psql -U ${POSTGRES_USER} -d ${POSTGRES_DB} -c 'SELECT 1' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - app_network
+  webserver:
+    restart: always
+    build:
+      context: .
+      dockerfile: DockerfileWebserver
+    container_name: webserver
+    ports:
+      - 8080:80
+    volumes:
+      - ./API/staticfiles:/app/staticfiles
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - app_network
+
 volumes:
-    db_data:
-    staticfiles:
-    mediafiles:
-    gunicorn_logs:
-    django_logs:
+  db_data:
+    driver: local
+  staticfiles:
+    driver: local
 
 networks:
-    backend:
-    frontend:
+  app_network:

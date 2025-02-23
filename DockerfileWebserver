@@ -1,0 +1,27 @@
+ARG NODE_VERSION=22.7.0
+
+FROM node:${NODE_VERSION} as FRONTEND
+
+LABEL maintainer="2024 MyHomeworks, { }"
+
+WORKDIR /app
+
+COPY ./.env.public .
+
+WORKDIR /app/client
+
+COPY ./client/package.json .
+
+RUN npm install
+
+COPY ./client .
+
+RUN npm run build
+
+FROM nginx:stable-alpine3.17
+
+WORKDIR /app
+
+COPY --from=FRONTEND /app/client/dist /app
+
+COPY ./nginx/nginx.conf /etc/nginx/nginx.conf

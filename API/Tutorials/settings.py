@@ -2,13 +2,13 @@ from pathlib import Path
 import os, dotenv, datetime
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-dotenv.load_dotenv(os.path.join(BASE_DIR.parent, ".env.development"))
+dotenv.load_dotenv(os.path.join(BASE_DIR.parent, ".env.public"))
 
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 
 DEBUG = os.getenv("DJANGO_DEBUG", "False")
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "0.0.0.0"]
+ALLOWED_HOSTS = ["127.0.0.1",  "0.0.0.0", "localhost"]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -17,18 +17,18 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "Tutorials__main.apps.TutorialsMainConfig",
     "corsheaders",
     "rest_framework",
     "rest_framework_simplejwt",
     "rest_framework_simplejwt.token_blacklist",
+    "Tutorials__main.apps.TutorialsMainConfig",
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -134,10 +134,7 @@ TOKEN_BLACKLIST_SERIALIZER = (
     "rest_framework_simplejwt.serializers.TokenBlacklistSerializer"
 )
 
-CORS_ORIGIN_WHITELIST = [
-    "http://localhost:8080",
-    "http://127.0.0.1:8080",
-]
+CORS_ALLOW_ALL_ORIGINS=True
 
 LOGGING = {
     "version": 1,

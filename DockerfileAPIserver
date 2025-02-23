@@ -1,30 +1,23 @@
-# Python version
-ARG PYTHON_VERSION=3.10.11
-
-# ------------------------------------------------------BACKEND
+ARG PYTHON_VERSION=3.13.0
 
 FROM python:${PYTHON_VERSION} as backend
 
-LABEL maintainer="2023 MyHomeworks, { }"
+LABEL maintainer="2024 MyHomeworks, { }"
 
 ENV PYTHONUNBUFFERED=1
 
 ENV PYTHONDONTWRITEBYTECODE=1
 
-WORKDIR /app/API
+WORKDIR /app
+
+COPY ./.env.public .
 
 RUN python3 -m venv venv && . venv/bin/activate && pip install --upgrade pip
+
+WORKDIR /app/API
 
 COPY ./API/requirements.txt .
 
 RUN pip install -r requirements.txt
 
 COPY ./API .
-
-RUN mkdir -p django_logs
-
-WORKDIR /app
-
-COPY ./.env .
-
-WORKDIR /app/API

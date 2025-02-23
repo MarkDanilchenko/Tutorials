@@ -3,6 +3,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from Tutorials__main import views
+from django.views.generic import TemplateView
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -10,6 +11,7 @@ from rest_framework_simplejwt.views import (
 )
 
 urlpatterns = [
+    path("test/", TemplateView.as_view(template_name="index.html")),
     path("admin/", admin.site.urls),
     path(
         "api/v1/token/retrieve/", TokenObtainPairView.as_view(), name="token_retrieve"
